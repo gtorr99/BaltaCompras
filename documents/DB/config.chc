@@ -1,0 +1,7 @@
+#Config
+#Tue Aug 31 19:59:19 BRT 2021
+cfg.mostrargrade=false
+cfg.location.x=-8
+cfg.ancorador=true
+cfg.recentes=D\:\\Documentos\\Gabriel\\Fatec\\Fatec Sorocaba\\7\u00BA Sem\\MPTC\\Trabalho\\BaltaCompras\\documents\\DB\\Logico.brM3;D\:\\Documentos\\Gabriel\\Fatec\\Fatec Sorocaba\\7\u00BA Sem\\MPTC\\Trabalho\\BaltaCompras\\documents\\DB\\DER.brM3;C\:\\Users\\GTorr\\Desktop\\Logico.xml;D\:\\Documentos\\Gabriel\\Fatec\\Fatec Sorocaba\\7\u00BA Sem\\MPTC\\Trabalho\\BaltaCompras\\documents\\DB\\DER_with_n_x_n.brM3
+cfg.location.y=-8
