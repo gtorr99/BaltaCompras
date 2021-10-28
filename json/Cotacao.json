@@ -1,0 +1,68 @@
+[
+    {
+        "id": 1,
+        "frete": 515.9,
+        "desconto": 200.0,
+        "prazo": "2021-10-25",
+        "selecionada": false,
+        "transportadora": "fedex",
+        "meioTransporte": "carro",
+        "status": 0,
+        "observacoes": null
+    },
+    {
+        "id": 2,
+        "frete": 200.0,
+        "desconto": 0.0,
+        "prazo": "2021-10-25",
+        "selecionada": true,
+        "transportadora": "ups",
+        "meioTransporte": "drone",
+        "status": 3,
+        "observacoes": null
+    },
+    {
+        "id": 3,
+        "frete": 100.0,
+        "desconto": 0.0,
+        "prazo": "2021-10-25",
+        "selecionada": false,
+        "transportadora": "aviacao",
+        "meioTransporte": "aviao",
+        "status": 0,
+        "observacoes": null
+    },
+    {
+        "id": 4,
+        "frete": 200.0,
+        "desconto": 100.0,
+        "prazo": "2021-10-25",
+        "selecionada": false,
+        "transportadora": "ups",
+        "meioTransporte": "drone",
+        "status": 0,
+        "observacoes": null
+    },
+    {
+        "id": 5,
+        "frete": 150.0,
+        "desconto": 50.0,
+        "prazo": "2021-10-25",
+        "selecionada": false,
+        "transportadora": "insiders",
+        "meioTransporte": "submarino",
+        "status": 0,
+        "observacoes": null
+    },
+    {
+        "id": 6,
+        "frete": 0.0,
+        "desconto": 0.0,
+        "prazo": "2021-10-25",
+        "selecionada": true,
+        "transportadora": "translimpa",
+        "meioTransporte": "furgao da limpeza",
+        "status": 3,
+        "observacoes": null
+    }
+]

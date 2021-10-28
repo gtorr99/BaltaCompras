@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "data": "2021-10-25",
+        "tipoCompra": 1,
+        "status": 0,
+        "observacoes": null
+    },
+    {
+        "id": 2,
+        "data": "2021-10-25",
+        "tipoCompra": 1,
+        "status": 1,
+        "observacoes": null
+    }
+]

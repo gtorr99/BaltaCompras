@@ -1,0 +1,84 @@
+[
+    {
+        "id": 1,
+        "data": "2021-10-25",
+        "status": 0,
+        "observacoes": "precisamos de um ps5 urgente na producao!",
+        "usuario": {
+            "id": 5,
+            "nome": "jorge ivelson",
+            "email": "jorge_ivelson@fatec.com",
+            "hashSenha": "00xff-hex",
+            "status": 0,
+            "setor": {
+                "id": 2,
+                "descricao": "almoxarifado",
+                "centrosCusto": []
+            },
+            "funcao": {
+                "id": 3,
+                "descricao": "requisitante",
+                "permissoes": [
+                    {
+                        "id": 3,
+                        "descricao": "ler requisicao"
+                    },
+                    {
+                        "id": 2,
+                        "descricao": "criar requisicao"
+                    }
+                ]
+            }
+        },
+        "centroCusto": {
+            "id": 2,
+            "descricao": "controle de entradas e saídas",
+            "valorGasto": 10000.0,
+            "valorLimite": 15000.0,
+            "setor": {
+                "id": 2,
+                "descricao": "almoxarifado",
+                "centrosCusto": []
+            }
+        }
+    },
+    {
+        "id": 2,
+        "data": "2021-10-25",
+        "status": 0,
+        "observacoes": "partiu uns ssds topzeira",
+        "usuario": {
+            "id": 2,
+            "nome": "caue da viola",
+            "email": "caue_viola@fatec.com",
+            "hashSenha": "00xff-hex",
+            "status": 0,
+            "setor": {
+                "id": 3,
+                "descricao": "ti",
+                "centrosCusto": []
+            },
+            "funcao": {
+                "id": 1,
+                "descricao": "administrador",
+                "permissoes": [
+                    {
+                        "id": 1,
+                        "descricao": "administrador"
+                    }
+                ]
+            }
+        },
+        "centroCusto": {
+            "id": 4,
+            "descricao": "help desk",
+            "valorGasto": 0.0,
+            "valorLimite": 1000.0,
+            "setor": {
+                "id": 3,
+                "descricao": "ti",
+                "centrosCusto": []
+            }
+        }
+    }
+]
