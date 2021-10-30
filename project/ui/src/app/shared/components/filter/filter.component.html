@@ -1,0 +1,52 @@
+<div class="row">
+    <div *ngIf="searchTextOptions" [ngClass]="filters ? 'col-md-10 col-lg-6' : 'col'">
+        <div class="input-group mb-3 me-2">
+            <i id="lupa" class="input-group-text bi bi-search"></i>
+            <input id="barraPesquisa"
+                type="text" 
+                class="form-control" 
+                placeholder="Pesquisar..."
+                aria-label="barra de pesquisa">
+            <app-button [btnClass]="'btn-outline-gray input-button-end dropdown-toggle'" data-bs-toggle="dropdown"
+            aria-expanded="false">
+                {{ selectedOption.label }}
+                <i class="bi bi-chevron-down ms-2"></i>
+            </app-button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let option of searchTextOptions">
+                    <a class="dropdown-item" (click)="updateDropdownLabel(option)">
+                        {{ option.label }}
+                    </a>
+                </li>
+            </ul>
+            <!-- <app-button [btnClass]="'btn-outline-primary input-button-end'">
+                Pesquisar
+            </app-button> -->
+        </div>
+    </div>
+
+    <div class="col ms-lg-3" *ngIf="filters">
+        <div class="row mb-sm-3 mb-lg-0">
+            <div class="col me-2" *ngFor="let filter of filters" style="max-width: fit-content;">
+                <div >
+                    <!-- <app-date-range-picker *ngIf="filter.type == 1"></app-date-range-picker> -->
+                </div>
+                <div class="dropdown" *ngIf="filter.type == 2">
+                    <app-button [btnClass]="'btn-outline-gray dropdown-toggle'" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i *ngIf="filter?.iconClass" class="bi me-2" [ngClass]="filter?.iconClass"></i>
+                        {{ filter.selectedOption || filter.label }}
+                        <i class="bi bi-chevron-down ms-2"></i>
+                    </app-button>
+                    <ul class="dropdown-menu">
+                        <li *ngFor="let option of filter?.options">
+                            <a class="dropdown-item" (click)="filter.selectedOption = option.label">
+                                {{ option.label }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

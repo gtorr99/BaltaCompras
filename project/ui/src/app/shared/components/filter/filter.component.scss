@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input#barraPesquisa {
+    padding: 0;
+    border: 2px solid var(--light-gray);
+    border-left: none;
+    border-right: none;
+    height: 40px;
+}
+input::placeholder, #lupa {
+    color: var(--light-gray);
+}
+
+#lupa {
+    background-color: white;
+    padding: 4px 8px;
+    border: 2px solid var(--light-gray);
+    border-right: none;
+    height: 40px;
+}
+
+.bi-chevron-down::before {
+    font-weight: bold !important;
+}
+
+.dropdown-menu, .dropdown-divider {
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover:first-child {
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+}
+
+.dropdown-item:hover:last-child {
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
