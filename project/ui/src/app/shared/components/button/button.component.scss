@@ -1,0 +1,125 @@
+:host {
+    --btn-transition: 0.2s;
+}
+
+.btn {
+    padding: 8px 16px;
+    font: var(--font-bold-16);
+    height: 40px;
+    white-space: nowrap;
+    outline:none;
+    -webkit-appearance: none;
+}
+
+.input-button-start {
+    &,
+    &:hover {
+        border-bottom-right-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+    }
+}
+
+.input-button-end {
+    &,
+    &:hover {
+        border-bottom-left-radius: 0 !important;
+        border-top-left-radius: 0 !important;
+    }
+}
+
+.no-icon::after {
+    display: none;
+}
+
+.btn-paging {
+    font: var(--font-regular-13);
+    height: 25px;
+    padding: 2px 4px;
+    background-color: white;
+    color: var(--dark);
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius);
+}
+
+/* Active */
+.btn-dark {
+    background-color: var(--dark);
+    color: white;
+}
+
+.btn-primary {
+    background-color: var(--blue);
+    color: white;
+}
+
+.btn-outline-dark {
+    padding: 8px 16px;
+    border: 2px solid var(--light-gray);
+    color: var(--dark);
+}
+
+.btn-outline-gray {
+    padding: 8px 16px;
+    border: 2px solid var(--light-gray);
+    color: var(--gray);
+    background-color: white;
+}
+
+.btn-outline-primary {
+    padding: 8px 16px;
+    border: 2px solid var(--blue);
+    color: var(--blue);
+}
+
+.btn-tertiary-dark {
+    border: none;
+    color: var(--dark);
+}
+
+.btn-tertiary-primary {
+    border: none;
+    color: var(--blue)
+}
+
+/* Hover */
+.btn-dark:hover {
+    background-color: var(--light-dark);
+    color: white;
+    transition: var(--btn-transition);
+}
+
+.btn-primary:hover {
+    background-color: var(--light-blue);
+    color: white;
+    transition: var(--btn-transition);
+}
+
+.btn-outline-dark:hover {
+    border-radius: 5px;
+    background-color: var(--dark);
+    color: white;
+    transition: var(--btn-transition);
+}
+
+.btn-outline-gray:hover {
+    border-radius: var(--radius);
+    background-color: var(--light-gray);
+    color: white;
+    transition: var(--btn-transition);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--blue);
+    color: white;
+    transition: var(--btn-transition);
+}
+
+.btn-tertiary-dark:hover {
+    color: var(--dark-gray);
+}
+
+.btn-tertiary-primary:hover {
+    color: var(--light-blue)
+}
+
+
