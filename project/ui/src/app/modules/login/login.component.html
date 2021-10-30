@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="row">
+        <h1 id="logo">BaltaCompras</h1>
+    </div>
+    <div class="row">
+        <div id="loginForm">
+            <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input id="loginEmail" class="form-control" type="email">
+            </div>
+            <div class="mb-3">
+                <label for="loginSenha" class="form-label">Senha</label>
+                <input id="loginSenha" class="form-control" type="password">
+            </div>
+            <div class="mt-4">
+                <div class="d-flex justify-content-center">
+                    <app-button [btnClass]="'btn-dark px-5'" (click)="onLogin()">Entrar</app-button>
+                </div>
+                <div class="d-flex justify-content-center mt-2">
+                    <a id="linkRecuperarSenha">
+                        Recuperar senha
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
