@@ -1,0 +1,13 @@
+export enum StatusEnum {
+    ATIVO,
+    INATIVO,
+    ABERTO,
+    APROVADO,
+    REPROVADO,
+    EM_ANALISE,
+    EM_PROCESSAMENTO,
+    CONCLUIDO,
+    CANCELADO,
+    REVISAR,
+    PROBLEMAS
+}
