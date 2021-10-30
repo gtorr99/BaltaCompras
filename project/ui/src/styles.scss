@@ -1,6 +1,43 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-:root {
-  --bs-primary: blue;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
 }
 
+:root {
+  // Cores
+  --background-color: #f3f3f3;
+  --dark: #0e0e0e;
+  --light-dark: #0f0f0fc7;
+
+  --gray: #C3C3C3;
+  --light-gray: #CFCFCF;
+  --dark-gray: #808080;
+
+  --blue: #549BE1;
+  --dark-blue: #185b9e;
+  --light-blue: #87bff6;
+
+  // Fontes
+  --font-family: "Roboto", sans-serif;
+  --logo: normal bold normal 20px var(--font-family);
+
+  --font-bold-48: normal bold normal 48px var(--font-family);
+  --font-bold-32: normal bold normal 32px var(--font-family);
+  --font-bold-24: normal bold normal 24px var(--font-family);
+  --font-bold-20: normal bold normal 20px var(--font-family);
+  --font-bold-16: normal bold normal 16px var(--font-family);
+  --font-bold-15: normal bold normal 15px var(--font-family);
+  --font-bold-13: normal bold normal 13px var(--font-family);
+  
+  --font-regular-15: normal normal normal 15px var(--font-family);
+  --font-regular-13: normal normal normal 13px var(--font-family);
+
+  // Box shadow
+  --box-shadow: 5px 7px 4px rgba(0, 0, 0, 0.3);
+  --radius: 4px;
+}
