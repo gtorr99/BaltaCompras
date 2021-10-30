@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: var(--dark);
+    max-height: 45px;
+    padding: 8px 16px;
+}
+
+a.logo {
+    color: white;
+    font: var(--logo);
+    white-space: nowrap;
+    position: absolute;
+    z-index: 21;
+    margin-left: 32px;
+    cursor: pointer;
+}
+
+i.bi::before {
+   color: white;
+   cursor: pointer;
+}
+
+i#menuIcon::before {
+    margin-top: 0.2rem;
+    font-weight: bold !important;
+    font-size: 20px;
+}
+
+i.bi.bi-person-fill::before {
+    font-size: 24px;
+    padding: 0.1rem;
+}
+
+i.bi.bi-person-fill:hover::before {
+    background-color: var(--gray);
+    border-radius: 2px;
+    transition: all 0.2s ease-out;
+}
+
+i.bi-bell-fill::before {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.sidebar {
+    height: 100%;
+    position: absolute;
+    z-index: 20;
+    background-color: var(--dark);
+    overflow-x: hidden;
+    transition: 0.3s;
+    box-shadow: var(--box-shadow)
+}
+
+.sidebar-header {
+    display: flex;
+    padding: 8px 16px;
+    color: white;
+    justify-content: space-between;
+    height: 45px;
+}
+
+.sidebar-body {
+    padding: 8px 24px;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 1rem;
+    padding: 0 24px;
+}
+
+.menu-item {
+    display: block;
+    color: var(--gray);
+    padding: 20px 0 8px 0;
+    border-bottom: 1px solid var(--gray);
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    font: var(--font-bold-16);
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.menu-item:last-child, .menu-item.dropdown-toggle {
+    border-bottom: none;
+}
+
+a.menu-item:hover, a.menu-item:hover > i.bi::before {
+    color: white;
+    cursor: pointer;
+    border-bottom-color: white;
+}
+
+a {
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+}
+
+i.bi.menu-item-icon::before {
+    color: var(--gray);
+    margin-right: 0.2rem;
+}
+
+.no-icon::after {
+    display: none;
+}
+
+i.bi.bi-chevron-down::before {
+    font-size: 12px;
+}
+
+h6#userName {
+    font: var(--font-bold-16);
+    padding-bottom: 0;
+}
+
+h6#userName:hover {
+    background-color: transparent;
+}
+
+span#userRole {
+    font: var(--font-regular-13);
+    padding: 0 16px;
+}

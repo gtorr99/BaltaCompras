@@ -1,0 +1,69 @@
+<!-- Sidebar -->
+<div class="sidebar" [ngStyle]="{width: sideBarSize}">
+    <div class="sidebar-header">
+        <i class="bi bi-x-lg close me-auto mt-1" (click)="onCloseSideBar()"></i>
+    </div> 
+    <div class="sidebar-body">
+        <ul id="menu">
+            <a class="menu-item" 
+                *ngFor="let menuItem of menuItemList; let i = index"  
+                [routerLink]="menuItem.value" routerLinkActive="active">
+                    <i class="bi menu-item-icon" [ngClass]="menuItem.icon"></i>
+                    {{ menuItem.name }}
+            </a>
+            <li class="dropdown" *ngFor="let menuItemDropdown of menuItemDropdownList">
+                <a class="menu-item dropdown-toggle no-icon" data-bs-toggle="dropdown" >
+                    <i class="bi menu-item-icon" [ngClass]="menuItemDropdown.icon"></i>
+                    {{ menuItemDropdown.name }}
+                    <i class="bi bi-chevron-down menu-item-icon"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li *ngFor="let item of menuItemDropdown.itens">
+                        <a class="dropdown-item" href="#" (click)="open(item.value)">
+                            {{ item.name }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="sidebar-footer">
+        <a id="configs" href="#" class="menu-item">
+            <i class="bi bi-gear-fill menu-item-icon"></i>
+            Configurações
+        </a>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <i id="menuIcon" class="bi bi-list mb-4 mb-lg-0" (click)="onOpenSideBar()"></i>
+        <a class="logo me-auto mb-4 mb-lg-0" routerLink="/home">BaltaCompras</a>
+        <div class="row mt-lg-4">
+            <div class="col">
+                <i class="bi bi-bell-fill me-3 position-relative">
+                    <span class="position-absolute ms-3 top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        2+
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </i>
+            </div>
+            <div class="col dropdown">
+                <a class="dropdown-toggle no-icon" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-fill"></i>
+                </a>
+                <ul id="dropdownMenuAccount" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink" style="margin-top: -20px;">
+                    <li>
+                       <h6 id="userName" class="dropdown-item">Admin User</h6>
+                       <span id="userRole">Comprador</span>
+                    </li>
+                    <li class="dropdown-divider mt-1 mx-3"></li>
+                    <li><a class="dropdown-item" href="#">Editar perfil</a></li>
+                    <li class="dropdown-divider mx-3"></li>
+                    <li><a class="dropdown-item" href="#">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
