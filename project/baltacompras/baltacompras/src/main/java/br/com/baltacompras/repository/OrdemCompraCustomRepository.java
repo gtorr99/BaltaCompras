@@ -7,34 +7,30 @@ import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.baltacompras.model.Requisicao;
+import br.com.baltacompras.model.OrdemCompra;
 
 @Repository
-public class RequisicaoCustomRepository {
+public class OrdemCompraCustomRepository {
     
     private final EntityManager em;
 
-    public RequisicaoCustomRepository(EntityManager em){
+    public OrdemCompraCustomRepository(EntityManager em){
         this.em = em;
     }
 
-    public List<Requisicao> filtrarPorData(Date dataInicio, Date dataFim){
-        
-        String query = "select r from Requisicao as r where r.data between :dataInicio and :dataFim";
-        var q = em.createQuery(query, Requisicao.class);
-        q.setParameter("dataInicio", dataInicio);
-        q.setParameter("dataFim", dataFim);
-        
-        return q.getResultList();
-    }
+    public List<OrdemCompra> filtrar(Integer id, Date dataInicio, Date dataFim, Integer tipoCompra, Integer status,
+    String observacoes){
 
-    public List<Requisicao> filtrar(Integer id, Date dataInicio, Date dataFim, Integer status, String observacao){
-        
-        String query = "select r from Requisicao as r";
+        String query = "select o from OrdemCompra as o";
         String condicao = " where ";
 
         if(id != null){
             query += condicao + "id = :id";
+            condicao = " and ";
+        }
+
+        if(tipoCompra != null){
+            query += condicao + "tipo_compra = :tipoCompra";
             condicao = " and ";
         }
 
@@ -43,32 +39,35 @@ public class RequisicaoCustomRepository {
             condicao = " and ";
         }
 
-        if(observacao != null){
-            query += condicao + "observacoes like :observacao";
+        if(observacoes != null){
+            query += condicao + "observacoes = :observacoes";
             condicao = " and ";
         }
 
         if(dataInicio != null && dataFim != null){
             query += condicao + "data between :dataInicio and :dataFim";
-            condicao = " and ";
         } else if(dataInicio != null){
             query += condicao + "data >= :dataInicio";
         } else if(dataFim != null){
             query += condicao + "data <= :dataFim";
         }
-        var q = em.createQuery(query, Requisicao.class);
-        
-        
+
+        var q = em.createQuery(query, OrdemCompra.class);
+
         if(id != null){
-           q.setParameter("id", id);
+            q.setParameter("id", id);
+        }
+
+        if(tipoCompra != null){
+            q.setParameter("tipoCompra", tipoCompra);
         }
 
         if(status != null){
             q.setParameter("status", status);
         }
 
-        if(observacao != null){
-            q.setParameter("observacao", "%" + observacao + "%");
+        if(observacoes != null){
+            q.setParameter("observacoes", "%" + observacoes + "%");
         }
 
         if(dataInicio != null && dataFim != null){
@@ -82,6 +81,5 @@ public class RequisicaoCustomRepository {
 
         return q.getResultList();
     }
-
 
 }
