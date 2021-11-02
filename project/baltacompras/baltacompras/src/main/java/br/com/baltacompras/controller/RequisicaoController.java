@@ -50,6 +50,27 @@ public class RequisicaoController {
         return customRepo.filtrarPorData(dateIni, dateFim);
     }
 
+    @GetMapping("/filtrar")
+    public List<Requisicao> filtrar(
+    @RequestParam(value = "id", required  = false) Integer id,
+    @RequestParam(value = "dataInicio", required = false) String dataInicio, 
+    @RequestParam(value = "dataFim", required = false) String dataFim,
+    @RequestParam(value = "status", required = false) Integer status, 
+    @RequestParam(value = "observacao", required = false) String observacao) throws ParseException{
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        Date dateIni = null;
+        Date dateFim = null;
+        
+        if(dataInicio != null){
+            dateIni = format.parse(dataInicio);
+        }
+        if(dataFim != null){
+            dateFim = format.parse(dataFim);
+        }
+        
+        return customRepo.filtrar(id, dateIni, dateFim, status, observacao);        
+    }
+
     @PostMapping
     public void salvar(@RequestBody Requisicao requisicao) {
         repositorio.save(requisicao);
