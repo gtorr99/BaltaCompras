@@ -40,7 +40,7 @@ public class OrdemCompraCustomRepository {
         }
 
         if(observacoes != null){
-            query += condicao + "observacoes = :observacoes";
+            query += condicao + "observacoes like :observacoes";
             condicao = " and ";
         }
 
