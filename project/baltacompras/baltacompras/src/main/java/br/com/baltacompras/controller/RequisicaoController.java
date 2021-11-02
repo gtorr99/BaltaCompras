@@ -1,17 +1,26 @@
 package br.com.baltacompras.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.baltacompras.model.Requisicao;
+import br.com.baltacompras.repository.RequisicaoCustomRepository;
 import br.com.baltacompras.repository.RequisicaoRepository;
 
 @RestController
@@ -20,25 +29,41 @@ public class RequisicaoController {
     @Autowired
     private RequisicaoRepository repositorio;
 
-    @GetMapping
-    public List<Requisicao> listar(){
-        return repositorio.findAll();
+    @Autowired 
+    private RequisicaoCustomRepository customRepo;
+
+    @GetMapping("/findall")
+    public ResponseEntity<?> listar(Pageable pageable) {
+        return new ResponseEntity<>(repositorio.findAll(pageable), HttpStatus.OK);
     }
-    
+
+    @GetMapping("/findbyid")
+    public Optional<Requisicao> buscarPorId(@RequestParam("id") Integer id) {
+        return repositorio.findById(id);
+    }
+
+    @GetMapping("/filterbydate")
+    public List<Requisicao> buscarPorData(@RequestParam("datestart") String dataInicio, @RequestParam("dateend") String dataFim) throws ParseException{
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        Date dateIni = format.parse(dataInicio);
+        Date dateFim = format.parse(dataFim);
+        return customRepo.filtrarPorData(dateIni, dateFim);
+    }
+
     @PostMapping
-    public void salvar(@RequestBody Requisicao requisicao){
+    public void salvar(@RequestBody Requisicao requisicao) {
         repositorio.save(requisicao);
     }
 
     @PutMapping
-    public void alterar(@RequestBody Requisicao requisicao){
-        if(requisicao.getId()>0){
+    public void alterar(@RequestBody Requisicao requisicao) {
+        if (requisicao.getId() > 0) {
             repositorio.save(requisicao);
         }
     }
 
     @DeleteMapping
-    public void excluir(@RequestBody Requisicao requisicao){
+    public void excluir(@RequestBody Requisicao requisicao) {
         repositorio.delete(requisicao);
     }
 }
