@@ -19,8 +19,8 @@ public class GrupoProduto {
     private Integer id;
     private String descricao;
     @JsonIgnore
-    @ManyToMany(mappedBy = "gruposProduto")
-    private Set<Fornecedor> gruposProduto;
+    @ManyToMany(mappedBy = "fornecedores")
+    private Set<Fornecedor> fornecedores;
     public Integer getId() {
         return id;
     }
@@ -33,10 +33,10 @@ public class GrupoProduto {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    public Set<Fornecedor> getGruposProduto() {
-        return gruposProduto;
+    public Set<Fornecedor> getFornecedores() {
+        return fornecedores;
     }
-    public void setGruposProduto(Set<Fornecedor> gruposProduto) {
-        this.gruposProduto = gruposProduto;
+    public void setFornecedores(Set<Fornecedor> fornecedores) {
+        this.fornecedores = fornecedores;
     }
 }

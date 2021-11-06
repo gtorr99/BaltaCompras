@@ -30,6 +30,12 @@ public class GrupoCotacao {
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = false)
     private Usuario usuario;
+
+    public GrupoCotacao() {
+        this.id = 0;
+        this.data = new Date();
+    }
+
     public Integer getId() {
         return id;
     }

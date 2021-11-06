@@ -337,3 +337,11 @@ ORDER BY 1;
 -- Subtotal cotação
 SELECT DISTINCT gcpc.id_cotacao, (SELECT DISTINCT(SUM(gcpc.preco_unitario * gcp.quantidade_total) + cot.frete - cot.desconto)) AS 'Preço' FROM GrupoCotacao_Produto_Cotacao gcpc INNER JOIN GrupoCotacao_Produto gcp ON gcpc.id_grupo_cotacao_produto = gcp.id_grupo_cotacao_produto INNER JOIN Cotacao cot ON cot.id_cotacao = gcpc.id_cotacao GROUP BY gcpc.id_cotacao;
 
+-- Gerar Cotações
+select p.id_grupo_produto, rp.id_produto, sum(rp.quantidade) as quantidadeTotal
+ from requisicao r 
+join requisicao_produto rp on r.id = rp.id_requisicao
+join produto p on p.id = rp.id_produto
+where r.status = 1
+group by p.id_grupo_produto, rp.id_produto;
+

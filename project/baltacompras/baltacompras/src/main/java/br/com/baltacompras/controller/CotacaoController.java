@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.baltacompras.model.Cotacao;
+import br.com.baltacompras.model.ProdutosAgrupados;
 import br.com.baltacompras.repository.CotacaoCustomRepository;
 import br.com.baltacompras.repository.CotacaoRepository;
 
@@ -75,4 +76,12 @@ public class CotacaoController {
     public void excluir(@RequestBody Cotacao cotacao){
         repositorio.delete(cotacao);
     }
+
+    @PostMapping("/email")
+    public void enviarEmail(@RequestParam(value = "id", required = false) Integer id){
+
+    }
+
+    //@GetMapping("/gerarCotacoes")
+    
 }

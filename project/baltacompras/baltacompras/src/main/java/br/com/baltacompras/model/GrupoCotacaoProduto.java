@@ -20,6 +20,12 @@ public class GrupoCotacaoProduto {
     @ManyToOne
     @JoinColumn(name = "id_grupo_cotacao", referencedColumnName = "id")
     private GrupoCotacao grupoCotacao;
+
+    public GrupoCotacaoProduto(float quantidadeTotal, GrupoCotacao grupoCotacao) {
+        this.id = 0;
+        this.quantidadeTotal = quantidadeTotal;
+        this.grupoCotacao = grupoCotacao;
+    }
     public Integer getId() {
         return id;
     }

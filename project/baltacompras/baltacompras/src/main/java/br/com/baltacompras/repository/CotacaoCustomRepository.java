@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
 import br.com.baltacompras.model.Cotacao;
+import br.com.baltacompras.model.GrupoCotacao;
 
 @Repository
 public class CotacaoCustomRepository {
@@ -24,80 +25,93 @@ public class CotacaoCustomRepository {
         String query = "select c from Cotacao as c";
         String condicao = " where ";
 
-        if(id != null){
+        if (id != null) {
             query += condicao + "id = :id";
             condicao = " and ";
         }
 
-        if(selecionada != null){
+        if (selecionada != null) {
             query += condicao + "selecionada = :selecionada";
             condicao = " and ";
         }
 
-        if(transportadora != null){
+        if (transportadora != null) {
             query += condicao + "transportadora like :transportadora";
             condicao = " and ";
         }
 
-        if(meioTransporte != null){
+        if (meioTransporte != null) {
             query += condicao + "meio_transporte like :meioTransporte";
             condicao = " and ";
         }
 
-        if(status != null){
+        if (status != null) {
             query += condicao + "status = :status";
             condicao = " and ";
         }
 
-        if(observacoes != null){
+        if (observacoes != null) {
             query += condicao + "observacoes like :observacoes";
             condicao = " and ";
         }
 
-        if(prazoInicio != null && prazoFim != null){
+        if (prazoInicio != null && prazoFim != null) {
             query += condicao + "prazo between :prazoInicio and :prazoFim";
-        } else if(prazoInicio != null){
+        } else if (prazoInicio != null) {
             query += condicao + "prazo >= :prazoInicio";
-        } else if(prazoFim != null){
+        } else if (prazoFim != null) {
             query += condicao + "prazo <= :prazoFim";
         }
 
         var q = em.createQuery(query, Cotacao.class);
 
-        if(id != null){
+        if (id != null) {
             q.setParameter("id", id);
         }
 
-        if(selecionada != null){
+        if (selecionada != null) {
             q.setParameter("selecionada", selecionada);
         }
 
-        if(transportadora != null){
+        if (transportadora != null) {
             q.setParameter("transportadora", transportadora);
         }
 
-        if(meioTransporte != null){
+        if (meioTransporte != null) {
             q.setParameter("meioTransporte", meioTransporte);
         }
 
-        if(status != null){
+        if (status != null) {
             q.setParameter("status", status);
         }
 
-        if(observacoes != null){
+        if (observacoes != null) {
             q.setParameter("observacoes", observacoes);
         }
 
-        if(prazoInicio != null && prazoFim != null){
+        if (prazoInicio != null && prazoFim != null) {
             q.setParameter("prazoInicio", prazoInicio);
             q.setParameter("prazoFim", prazoFim);
-        } else if(prazoInicio != null){
+        } else if (prazoInicio != null) {
             q.setParameter("prazoInicio", prazoInicio);
-        } else if(prazoFim != null){
+        } else if (prazoFim != null) {
             q.setParameter("prazoFim", prazoFim);
         }
-                
+
         return q.getResultList();
+    }
+
+    public List<GrupoCotacao> gerarCotacoes(){
+        String query = "select p.id_grupo_produto, rp.id_produto, sum(rp.quantidade) as quantidadeTotal " + 
+        "from requisicao r " + 
+       "join requisicao_produto rp on r.id = rp.id_requisicao " +
+       "join produto p on p.id = rp.id_produto " + 
+       "where r.status = 1 " + 
+       "group by p.id_grupo_produto, rp.id_produto";
+
+       var q = em.createQuery(query);
+
+       return q.getResultList();
     }
 
 }
