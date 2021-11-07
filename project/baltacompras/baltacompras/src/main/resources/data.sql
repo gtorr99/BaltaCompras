@@ -87,10 +87,10 @@ INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(3, 'água
 INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(4, 'sabao em pó', 3, 2);
 
 -- requisicões
-INSERT INTO requisicao(id, data, observacoes, status, id_usuario, id_centro_custo) VALUES(1, (SELECT now()), 'precisamos de um ps5 urgente na producao!', 1, 5, 2);
+INSERT INTO requisicao(id, data, prazo, observacoes, status, id_usuario, id_centro_custo) VALUES(1, (SELECT now()), (SELECT now()), 'precisamos de um ps5 urgente na producao!', 1, 5, 2);
 
 
-INSERT INTO requisicao(id, data, observacoes, status, id_usuario, id_centro_custo) VALUES(2, (SELECT now()), 'partiu uns ssds topzeira', 2, 2, 4);
+INSERT INTO requisicao(id, data, prazo, observacoes, status, id_usuario, id_centro_custo) VALUES(2, (SELECT now()), (SELECT now()), 'partiu uns ssds topzeira', 0, 2, 4);
 
 
 -- requisicao produto
@@ -126,9 +126,9 @@ INSERT INTO grupo_produto_fornecedor(id_fornecedor, id_grupo_produto) VALUES(3, 
 INSERT INTO grupo_produto_fornecedor(id_fornecedor, id_grupo_produto) VALUES(4, 2);
 
 -- grupo cotacao
-INSERT INTO grupo_cotacao(id, data, prazo_solicitado, id_usuario) VALUES(1, (SELECT now()), (SELECT now()), 4);
+INSERT INTO grupo_cotacao(id, data, prazo_solicitado, id_grupo_produto, id_usuario) VALUES(1, (SELECT now()), (SELECT now()), 1, 4);
 
-INSERT INTO grupo_cotacao(id, data, prazo_solicitado, id_usuario) VALUES(2, (SELECT now()), (SELECT now()), 4);
+INSERT INTO grupo_cotacao(id, data, prazo_solicitado, id_grupo_produto, id_usuario) VALUES(2, (SELECT now()), (SELECT now()), 2, 4);
 
 -- grupocotacao produto
 INSERT INTO grupo_cotacao_produto(id, quantidade_total, id_grupo_cotacao) VALUES(1, 7, 1);

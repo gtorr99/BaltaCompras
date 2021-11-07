@@ -1,18 +1,10 @@
 package br.com.baltacompras.model;
 
-
-
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -23,19 +15,26 @@ public class GrupoCotacao {
     private Integer id;
     @Column(nullable = false)
     private Date data;
-    @Column(nullable = false, name = "prazo_solicitado")
+    @Column(name = "prazo_solicitado")
     private Date prazoSolicitado;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_grupo_produto", referencedColumnName = "id")
+    private GrupoProduto grupoProduto;
+
     @Type(type = "text")
     private String observacoes;
     @ManyToOne
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
 
-    public GrupoCotacao() {
-        this.id = 0;
+    public GrupoCotacao() {}
+
+    public GrupoCotacao(Date prazoSolicitado, GrupoProduto grupoProduto) {
         this.data = new Date();
-        // ToDo - Setar prazo solicitado como o menor prazo da requisição para o dado grupo produto
-        this.prazoSolicitado = new Date();
+        this.prazoSolicitado = prazoSolicitado;
+        this.grupoProduto = grupoProduto;
         // ToDo - Setar usuário logado
     }
 
@@ -70,5 +69,8 @@ public class GrupoCotacao {
         this.usuario = usuario;
     }
 
-    
+    public GrupoProduto getGrupoProduto() {
+        return grupoProduto;
+    }
+
 }

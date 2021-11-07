@@ -69,6 +69,7 @@ CREATE TABLE produto (
 CREATE TABLE requisicao (
      id INT AUTO_INCREMENT
     ,data DATETIME NOT NULL
+    ,prazo DATE NOT NULL
     ,status INT NOT NULL
     ,observacoes TEXT
     ,id_usuario INT NOT NULL
@@ -122,6 +123,7 @@ CREATE TABLE grupo_cotacao (
      id INT AUTO_INCREMENT
     ,data DATETIME NOT NULL
     ,prazo_solicitado DATE
+    ,id_grupo_produto INT NOT NULL
     ,observacoes TEXT
     ,id_usuario INT
     ,CONSTRAINT pk__grupo_cotacao PRIMARY KEY AUTO_INCREMENT (id)
@@ -254,6 +256,11 @@ ALTER TABLE aprovacao_requisicao ADD CONSTRAINT fk__aprovacao_requisicao__usuari
 ALTER TABLE grupo_cotacao ADD CONSTRAINT fk__grupo_cotacao__usuario
     FOREIGN KEY (id_usuario)
     REFERENCES usuario (id)
+    ON DELETE CASCADE;
+
+ALTER TABLE grupo_cotacao ADD CONSTRAINT fk__grupo_cotacao__grupo_produto
+    FOREIGN KEY (id_grupo_produto)
+    REFERENCES grupo_produto (id)
     ON DELETE CASCADE;
 
 ALTER TABLE grupo_cotacao_produto ADD CONSTRAINT fk__grupo_cotacao_produto__grupo_cotacao

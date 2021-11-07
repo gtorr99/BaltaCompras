@@ -1,14 +1,12 @@
 package br.com.baltacompras.serviceimplement;
 
-import br.com.baltacompras.model.GrupoCotacao;
-import br.com.baltacompras.model.GrupoCotacaoProduto;
-import br.com.baltacompras.model.ProdutoAgrupado;
-import br.com.baltacompras.model.RequisicaoProduto;
+import br.com.baltacompras.model.*;
 import br.com.baltacompras.repository.GrupoCotacaoProdutoRepository;
 import br.com.baltacompras.repository.GrupoCotacaoRepository;
 
 import java.util.*;
 
+import br.com.baltacompras.repository.GrupoProdutoRepository;
 import br.com.baltacompras.repository.RequisicaoProdutoRepository;
 import br.com.baltacompras.service.GrupoCotacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +25,23 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
     @Autowired
     RequisicaoProdutoRepository requisicaoProdutoRepository;
 
+    @Autowired
+    GrupoProdutoRepository grupoProdutoRepository;
+
     @Override
     @Transactional
      public List<GrupoCotacao> gerarCotacoes() {
          List<ProdutoAgrupado> produtosAgrupados = repository.getRequisicoesAgrupadas();
 
-         Set<Integer> grupoProdutoIds = new HashSet<>();
-         produtosAgrupados.forEach(pa -> grupoProdutoIds.add(pa.getId_grupo_produto()));
+         Map<GrupoProduto, Date> grupoProdutoEPrazoMap = new HashMap<>();
+         produtosAgrupados.forEach(pa ->
+             grupoProdutoEPrazoMap.put(grupoProdutoRepository.getById(pa.getId_grupo_produto()), pa.getPrazo())
+         );
 
          Map<Integer, GrupoCotacao> grupoCotacaoMap = new HashMap<>();
-         grupoProdutoIds.forEach(gp -> grupoCotacaoMap.put(gp, repository.save(new GrupoCotacao())));
+         grupoProdutoEPrazoMap.forEach((gp, prazo) ->
+                 grupoCotacaoMap.put(gp.getId(), repository.save(new GrupoCotacao(prazo, gp)
+         )));
 
          List<RequisicaoProduto> requisicaoProdutos = requisicaoProdutoRepository.findAllByRequisicaoStatus(1);
 

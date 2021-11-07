@@ -14,6 +14,8 @@ public class Requisicao {
     @Column(nullable = false)
     private Date data;
     @Column(nullable = false)
+    private Date prazo;
+    @Column(nullable = false)
     private Integer status;
     private String observacoes;
     @ManyToOne
@@ -65,5 +67,13 @@ public class Requisicao {
 
     public Set<RequisicaoProduto> getProdutos() {
         return produtos;
+    }
+
+    public Date getPrazo() {
+        return prazo;
+    }
+
+    public void setPrazo(Date prazo) {
+        this.prazo = prazo;
     }
 }

@@ -9,7 +9,7 @@ import br.com.baltacompras.model.ProdutoAgrupado;
 import java.util.List;
 
 public interface GrupoCotacaoRepository extends JpaRepository<GrupoCotacao, Integer>{
-        @Query("select new br.com.baltacompras.model.ProdutoAgrupado(p.grupoProduto.id, rp.produto.id, CAST(sum(rp.quantidade) as float)) " +
+        @Query("select new br.com.baltacompras.model.ProdutoAgrupado(p.grupoProduto.id, rp.produto.id, CAST(sum(rp.quantidade) as float), min(r.prazo)) " +
             "from Requisicao r " +
             "join RequisicaoProduto rp on r.id = rp.requisicao.id " +
             "join Produto p on p.id = rp.produto.id " +
