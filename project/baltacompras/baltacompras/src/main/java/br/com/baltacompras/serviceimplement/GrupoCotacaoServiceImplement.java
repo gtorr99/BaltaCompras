@@ -1,6 +1,7 @@
 package br.com.baltacompras.serviceimplement;
 
 import br.com.baltacompras.model.*;
+import br.com.baltacompras.model.enums.Status;
 import br.com.baltacompras.repository.GrupoCotacaoProdutoRepository;
 import br.com.baltacompras.repository.GrupoCotacaoRepository;
 
@@ -43,7 +44,7 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
                  grupoCotacaoMap.put(gp.getId(), repository.save(new GrupoCotacao(prazo, gp)
          )));
 
-         List<RequisicaoProduto> requisicaoProdutos = requisicaoProdutoRepository.findAllByRequisicaoStatus(1);
+         List<RequisicaoProduto> requisicaoProdutos = requisicaoProdutoRepository.findAllByRequisicaoStatus(Status.APROVADO);
 
          produtosAgrupados.forEach(pa -> {
              GrupoCotacaoProduto gcp = grupoCotacaoProdutoRepository.save(new GrupoCotacaoProduto(
@@ -53,7 +54,7 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
              requisicaoProdutos.forEach(rp -> {
                  if (Objects.equals(rp.getProduto().getId(), pa.getId_produto())) {
                      rp.setGrupoCotacaoProduto(gcp);
-                     rp.getRequisicao().setStatus(3);
+                     rp.getRequisicao().setStatus(Status.EM_PROCESSAMENTO);
                      requisicaoProdutoRepository.save(rp);
                  }
              });

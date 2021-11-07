@@ -1,5 +1,7 @@
 package br.com.baltacompras.model;
 
+import br.com.baltacompras.model.enums.Status;
+
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -20,7 +22,7 @@ public class OrdemCompra {
     @Column(name = "tipo_compra", nullable = false)
     private Integer tipoCompra;
     @Column(nullable = false)
-    private Integer status;
+    private Status status;
     private String observacoes;
     public Integer getId() {
         return id;
@@ -40,10 +42,10 @@ public class OrdemCompra {
     public void setTipoCompra(Integer tipoCompra) {
         this.tipoCompra = tipoCompra;
     }
-    public Integer getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(Integer status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public String getObservacoes() {

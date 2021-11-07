@@ -1,5 +1,7 @@
 package br.com.baltacompras.model;
 
+import br.com.baltacompras.model.enums.Status;
+
 import java.sql.Date;
 import java.util.Set;
 
@@ -16,7 +18,7 @@ public class Requisicao {
     @Column(nullable = false)
     private Date prazo;
     @Column(nullable = false)
-    private Integer status;
+    private Status status;
     private String observacoes;
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
@@ -40,10 +42,10 @@ public class Requisicao {
     public void setData(Date data) {
         this.data = data;
     }
-    public Integer getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(Integer status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public String getObservacoes() {

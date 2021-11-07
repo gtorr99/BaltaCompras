@@ -13,7 +13,7 @@ public interface GrupoCotacaoRepository extends JpaRepository<GrupoCotacao, Inte
             "from Requisicao r " +
             "join RequisicaoProduto rp on r.id = rp.requisicao.id " +
             "join Produto p on p.id = rp.produto.id " +
-            "where r.status = 1 " +
+            "where r.status = br.com.baltacompras.model.enums.Status.APROVADO " +
             "group by p.grupoProduto.id, rp.produto.id")
     public List<ProdutoAgrupado> getRequisicoesAgrupadas();
 }

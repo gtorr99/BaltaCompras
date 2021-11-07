@@ -64,17 +64,17 @@ INSERT INTO funcao_permissao(id_funcao, id_permissao) VALUES(5, 9);
 -- usuarios
 INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(1, 'joel nathan', 'joel_nathan@fatec.com', '00xff-hex', 0, 3, 1);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(2, 'caue da viola', 'caue_viola@fatec.com', '00xff-hex', 0, 3, 1);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(2, 'caue da viola', 'caue_viola@fatec.com', '00xff-hex', 6, 3, 1);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(3, 'gabriel towers', 'gabriel_towers@fatec.com', '00xff-hex', 0, 3, 1);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(3, 'gabriel towers', 'gabriel_towers@fatec.com', '00xff-hex', 6, 3, 1);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(4, 'vitor valoroso', 'vitor_valoroso@fatec.com', '00xff-hex', 0, 1, 2);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(4, 'vitor valoroso', 'vitor_valoroso@fatec.com', '00xff-hex', 6, 1, 2);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(5, 'jorge ivelson', 'jorge_ivelson@fatec.com', '00xff-hex', 0, 2, 3);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(5, 'jorge ivelson', 'jorge_ivelson@fatec.com', '00xff-hex', 6, 2, 3);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(6, 'boss do ivelson', 'boss_ivelson@fatec.com', '00xff-hex', 0, 2, 4);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(6, 'boss do ivelson', 'boss_ivelson@fatec.com', '00xff-hex', 6, 2, 4);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(7, 'boss do valoroso', 'boss_valoroso@fatec.com', '00xff-hex', 0, 1, 5);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(7, 'boss do valoroso', 'boss_valoroso@fatec.com', '00xff-hex', 6, 1, 5);
 
 -- grupo produto
 INSERT INTO grupo_produto(id, descricao) VALUES(1, 'eletrônicos');
@@ -106,13 +106,13 @@ INSERT INTO requisicao_produto(id_requisicao, id_produto, quantidade) VALUES(2, 
 INSERT INTO aprovacao_requisicao(id_requisicao, id_usuario, data, status) VALUES(1, 6, (SELECT now()), 0);
 
 -- fornecedores
-INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(1, '00.000.000/0000-00', 'sp-sony', 'sony inc.', 'sony', 0, 'sony_ps5@gmail.com', '(00) 00000-0000', '18000-000', 'rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
+INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(1, '00.000.000/0000-00', 'sp-sony', 'sony inc.', 'sony', 6, 'sony_ps5@gmail.com', '(00) 00000-0000', '18000-000', 'rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
-INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(2, '11.111.111/1111-11', 'sp-amz', 'amazon', 'amazon', 0, 'amazon5@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
+INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(2, '11.111.111/1111-11', 'sp-amz', 'amazon', 'amazon', 6, 'amazon5@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
-INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(3, '22.222.222/2222-22', 'sp-ext', 'extra hipermercado', 'extra', 0, 'extra@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
+INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(3, '22.222.222/2222-22', 'sp-ext', 'extra hipermercado', 'extra', 6, 'extra@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
-INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(4, '33.333.333/3333-33', 'sp-rdl', 'rede limpa', 'rede limpa', 0, 'rede_limpa@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
+INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(4, '33.333.333/3333-33', 'sp-rdl', 'rede limpa', 'rede limpa', 6, 'rede_limpa@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
 -- grupoproduto fornecedor
 INSERT INTO grupo_produto_fornecedor(id_fornecedor, id_grupo_produto) VALUES(1, 1);

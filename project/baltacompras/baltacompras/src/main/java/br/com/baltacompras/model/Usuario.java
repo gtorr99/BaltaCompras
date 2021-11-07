@@ -1,5 +1,7 @@
 package br.com.baltacompras.model;
 
+import br.com.baltacompras.model.enums.Status;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +24,7 @@ public class Usuario {
     @Column(name = "hash_senha", nullable = false)
     private String hashSenha;
     @Column(nullable = false)
-    private Integer status;
+    private Status status;
     @ManyToOne
     @JoinColumn(name = "id_setor", referencedColumnName = "id")
     private Setor setor;
@@ -53,10 +55,10 @@ public class Usuario {
     public void setHashSenha(String hashSenha) {
         this.hashSenha = hashSenha;
     }
-    public Integer getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(Integer status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public Setor getSetor() {

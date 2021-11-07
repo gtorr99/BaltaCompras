@@ -1,5 +1,7 @@
 package br.com.baltacompras.model;
 
+import br.com.baltacompras.model.enums.Status;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +31,7 @@ public class Fornecedor {
     @Column(name = "nome_fantasia")
     private String nomeFantasia;
     @Column(nullable = false)
-    private Integer status;
+    private Status status;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
@@ -79,10 +81,10 @@ public class Fornecedor {
     public void setNomeFantasia(String nomeFantasia) {
         this.nomeFantasia = nomeFantasia;
     }
-    public Integer getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(Integer status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public String getEmail() {

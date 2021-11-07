@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import br.com.baltacompras.model.enums.Status;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -27,7 +28,7 @@ public class Cotacao {
     @Column(name = "meio_transporte")
     private String meioTransporte;
     @Column(nullable = false)
-    private Integer status;
+    private Status status;
     @Type(type = "text")
     private String observacoes;
 
@@ -73,10 +74,10 @@ public class Cotacao {
     public void setMeioTransporte(String meioTransporte) {
         this.meioTransporte = meioTransporte;
     }
-    public Integer getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(Integer status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public String getObservacoes() {
