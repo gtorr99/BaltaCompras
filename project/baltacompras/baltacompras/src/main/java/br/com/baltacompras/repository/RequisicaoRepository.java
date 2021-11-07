@@ -7,6 +7,5 @@ import br.com.baltacompras.model.Requisicao;
 
 @Repository
 public interface RequisicaoRepository extends JpaRepository<Requisicao, Integer>{
-
 }
 

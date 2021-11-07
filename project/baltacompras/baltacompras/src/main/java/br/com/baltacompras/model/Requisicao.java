@@ -1,15 +1,9 @@
 package br.com.baltacompras.model;
 
 import java.sql.Date;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "requisicao")
@@ -28,6 +22,10 @@ public class Requisicao {
     @ManyToOne
     @JoinColumn(name = "id_centro_custo", referencedColumnName = "id")
     private CentroCusto centroCusto;
+
+    @OneToMany(mappedBy = "requisicao")
+    private Set<RequisicaoProduto> produtos;
+
     public Integer getId() {
         return id;
     }
@@ -63,5 +61,9 @@ public class Requisicao {
     }
     public void setCentroCusto(CentroCusto centroCusto) {
         this.centroCusto = centroCusto;
+    }
+
+    public Set<RequisicaoProduto> getProdutos() {
+        return produtos;
     }
 }

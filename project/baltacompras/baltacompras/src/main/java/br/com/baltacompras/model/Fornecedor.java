@@ -44,7 +44,7 @@ public class Fornecedor {
     private String estado;
     @ManyToMany
     @JoinTable(
-        name="grupo_prouto_fornecedor",
+        name="grupo_produto_fornecedor",
         joinColumns = @JoinColumn(name = "id_fornecedor"),
         inverseJoinColumns = @JoinColumn(name = "id_grupo_produto")
     )

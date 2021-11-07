@@ -19,7 +19,7 @@ public class GrupoProduto {
     private Integer id;
     private String descricao;
     @JsonIgnore
-    @ManyToMany(mappedBy = "fornecedores")
+    @ManyToMany(mappedBy = "gruposProduto")
     private Set<Fornecedor> fornecedores;
     public Integer getId() {
         return id;

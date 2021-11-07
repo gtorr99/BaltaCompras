@@ -32,7 +32,7 @@ public class RequisicaoProdutoController {
 
     @PutMapping
     public void alterar(@RequestBody RequisicaoProduto requisicaoProduto){
-        if(requisicaoProduto.getId()>0){
+        if(requisicaoProduto.getId() != null){
             repositorio.save(requisicaoProduto);
         }
     }

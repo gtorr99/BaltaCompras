@@ -1,13 +1,9 @@
 package br.com.baltacompras.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "produto")
@@ -20,7 +16,12 @@ public class Produto {
     private Integer unMedida;
     @ManyToOne
     @JoinColumn(name = "id_grupo_produto", referencedColumnName = "id")
-    private GrupoProduto GrupoProduto;
+    private GrupoProduto grupoProduto;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "produto")
+    private Set<RequisicaoProduto> requisicoes;
+
     public Integer getId() {
         return id;
     }
@@ -40,11 +41,13 @@ public class Produto {
         this.unMedida = unMedida;
     }
     public GrupoProduto getGrupoProduto() {
-        return GrupoProduto;
+        return grupoProduto;
     }
     public void setGrupoProduto(GrupoProduto grupoProduto) {
-        GrupoProduto = grupoProduto;
+        this.grupoProduto = grupoProduto;
     }
 
-    
+    public Set<RequisicaoProduto> getRequisicoes() {
+        return requisicoes;
+    }
 }

@@ -28,12 +28,15 @@ public class GrupoCotacao {
     @Type(type = "text")
     private String observacoes;
     @ManyToOne
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = true)
     private Usuario usuario;
 
     public GrupoCotacao() {
         this.id = 0;
         this.data = new Date();
+        // ToDo - Setar prazo solicitado como o menor prazo da requisição para o dado grupo produto
+        this.prazoSolicitado = new Date();
+        // ToDo - Setar usuário logado
     }
 
     public Integer getId() {

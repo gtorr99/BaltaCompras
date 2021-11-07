@@ -9,13 +9,13 @@
 */
 
 CREATE TABLE setor (
-    id INT
+     id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
     ,CONSTRAINT pk__setor PRIMARY KEY AUTO_INCREMENT (id)
 );
 
 CREATE TABLE centro_custo (
-    id INT
+     id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
     ,valor_gasto REAL(10,2) NOT NULL
     ,valor_limite REAL(10,2) NOT NULL
@@ -24,13 +24,13 @@ CREATE TABLE centro_custo (
 );
 
 CREATE TABLE permissao (
-    id INT
+     id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
     ,CONSTRAINT pk__permissao PRIMARY KEY AUTO_INCREMENT (id)
 );
 
 CREATE TABLE funcao (
-    id INT
+     id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
     ,CONSTRAINT pk__funcao PRIMARY KEY AUTO_INCREMENT (id)
 );
@@ -42,7 +42,7 @@ CREATE TABLE funcao_permissao (
 );
 
 CREATE TABLE usuario (
-    id INT
+     id INT AUTO_INCREMENT
     ,nome VARCHAR(255) NOT NULL
     ,email VARCHAR(255) NOT NULL UNIQUE
     ,hash_senha VARCHAR(255) NOT NULL
@@ -53,13 +53,13 @@ CREATE TABLE usuario (
 );
 
 CREATE TABLE grupo_produto (
-    id INT
+     id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
     ,CONSTRAINT pk__grupo_produto PRIMARY KEY AUTO_INCREMENT (id)
 );
 
 CREATE TABLE produto (
-    id INT
+     id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
     ,un_medida INT NOT NULL
     ,id_grupo_produto INT NOT NULL
@@ -67,7 +67,7 @@ CREATE TABLE produto (
 );
 
 CREATE TABLE requisicao (
-    id INT
+     id INT AUTO_INCREMENT
     ,data DATETIME NOT NULL
     ,status INT NOT NULL
     ,observacoes TEXT
@@ -94,7 +94,7 @@ CREATE TABLE aprovacao_requisicao (
 );
 
 CREATE TABLE fornecedor (
-    id INT
+     id INT AUTO_INCREMENT
     ,cnpj VARCHAR(20) NOT NULL UNIQUE
     ,inscricao_estadual VARCHAR(30) NOT NULL UNIQUE
     ,razao_social VARCHAR(255) NOT NULL
@@ -119,23 +119,23 @@ CREATE TABLE grupo_produto_fornecedor (
 );
 
 CREATE TABLE grupo_cotacao (
-    id INT
+     id INT AUTO_INCREMENT
     ,data DATETIME NOT NULL
-    ,prazo_solicitado DATE NOT NULL
+    ,prazo_solicitado DATE
     ,observacoes TEXT
-    ,id_usuario INT NOT NULL
+    ,id_usuario INT
     ,CONSTRAINT pk__grupo_cotacao PRIMARY KEY AUTO_INCREMENT (id)
 );
 
 CREATE TABLE grupo_cotacao_produto (
-    id INT
+     id INT AUTO_INCREMENT
     ,quantidade_total REAL(10, 2) NOT NULL
     ,id_grupo_cotacao INT NOT NULL
     ,CONSTRAINT pk__requisicao_produto PRIMARY KEY AUTO_INCREMENT (id)
 );
 
 CREATE TABLE cotacao (
-    id INT
+     id INT AUTO_INCREMENT
     ,frete REAL(10, 2)
     ,desconto REAL(10, 2)
     ,prazo DATE NOT NULL
@@ -158,7 +158,7 @@ CREATE TABLE grupo_cotacao_produto_cotacao (
 );
 
 CREATE TABLE ordem_compra (
-    id INT
+     id INT AUTO_INCREMENT
     ,data DATETIME NOT NULL
     ,tipo_compra INT NOT NULL
     ,status INT NOT NULL
@@ -169,7 +169,7 @@ CREATE TABLE ordem_compra (
 );
 
 CREATE TABLE forma_pgto (
-    id INT
+     id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
     ,CONSTRAINT pk__forma_pgto PRIMARY KEY AUTO_INCREMENT (id)
 );

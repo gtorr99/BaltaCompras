@@ -87,11 +87,11 @@ INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(3, 'água
 INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(4, 'sabao em pó', 3, 2);
 
 -- requisicões
-INSERT INTO requisicao(id, data, observacoes, status, id_usuario, id_centro_custo) VALUES(1, (SELECT now()), 'precisamos de um ps5 urgente na producao!', 0, 5, 2);
-SELECT nextval('id_requisicao_seq'::regclass);
+INSERT INTO requisicao(id, data, observacoes, status, id_usuario, id_centro_custo) VALUES(1, (SELECT now()), 'precisamos de um ps5 urgente na producao!', 1, 5, 2);
 
-INSERT INTO requisicao(id, data, observacoes, status, id_usuario, id_centro_custo) VALUES(2, (SELECT now()), 'partiu uns ssds topzeira', 0, 2, 4);
-SELECT nextval('id_requisicao_seq'::regclass);
+
+INSERT INTO requisicao(id, data, observacoes, status, id_usuario, id_centro_custo) VALUES(2, (SELECT now()), 'partiu uns ssds topzeira', 2, 2, 4);
+
 
 -- requisicao produto
 INSERT INTO requisicao_produto(id_requisicao, id_produto, quantidade) VALUES(1, 1, 2);

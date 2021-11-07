@@ -21,6 +21,8 @@ public class GrupoCotacaoProduto {
     @JoinColumn(name = "id_grupo_cotacao", referencedColumnName = "id")
     private GrupoCotacao grupoCotacao;
 
+    public GrupoCotacaoProduto() {}
+
     public GrupoCotacaoProduto(float quantidadeTotal, GrupoCotacao grupoCotacao) {
         this.id = 0;
         this.quantidadeTotal = quantidadeTotal;

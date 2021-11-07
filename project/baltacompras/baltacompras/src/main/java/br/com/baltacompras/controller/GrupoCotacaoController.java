@@ -2,6 +2,8 @@ package br.com.baltacompras.controller;
 
 import java.util.List;
 
+import br.com.baltacompras.model.ProdutoAgrupado;
+import br.com.baltacompras.serviceimplement.GrupoCotacaoServiceImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +22,17 @@ public class GrupoCotacaoController {
     @Autowired
     private GrupoCotacaoRepository repositorio;
 
+    @Autowired
+    private GrupoCotacaoServiceImplement grupoCotacaoServiceImplement;
+
     @GetMapping
     public List<GrupoCotacao> listar(){
         return repositorio.findAll();
+    }
+
+    @GetMapping("/gerar-cotacoes")
+    public List<GrupoCotacao> gerarCotacoes(){
+        return grupoCotacaoServiceImplement.gerarCotacoes();
     }
     
     @PostMapping
