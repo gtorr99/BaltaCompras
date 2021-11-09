@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { GrupoProduto } from '@models/grupo-produto.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Fornecedor } from '@models/fornecedor.model';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-fornecedor',
@@ -10,6 +13,7 @@ import { Fornecedor } from '@models/fornecedor.model';
 })
 export class FornecedorComponent implements OnInit {
 
+  fornecedorForm: FormGroup;
   estados: { label: string, value: string }[] = [];
   grupoProdutoList: GrupoProduto[] = [];
 
@@ -19,19 +23,23 @@ export class FornecedorComponent implements OnInit {
   phoneMask: string = "(00) 00000-0000";
   cepMask: string = "00000-000";
 
-  maxLength: number = 255;
+  private maxLength: number = 255;
 
   // Angular validators
-  textValidator = [
+  private textValidator = [
     Validators.required,
     Validators.maxLength(this.maxLength),
     Validators.minLength(1),
     Validators.nullValidator,
   ];
-  commonValidators = [Validators.required, Validators.nullValidator];
-  fornecedorForm: FormGroup;
+  private commonValidators = [Validators.required, Validators.nullValidator];
+  private modalRef: NgbModalRef;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private modalService: NgbModal,
+    private toastrService: ToastrService
+  ) { }
 
   ngOnInit(): void {
     this.fornecedorForm = this.formBuilder.group({
@@ -89,13 +97,21 @@ export class FornecedorComponent implements OnInit {
     }
     
     form.classList.add('was-validated');
+    this.toastrService.success("Fornecedor cadastrado!");
   }
 
   onReset(event: any) {
     event.preventDefault();
-    var form = document.getElementsByClassName('needs-validation')[0] as HTMLFormElement;
-    form.classList.remove('was-validated');
-    this.fornecedorForm.reset();
+    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+    this.modalRef.componentInstance.title = "Resetar formulário";
+    this.modalRef.componentInstance.message = "As informações inseridas no formulário serão excluídas. Você tem certeza que deseja cancelar?";
+    this.modalRef.closed.subscribe(response => {
+      if (response) {
+        var form = document.getElementsByClassName('needs-validation')[0] as HTMLFormElement;
+        form.classList.remove('was-validated');
+        this.fornecedorForm.reset();
+      }
+    });
   }
 
   getEstadoBindLabel(): string {

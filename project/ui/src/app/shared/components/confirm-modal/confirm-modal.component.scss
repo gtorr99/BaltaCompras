@@ -1,0 +1,22 @@
+.modal-header {
+    padding: 24px;
+    padding-bottom: 16px;
+}
+
+.modal-title {
+    font: var(--font-bold-24);
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+.modal-footer {
+    padding: 24px;
+    padding-top: 16px;
+}
+
+.modal-body {
+    font: var(--font-regular-16);
+    padding: 0 24px;
+}

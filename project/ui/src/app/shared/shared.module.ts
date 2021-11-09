@@ -5,8 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as fromComponents from './components';
 import { RouterModule } from '@angular/router';
 import { TitleComponent } from './components/title/title.component';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 @NgModule({
-  declarations: [...fromComponents.components, TitleComponent],
+  declarations: [...fromComponents.components, TitleComponent, ConfirmModalComponent],
   imports: [
     CommonModule,
     FormsModule,

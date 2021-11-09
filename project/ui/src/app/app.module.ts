@@ -11,7 +11,10 @@ import { CoreModule } from "@core/core.module";
 import { SharedModule } from '@shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePipe } from '@angular/common';
+
+// External libs
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -27,6 +30,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgSelectModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true
+    })
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent],
