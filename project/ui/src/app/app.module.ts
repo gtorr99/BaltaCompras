@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
 import { NgbModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
@@ -10,7 +10,9 @@ import { AppRoutingModule } from "./app-routing.module";
 import { CoreModule } from "@core/core.module";
 import { SharedModule } from '@shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+import { DatePipe } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -19,22 +21,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SharedModule,
     BrowserModule,
     CoreModule,
-    FormsModule,
     ReactiveFormsModule,
     NgbModule,
     NgbModalModule,
+    NgSelectModule,
     BrowserAnimationsModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    // AutocompleteLibModule,
-    HttpClientModule, 
-    // HttpClient
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent],
-  exports: [SharedModule]//, AutocompleteLibModule]
+  exports: []
 })
 export class AppModule { }
 

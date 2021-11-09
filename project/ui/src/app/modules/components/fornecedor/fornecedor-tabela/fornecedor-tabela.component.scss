@@ -1,21 +1,5 @@
-input#barraPesquisa {
-    padding: 0;
-    border: var(--border);
-    border-left: none;
-    border-right: none;
-    height: 40px;
-}
-input::placeholder, #lupa {
-    color: var(--gray-400);
-}
 
-#lupa {
-    background-color: white;
-    padding: 4px 8px;
-    border: var(--border);
-    border-right: none;
-    height: 40px;
-}
+
 
 .bi-chevron-down::before {
     font-weight: bold !important;

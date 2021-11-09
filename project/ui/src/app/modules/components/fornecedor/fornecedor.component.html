@@ -1,0 +1,238 @@
+<app-title [title]="'Registrar fornecedor'"></app-title>
+
+<form [formGroup]="fornecedorForm" (ngSubmit)="onSubmit($event)" class="needs-validation" novalidate>
+<div class="box">
+    <h3>Informações</h3>
+    <div formGroupName="info">
+        <div class="row" >
+            <div class="col">
+                <label for="nomeFantasia" class="form-label">
+                    Nome fantasia <span class="text-danger">*</span>
+                </label>
+                <input type="text" id="nomeFantasia" class="form-control " formControlName="nomeFantasia" required>
+                <small class="valid-feedback"
+                    *ngIf="fornecedorForm.get('info.nomeFantasia').valid && fornecedorForm.get('info.nomeFantasia').touched; else invalidNomeFantasia">
+                    Nome fantasia ok!
+                </small>
+                <ng-template #invalidNomeFantasia>
+                    <small class="invalid-feedback">
+                        Por favor, insira o nome fantasia
+                    </small>
+                </ng-template>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="razaoSocial" class="form-label">
+                    Razão social <span class="text-danger">*</span>
+                </label>
+                <input type="text" id="razaoSocial" class="form-control" formControlName="razaoSocial" required>
+                <small class="valid-feedback"
+                    *ngIf="fornecedorForm.get('info.razaoSocial').valid && fornecedorForm.get('info.razaoSocial').touched; else invalidRazaoSocial">
+                    Razão social ok!
+                </small>
+                <ng-template #invalidRazaoSocial>
+                    <small class="invalid-feedback">
+                        Por favor, insira a razão social
+                    </small>
+                </ng-template>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-7 col-sm-8">
+                <label for="cnpj" class="form-label">
+                    CNPJ <span class="text-danger">*</span>
+                </label>
+                <input type="text" id="cnpj" class="form-control" 
+                    [mask]="cnpjMask" 
+                    [clearIfNotMatch]="true"
+                    formControlName="cnpj"
+                    required>
+                <small class="valid-feedback"
+                    *ngIf="fornecedorForm.get('info.cnpj').valid && fornecedorForm.get('info.cnpj').touched; else invalidCnpj">
+                    CNPJ válido!
+                </small>
+                <ng-template #invalidCnpj>
+                    <small class="invalid-feedback">
+                        CNPJ inválido!
+                    </small>
+                </ng-template>
+            </div>
+            <div class="col ms-2">
+                <label for="inscricaoEstadual" class="form-label">
+                    Inscrição estadual <span class="text-danger">*</span>
+                </label>
+                <input type="text" id="inscricaoEstadual" class="form-control" 
+                    [mask]="inscricaoEstadualMask"
+                    [clearIfNotMatch]="true" 
+                    formControlName="inscricaoEstadual"
+                    required>
+                <small class="valid-feedback"
+                    *ngIf="fornecedorForm.get('info.inscricaoEstadual').valid && fornecedorForm.get('info.inscricaoEstadual').touched; else invalidInscricaoEstadual">
+                    Inscrição estadual válida!
+                </small>
+                <ng-template #invalidInscricaoEstadual>
+                    <small class="invalid-feedback">
+                        Inscrição estadual inválida!
+                    </small>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contato -->
+    <div class="row mt-5">
+        <div formGroupName="contato">
+            <h3>Contato</h3>
+            <div class="row">
+                <div class="col">
+                    <label for="email" class="form-label">
+                        Email <span class="text-danger">*</span>
+                    </label>
+                    <input type="email" id="email" class="form-control" formControlName="email" required>
+                    <small class="valid-feedback"
+                        *ngIf="fornecedorForm.get('contato.email').valid && fornecedorForm.get('contato.email').touched; else invalidEmail">
+                        Email ok!
+                    </small>
+                    <ng-template #invalidEmail>
+                        <small class="invalid-feedback">
+                            Por favor, insira um email válido
+                        </small>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="telefone" class="form-label">
+                        Telefone <span class="text-danger">*</span>
+                    </label>
+                    <input type="tel" id="telefone" class="form-control" 
+                        [mask]="phoneMask"
+                        [clearIfNotMatch]="true"
+                        formControlName="telefone"
+                        required>
+                    <small class="valid-feedback"
+                        *ngIf="fornecedorForm.get('contato.telefone').valid && fornecedorForm.get('contato.telefone').touched; else invalidTelefone">
+                        Telefone ok!
+                    </small>
+                    <ng-template #invalidTelefone>
+                        <small class="invalid-feedback">
+                            Por favor, insira um telefone válido
+                        </small>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Endereço -->
+    <div class="row mt-5">
+        <div formGroupName="endereco">
+            <h3>Endereço</h3>
+            <div class="row">
+                <div class="col-4">
+                    <label for="cep" class="form-label">
+                        CEP <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="cep" class="form-control" formControlName="cep"
+                    [mask]="cepMask"
+                    [clearIfNotMatch]="true"
+                    required>
+                    <small class="valid-feedback"
+                        *ngIf="fornecedorForm.get('endereco.cep').valid && fornecedorForm.get('endereco.cep').touched; else invalidCEP">
+                        CEP válido!
+                    </small>
+                    <ng-template #invalidCEP>
+                        <small class="invalid-feedback">
+                            CEP inválido!
+                        </small>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="rua" class="form-label">
+                        Rua <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="rua" class="form-control" formControlName="rua" required>
+                </div>
+                <div class="col-2 col-lg-1 ms-2">
+                    <label for="numero" class="form-label">
+                        Nº <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="numero" class="form-control" formControlName="numero" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md">
+                    <label for="complemento" class="form-label">
+                        Complemento
+                    </label>
+                    <input type="text" id="complemento" class="form-control" formControlName="complemento">
+                </div>
+                <div class="col-12 ms-md-2 col-md-4">
+                    <label for="bairro" class="form-label">
+                        Bairro <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="bairro" class="form-control" formControlName="bairro" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="cidade" class="form-label">
+                        Cidade <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="cidade" class="form-control" formControlName="cidade" required>
+                </div>
+                <div class="col-3 ms-2">
+                    <label for="estadosDataList" class="form-label">Estado <span class="text-danger">*</span></label>
+                    <ng-select [items]="estados" 
+                        [bindLabel]="getEstadoBindLabel()" 
+                        bindValue="value" 
+                        formControlName="estado" 
+                        required>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Grupo produtos -->
+    <div class="row mt-5">
+        <h3>Grupo de produtos</h3>
+        <div class="row justify-content-between">
+            <div class="col">
+                <label for="grupoProdutoDataList" class="form-label">Adicionar grupo <span class="text-danger">*</span></label>
+                <ng-select [items]="grupoProdutoList"           
+                bindLabel="descricao" 
+                bindValue="id" 
+                [multiple]="true"
+                [closeOnSelect]="false"
+                [hideSelected]="true"
+                placeholder="Selecionar grupo de produto"
+                formControlName="gruposProduto" required>
+                </ng-select>
+                <small class="valid-feedback"
+                    *ngIf="fornecedorForm.valid; else invalidGrupoProduto">
+                    Grupos de Produto ok!
+                </small>
+                <ng-template #invalidGrupoProduto>
+                    <small class="invalid-feedback">
+                        É necessário inserir ao menos um grupo de produto
+                    </small>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-end mt-3 pb-5">
+    <div class="col-auto me-auto">
+        <app-button [btnClass]="'btn-tertiary-primary p-0'" routerLink="/fornecedor">Voltar</app-button>
+    </div>
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-outline-danger me-2'" (click)="onReset($event)">Cancelar</app-button>
+    </div>
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-primary'" type="submit">Salvar</app-button>
+    </div>
+</div>
+</form>

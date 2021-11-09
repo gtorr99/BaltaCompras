@@ -1,23 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import * as fromComponents from './components';
-import { ButtonComponent } from './components/button/button.component';
-import { TableComponent } from './components/table/table.component';
-import { FilterComponent } from './components/filter/filter.component';
-import { DateRangePickerModule } from './components/date-range-picker/date-range-picker.module';
+import { RouterModule } from '@angular/router';
+import { TitleComponent } from './components/title/title.component';
 @NgModule({
-  declarations: [...fromComponents.components, ButtonComponent, TableComponent, FilterComponent],
+  declarations: [...fromComponents.components, TitleComponent],
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
-    DateRangePickerModule
+    ReactiveFormsModule,
+    RouterModule
   ],
-  exports: [
-    ...fromComponents.components, 
-    DateRangePickerModule]
+  exports: [...fromComponents.components, RouterModule]
 })
 export class SharedModule { }

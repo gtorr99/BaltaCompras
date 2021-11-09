@@ -1,0 +1,240 @@
+<!-- Title n' Info -->
+<div id="title" class="row">
+    <div class="col">
+        <h2>Criar requisição</h2>
+    </div>
+    <div class="col-sm-auto">
+        <div id="header-info" class="row">
+            <div class="col-sm-auto mt-2">
+                <span class="header-label">Usuário:</span>
+            </div>
+            <div class="col-sm-auto mt-2">
+                <span class="header-value me-3">{{ currentUser }}</span>
+            </div>
+            <div class="col-sm-auto mt-2">
+                <span class="header-label">Data:</span>
+            </div>
+            <div class="col-sm-auto mt-2">
+                <span class="header-value">{{ today | date: 'dd/MM/yyyy' }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <label for="centroCustoInput" class="form-label">Centro de custo</label>
+            <input id="centroCustoInput" class="form-control px-3 py-2" list="datalistOptions">
+            <datalist id="datalistOptions">
+                <option *ngFor="let centroCusto of centroCustoLista" [value]="centroCusto.descricao">
+            </datalist>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <label class="form-label">Produtos</label>
+        <div class="col">
+            <app-filter [searchTextOptions]="textOptions" (optionEvent)="onSearch($event)"></app-filter>
+        </div>
+    </div>        
+</div>
+
+<!-- Produtos -->
+<div id="listaProdutos">
+    <div class="row">
+        <div class="col border-gray-end">
+            <div class="row mb-3">
+                <div class="col">
+                    <h3>Produtos filtrados</h3>
+                </div>
+                <div class="col-sm-auto me-2 mt-1">
+                    <h4>Grupo:</h4>
+                </div>
+                <div class="col-sm-auto mt-1">
+                    <span>{{ grupo }}</span>
+                </div>
+            </div>
+            <div class="row justify-content-between mb-3">
+                <div class="col">
+                    <div class="col-sm-auto">
+                        <h4>Produto</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row justify-content-end">
+                        <div class="col-sm-auto" style="width: 130px;">
+                            <h4>Quantidade</h4>
+                        </div>
+                        <div class="col-sm-auto">
+                            <h4>Unidade</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item align-items-center" *ngFor="let produtoFiltrado of listaProdutosFiltrados">
+                        <div class="row justify-content-between w-100">
+                            <div class="col my-auto">
+                                <div class="row">
+                                    <div class="col-sm-auto me-2 align-items-center">
+                                        <input class="form-check-input" type="checkbox" (click)="produtoFiltrado.isChecked = !produtoFiltrado.isChecked"
+                                        [checked]="produtoFiltrado.isChecked">
+                                    </div>
+                                    <div class="col-sm-auto align-items-center">
+                                        <span class="produto">
+                                            {{ produtoFiltrado.reqProd.produto.descricao }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row justify-content-end">
+                                    <div class="col-sm-auto me-2">
+                                        <div class="number-input ms-auto me-2">
+                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="bi-dash-lg pt-1"
+                                                (click)="onDecreaseQuantity(listaProdutosFiltrados, produtoFiltrado.reqProd)"></button>
+                                            <input class="quantity" min="0" name="quantity" [value]="produtoFiltrado.reqProd.quantidade" type="number">
+                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="bi-plus-lg pt-1"
+                                                (click)="onIncreaseQuantity(listaProdutosFiltrados, produtoFiltrado.reqProd)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <button #btnMedida class="btn-medida dropdown-toggle" data-bs-toggle="dropdown">
+                                            <span class="w-100 text-center">{{ produtoFiltrado.medidaSelecionada }}</span>
+                                            <i class="bi-chevron-down ms-auto" *ngIf="checkListSize(produtoFiltrado.reqProd)"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" *ngIf="checkListSize(produtoFiltrado.reqProd)">
+                                            <li class="dropdown-item" *ngFor="let un of produtoFiltrado.reqProd.produto.getListaMedidas()"
+                                                (click)="produtoFiltrado.medidaSelecionada = un">{{ un }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-2 align-self-center">
+            <div class="row text-center">
+                <div class="col">
+                    <div class="row">
+                        <label for="" class="form-label mb-2">Adicionar</label>
+                    </div>
+                    <div class="row">
+                        <app-button [btnClass]="'btn-outline-gray'" (click)="onAdd()">
+                            <i class="bi-chevron-right"></i>
+                        </app-button>
+                    </div>
+                    <div class="row">
+                        <app-button [btnClass]="'btn-outline-gray mt-2'" (click)="onRemove()">
+                            <i class="bi-chevron-left"></i>
+                        </app-button>
+                    </div>
+                    <div class="row">
+                        <label for="" class="form-label mt-2">Remover</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col border-gray-start">
+            <div class="row mb-3">
+                <h3>Produtos adicionados</h3>
+            </div>
+            <div class="row justify-content-between mb-3">
+                <div class="col">
+                    <div class="col-sm-auto">
+                        <h4>Produto</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row justify-content-end">
+                        <div class="col-sm-auto" style="width: 130px;">
+                            <h4>Quantidade</h4>
+                        </div>
+                        <div class="col-sm-auto">
+                            <h4>Unidade</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item align-items-center" *ngFor="let produtoAdicionado of listaProdutosAdicionados">
+                        <div class="row justify-content-between w-100">
+                            <div class="col my-auto">
+                                <div class="row">
+                                    <div class="col-sm-auto me-2 align-items-center">
+                                        <input class="form-check-input" type="checkbox"
+                                            (click)="produtoAdicionado.isChecked = !produtoAdicionado.isChecked"
+                                            [checked]="produtoAdicionado.isChecked">
+                                    </div>
+                                    <div class="col-sm-auto align-items-center">
+                                        <span class="produto">
+                                            {{ produtoAdicionado.reqProd.produto.descricao }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row justify-content-end">
+                                    <div class="col-sm-auto me-2">
+                                        <div class="number-input ms-auto me-2">
+                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                class="bi-dash-lg pt-1"
+                                                (click)="onDecreaseQuantity(listaProdutosAdicionados, produtoAdicionado.reqProd)"></button>
+                                            <input class="quantity" min="0" name="quantity" [value]="produtoAdicionado.reqProd.quantidade"
+                                                type="number">
+                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                class="bi-plus-lg pt-1"
+                                                (click)="onIncreaseQuantity(listaProdutosAdicionados, produtoAdicionado.reqProd)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <button #btnMedida class="btn-medida dropdown-toggle" data-bs-toggle="dropdown">
+                                            <span class="w-100 text-center">{{ produtoAdicionado.medidaSelecionada }}</span>
+                                            <i class="bi-chevron-down ms-auto" *ngIf="checkListSize(produtoAdicionado.reqProd)"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" *ngIf="checkListSize(produtoAdicionado.reqProd)">
+                                            <li class="dropdown-item" *ngFor="let un of produtoAdicionado.reqProd.produto.getListaMedidas()"
+                                                (click)="produtoAdicionado.medidaSelecionada = un">{{ un }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-end mt-3 pb-5">
+    <div class="col-sm-auto me-auto">
+        <app-button [btnClass]="'btn-tertiary-primary p-0'" routerLink="/requisicao">Voltar</app-button>
+    </div>
+    <div class="col-sm-auto">
+        <app-button [btnClass]="'btn-outline-danger me-2'">Cancelar</app-button>
+    </div>
+    <div class="col-sm-auto">
+        <app-button [btnClass]="'btn-primary'">Concluir</app-button>
+    </div>
+</div>
+
+<!-- <div class="ng-autocomplete">
+    <ng-autocomplete [data]="data" [searchKeyword]="keyword" (selected)='selectEvent($event)'
+        (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
+        [notFoundTemplate]="notFoundTemplate">
+    </ng-autocomplete>
+
+    <ng-template #itemTemplate let-item>
+        <a [innerHTML]="item.name"></a>
+    </ng-template>
+
+    <ng-template #notFoundTemplate let-notFound>
+        <div [innerHTML]="notFound"></div>
+    </ng-template>
+</div> -->

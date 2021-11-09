@@ -1,0 +1,45 @@
+.container {
+    background: white;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--radius);
+    margin: 32px auto;
+    padding: 32px;
+    max-width: 480px;
+    height: 410px;
+}
+
+h1#logo {
+    font: var(--font-bold-48);
+    white-space: nowrap;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#loginForm {
+    width: 320px;
+    margin: 16px auto;
+}
+
+.form-label {
+    font: var(--font-bold-16);
+    margin-bottom: 0.4rem;
+}
+
+div a#linkRecuperarSenha {
+    text-decoration: none;
+    color: var(--gray-600);
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+div a#linkRecuperarSenha:hover {
+    color: var(--black);
+    transition: 0.2s;
+}
+
+@media (max-width: 430px) { 
+   h1#logo {
+        font: var(--font-bold-32); 
+   }
+}

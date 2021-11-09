@@ -1,20 +1,9 @@
-input#barraPesquisa {
-    padding: 0;
-    border: var(--border);
-    border-left: none;
-    border-right: none;
-    height: 40px;
-}
-input::placeholder, #lupa {
-    color: var(--gray-400);
+#title {
+    margin: 32px auto;
 }
 
-#lupa {
-    background-color: white;
-    padding: 4px 8px;
-    border: var(--border);
-    border-right: none;
-    height: 40px;
+h2 {
+    font: var(--font-bold-32);
 }
 
 .bi-chevron-down::before {

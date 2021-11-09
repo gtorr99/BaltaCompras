@@ -1,19 +1,14 @@
-* {
-    margin: 0;
-    padding: 0;
-}
-
 .no-icon::after {
     display: none;
 }
 
 .context-menu {
     cursor: pointer;
-    color: var(--light-gray);
+    color: var(--gray-400);
 }
 
 .context-menu:hover {
-    color: var(--light-dark);
+    color: var(--gray-400);
 }
 
 .dropdown-menu, .dropdown-divider {
@@ -46,9 +41,9 @@
     height: 40px;
     padding: 4px 8px;
     background-color: white;
-    border: 2px solid var(--light-gray);
+    border: var(--border);
     align-items: center;
-    color: var(--light-dark);
+    color: var(--gray-400);
 }
 
 #paging-bar {
@@ -63,20 +58,20 @@
 }
 
 .navigation {
-    color: var(--dark);
+    color: var(--black);
     border: 1px solid transparent;
     padding: 0 2px;
 }
 
 .navigation:hover {
-    background-color: var(--light-gray);
+    background-color: var(--gray-400);
     border: 1px solid var(--gray);
     border-radius: var(--radius);
     color: white;
 }
 
 .table {
-    border: 2px solid var(--gray);
+    border: var(--border);
     background-color: white;
     border-bottom: none;
 }
@@ -86,10 +81,10 @@ th, tr {
 }
 
 th {
-    background-color: rgb(243, 243, 243);
+    background-color: var(--gray-200);
     border-color: var(--gray) !important;
-    border-top-left-radius: 5px 5px;
-    border-top-right-radius: 5px 5px;
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
 }
 
 tr:last-child {
@@ -97,7 +92,7 @@ tr:last-child {
 }
 
 tr {
-    border: 1px solid var(--light-gray);
+    border: 1px solid var(--gray-400);
 }
 tr td {
     padding: 12px;

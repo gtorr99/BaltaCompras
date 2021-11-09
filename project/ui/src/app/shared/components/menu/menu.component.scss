@@ -4,7 +4,7 @@
 }
 
 .navbar {
-    background-color: var(--dark);
+    background-color: var(--black);
     max-height: 45px;
     padding: 8px 16px;
 }
@@ -50,10 +50,10 @@ i.bi-bell-fill::before {
     height: 100%;
     position: absolute;
     z-index: 20;
-    background-color: var(--dark);
+    background-color: var(--black);
     overflow-x: hidden;
     transition: 0.3s;
-    box-shadow: var(--box-shadow)
+    box-shadow: var(--box-shadow);
 }
 
 .sidebar-header {

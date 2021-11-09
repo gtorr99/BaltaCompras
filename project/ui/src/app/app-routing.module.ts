@@ -1,30 +1,33 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from '@modules/login/login.component';
-import { RequisicaoComponent } from '@modules/requisicao/requisicao.component';
+import { Routes, RouterModule } from '@angular/router';
+import { PageNotFoundComponent } from '@shared/components/page-not-found/page-not-found.component'
 
 const routes: Routes = [
     { 
         path: '',
-        component: LoginComponent,
+        redirectTo: 'home',
         pathMatch: 'full'
     },
     {
         path: 'login',
-        loadChildren: () => import('@modules/login/login-routing.module').then(m => m.LoginRoutingModule)
+        loadChildren: () => import('@modules/login/login.module').then(m => m.LoginModule)
     },
     {
         path: 'home',
-        loadChildren: () => import('@modules/home/home-routing.module').then(m => m.HomeRoutingModule)
+        loadChildren: () => import('@modules/home/home.module').then(m => m.HomeModule)
     },
     {
         path: 'requisicao',
-        loadChildren: () => import('@modules/requisicao/requisicao-routing.module').then(m => m.RequisicaoRoutingModule)
+        loadChildren: () => import('@modules/requisicao/requisicao.module').then(m => m.RequisicaoModule)
     },
     {
-        path: 'requisicao/criar',
-        component: RequisicaoComponent
+        path: 'fornecedor',
+        loadChildren: () => import('@modules/fornecedor/fornecedor.module').then(m => m.FornecedorModule)
     },
+    {
+        path: '**',
+        component: PageNotFoundComponent
+    }
 ];
 
 @NgModule({

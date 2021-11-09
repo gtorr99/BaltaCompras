@@ -1,5 +1,5 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "~@ng-select/ng-select/themes/default.theme.css";
 
 body {
   margin: 0;
@@ -8,19 +8,58 @@ body {
   background-color: var(--background-color);
 }
 
+main.container * {
+  padding: 0;
+  margin: 0;
+}
+
+main.container h3 {
+  font: var(--font-bold-20);
+}
+
+main.container h4 {
+  font: var(--font-bold-16);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+@media (min-width: 1080px) {
+  main.container {
+    padding: 0 100px;
+  }
+}
+
+@media (max-width: 1079px) {
+  main.container {
+    padding: 0 32px;
+  }
+}
+
 :root {
   // Cores
-  --background-color: #f3f3f3;
-  --dark: #0e0e0e;
-  --light-dark: #0f0f0fc7;
+  --background-color: #f8f9fa;
+  --black: #0c0c0c;
 
-  --gray: #C3C3C3;
-  --light-gray: #CFCFCF;
-  --dark-gray: #808080;
+  --gray: #adb5bd;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-400: #ced4da;
+  --gray-600: #6c757d;
+  --gray-900: #6c757d;
 
-  --blue: #549BE1;
-  --dark-blue: #185b9e;
-  --light-blue: #87bff6;
+  --primary: #0a58ca;
+  --danger: #b02a37;
+
+  --blue-400: #3d8bfd;
 
   // Fontes
   --font-family: "Roboto", sans-serif;
@@ -40,4 +79,5 @@ body {
   // Box shadow
   --box-shadow: 5px 7px 4px rgba(0, 0, 0, 0.3);
   --radius: 4px;
+  --border: 2px solid var(--gray-400);
 }

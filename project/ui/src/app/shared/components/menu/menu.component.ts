@@ -53,7 +53,7 @@ export class MenuComponent implements OnInit {
       },
       {
         name: "Fornecedores",
-        value: null,
+        value: "/fornecedor",
         icon: "bi-box"
       }
     ]

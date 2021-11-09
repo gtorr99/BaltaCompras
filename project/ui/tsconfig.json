@@ -4,20 +4,26 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@env": [
-        "environments/environment"
-      ],
-      "@shared/*": [
-        "app/shared/*"
+      "@assets/*": [
+        "app/assets/*"
       ],
       "@core/*": [
         "app/core/*"
       ],
-      "@modules/*": [
-        "app/modules/*"
+      "@enums/*": [
+        "app/modules/models/enums/*"
       ],
-      "@assets/*": [
-        "app/assets/*"
+      "@env": [
+        "environments/environment"
+      ],
+      "@models/*": [
+        "app/modules/models/*"
+      ],
+      "@modules/*": [
+        "app/modules/components/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
       ]
     },
     "outDir": "./dist/out-tsc",
