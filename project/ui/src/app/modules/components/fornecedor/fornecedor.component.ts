@@ -5,6 +5,10 @@ import { Fornecedor } from '@models/fornecedor.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { ToastrService } from 'ngx-toastr';
+import { FornecedorService } from 'app/modules/services/fornecedor.service';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { CEP } from '@models/cep.model';
 
 @Component({
   selector: 'app-fornecedor',
@@ -22,6 +26,7 @@ export class FornecedorComponent implements OnInit {
   inscricaoEstadualMask: string = "000.000.000.000";
   phoneMask: string = "(00) 00000-0000";
   cepMask: string = "00000-000";
+  cepPattern: RegExp = new RegExp(/^\d{5}\d{3}/);
 
   private maxLength: number = 255;
 
@@ -38,7 +43,8 @@ export class FornecedorComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private fornecedorService: FornecedorService
   ) { }
 
   ngOnInit(): void {
@@ -54,7 +60,7 @@ export class FornecedorComponent implements OnInit {
         telefone: ['', this.commonValidators],
       }),
       endereco: this.formBuilder.group({
-        cep: ['', this.commonValidators],
+        cep: ['', [...this.commonValidators, Validators.pattern(this.cepPattern)]],
         rua: ['', this.textValidator],
         numero: ['', [...this.commonValidators, Validators.maxLength(5)]],
         complemento: ['', Validators.maxLength(this.maxLength)],
@@ -66,38 +72,78 @@ export class FornecedorComponent implements OnInit {
     });
     this.loadEstados();
     this.loadGrupos();
+
   }
 
-  onSubmit(event: any) {
-    this.fornecedorForm.markAllAsTouched();
-    var form = document.getElementsByClassName('needs-validation')[0] as HTMLFormElement;
-    if (form.checkValidity() === false && !this.fornecedorForm.valid) {
-      event.preventDefault();
-      event.stopPropagation();
-    } else {
-      let fornecedor = new Fornecedor({
-        nomeFantasia: this.fornecedorForm.get('info.nomeFantasia').value,
-        razaoSocial: this.fornecedorForm.get('info.razaoSocial').value,
-        inscricaoEstadual: this.fornecedorForm.get('info.inscricaoEstadual').value,
-        cnpj: this.fornecedorForm.get('info.cnpj').value,
-        email: this.fornecedorForm.get('contato.email').value,
-        telefone: this.fornecedorForm.get('contato.telefone').value,
-        cep: this.fornecedorForm.get('endereco.cep').value,
-        rua: this.fornecedorForm.get('endereco.rua').value,
-        numero: this.fornecedorForm.get('endereco.numero').value,
-        complemento: this.fornecedorForm.get('endereco.complemento').value,
-        bairro: this.fornecedorForm.get('endereco.bairro').value,
-        cidade: this.fornecedorForm.get('endereco.cidade').value,
-        estado: this.fornecedorForm.get('endereco.estado').value,
-        gruposProduto: this.fornecedorForm.get('gruposProduto').value.map(gp => {
-          return new GrupoProduto({ id: gp, descricao: this.grupoProdutoList.find(gpl => gpl.id == gp).descricao });
-        })
+  onSearch() {
+    if (this.cepPattern.test(this.fornecedorForm.get('endereco.cep').value)) {
+      this.fornecedorService.verificarCEP(this.fornecedorForm.get('endereco.cep').value)
+        .subscribe(response => {
+          if (!response.erro) {
+            this.fornecedorForm.patchValue({
+              endereco: {
+                rua: response.logradouro,
+                complemento: response.complemento,
+                bairro: response.bairro,
+                cidade: response.localidade,
+                estado: response.uf
+              }
+            });
+          } else {
+            this.fornecedorForm.patchValue({
+              endereco: {
+                rua: '',
+                complemento: '',
+                bairro: '',
+                cidade: '',
+                estado: ''
+              }
+            });
+            this.fornecedorForm.get('endereco.cep').setErrors({ 'incorrect': true });
+            // this.fornecedorForm.setErrors({
+            //   endereco: {
+            //     cep: 
+            //   }
+            // })
+          }
       });
-      console.log(fornecedor);
     }
-    
-    form.classList.add('was-validated');
-    this.toastrService.success("Fornecedor cadastrado!");
+  }
+
+
+  onSubmit(event: any) {
+    if (event.key == "Enter" || event.type == "submit") {
+      this.fornecedorForm.markAllAsTouched();
+      var form = document.getElementsByClassName('needs-validation')[0] as HTMLFormElement;
+      if (form.checkValidity() === false && !this.fornecedorForm.valid) {
+        event.preventDefault();
+        event.stopPropagation();
+      } else {
+        let fornecedor = new Fornecedor({
+          id: 0,
+          nomeFantasia: this.fornecedorForm.get('info.nomeFantasia').value,
+          razaoSocial: this.fornecedorForm.get('info.razaoSocial').value,
+          inscricaoEstadual: this.fornecedorForm.get('info.inscricaoEstadual').value,
+          cnpj: this.fornecedorForm.get('info.cnpj').value,
+          email: this.fornecedorForm.get('contato.email').value,
+          telefone: this.fornecedorForm.get('contato.telefone').value,
+          cep: this.fornecedorForm.get('endereco.cep').value,
+          rua: this.fornecedorForm.get('endereco.rua').value,
+          numero: this.fornecedorForm.get('endereco.numero').value,
+          complemento: this.fornecedorForm.get('endereco.complemento').value,
+          bairro: this.fornecedorForm.get('endereco.bairro').value,
+          cidade: this.fornecedorForm.get('endereco.cidade').value,
+          estado: this.fornecedorForm.get('endereco.estado').value,
+          gruposProduto: this.fornecedorForm.get('gruposProduto').value.map(gp => {
+            return new GrupoProduto({ id: gp, descricao: this.grupoProdutoList.find(gpl => gpl.id == gp).descricao });
+          })
+        });
+        this.fornecedorService.salvar(fornecedor).subscribe(() => {
+          this.toastrService.success("Fornecedor cadastrado!");
+        });
+      }
+      form.classList.add('was-validated');
+    }
   }
 
   onReset(event: any) {

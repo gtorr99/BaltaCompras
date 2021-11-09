@@ -14,7 +14,6 @@ import { DatePipe } from '@angular/common';
 
 // External libs
 import { NgSelectModule } from '@ng-select/ng-select';
-import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -29,12 +28,7 @@ import { ToastrModule } from 'ngx-toastr';
     NgbModalModule,
     NgSelectModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    ToastrModule.forRoot({
-      timeOut: 10000,
-      positionClass: 'toast-bottom-right',
-      preventDuplicates: true
-    })
+    HttpClientModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent],

@@ -137,6 +137,7 @@
                     <input type="text" id="cep" class="form-control" formControlName="cep"
                     [mask]="cepMask"
                     [clearIfNotMatch]="true"
+                    (change)="onSearch()"
                     required>
                     <small class="valid-feedback"
                         *ngIf="fornecedorForm.get('endereco.cep').valid && fornecedorForm.get('endereco.cep').touched; else invalidCEP">
@@ -206,6 +207,7 @@
                 bindLabel="descricao" 
                 bindValue="id" 
                 [multiple]="true"
+                [searchable]="true"
                 [closeOnSelect]="false"
                 [hideSelected]="true"
                 placeholder="Selecionar grupo de produto"
@@ -226,7 +228,7 @@
 </div>
 <div class="row justify-content-end mt-3 pb-5">
     <div class="col-auto">
-        <app-button [btnClass]="'btn-outline-danger me-2'" (click)="onReset($event)">Cancelar</app-button>
+        <app-button [btnClass]="'btn-outline-danger me-2'" type="button" (click)="onReset($event)">Cancelar</app-button>
     </div>
     <div class="col-auto">
         <app-button [btnClass]="'btn-primary'" type="submit">Salvar</app-button>
