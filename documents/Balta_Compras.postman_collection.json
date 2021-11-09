@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "cf9af107-fcab-4f5f-ae7a-e56591c21261",
+		"name": "Balta Compras",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Requisição",
+			"item": [
+				{
+					"name": "Update status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/requisicao/aprovado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"requisicao",
+								"aprovado"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Requisições",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/requisicao",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"requisicao"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api"
+		}
+	]
+}
