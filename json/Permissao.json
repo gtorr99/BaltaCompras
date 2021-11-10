@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "descricao": "administrador"
+    },
+    {
+        "id": 2,
+        "descricao": "criar requisicao"
+    },
+    {
+        "id": 3,
+        "descricao": "ler requisicao"
+    },
+    {
+        "id": 4,
+        "descricao": "aprovar requisicao"
+    },
+    {
+        "id": 5,
+        "descricao": "criar cotacao"
+    },
+    {
+        "id": 6,
+        "descricao": "ler cotacao"
+    },
+    {
+        "id": 7,
+        "descricao": "criar ordem"
+    },
+    {
+        "id": 8,
+        "descricao": "ler ordem"
+    },
+    {
+        "id": 9,
+        "descricao": "aprovar ordem"
+    }
+]

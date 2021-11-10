@@ -1,0 +1,340 @@
+[
+    {
+        "id": 1,
+        "requisicao": {
+            "id": 1,
+            "data": "2021-10-25",
+            "status": 0,
+            "observacoes": "precisamos de um ps5 urgente na producao!",
+            "usuario": {
+                "id": 5,
+                "nome": "jorge ivelson",
+                "email": "jorge_ivelson@fatec.com",
+                "hashSenha": "00xff-hex",
+                "status": 0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                },
+                "funcao": {
+                    "id": 3,
+                    "descricao": "requisitante",
+                    "permissoes": [
+                        {
+                            "id": 2,
+                            "descricao": "criar requisicao"
+                        },
+                        {
+                            "id": 3,
+                            "descricao": "ler requisicao"
+                        }
+                    ]
+                }
+            },
+            "centroCusto": {
+                "id": 2,
+                "descricao": "controle de entradas e saídas",
+                "valorGasto": 10000.0,
+                "valorLimite": 15000.0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                }
+            }
+        },
+        "produtos": {
+            "id": 1,
+            "descricao": "ps5",
+            "unMedida": 0,
+            "grupoProduto": {
+                "id": 1,
+                "descricao": "eletrônicos"
+            }
+        },
+        "quantidade": 2.0,
+        "grupoCotacaoProduto": null
+    },
+    {
+        "id": 3,
+        "requisicao": {
+            "id": 1,
+            "data": "2021-10-25",
+            "status": 0,
+            "observacoes": "precisamos de um ps5 urgente na producao!",
+            "usuario": {
+                "id": 5,
+                "nome": "jorge ivelson",
+                "email": "jorge_ivelson@fatec.com",
+                "hashSenha": "00xff-hex",
+                "status": 0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                },
+                "funcao": {
+                    "id": 3,
+                    "descricao": "requisitante",
+                    "permissoes": [
+                        {
+                            "id": 2,
+                            "descricao": "criar requisicao"
+                        },
+                        {
+                            "id": 3,
+                            "descricao": "ler requisicao"
+                        }
+                    ]
+                }
+            },
+            "centroCusto": {
+                "id": 2,
+                "descricao": "controle de entradas e saídas",
+                "valorGasto": 10000.0,
+                "valorLimite": 15000.0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                }
+            }
+        },
+        "produtos": {
+            "id": 3,
+            "descricao": "água sanitária",
+            "unMedida": 0,
+            "grupoProduto": {
+                "id": 2,
+                "descricao": "material de limpeza"
+            }
+        },
+        "quantidade": 10.0,
+        "grupoCotacaoProduto": null
+    },
+    {
+        "id": 4,
+        "requisicao": {
+            "id": 1,
+            "data": "2021-10-25",
+            "status": 0,
+            "observacoes": "precisamos de um ps5 urgente na producao!",
+            "usuario": {
+                "id": 5,
+                "nome": "jorge ivelson",
+                "email": "jorge_ivelson@fatec.com",
+                "hashSenha": "00xff-hex",
+                "status": 0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                },
+                "funcao": {
+                    "id": 3,
+                    "descricao": "requisitante",
+                    "permissoes": [
+                        {
+                            "id": 2,
+                            "descricao": "criar requisicao"
+                        },
+                        {
+                            "id": 3,
+                            "descricao": "ler requisicao"
+                        }
+                    ]
+                }
+            },
+            "centroCusto": {
+                "id": 2,
+                "descricao": "controle de entradas e saídas",
+                "valorGasto": 10000.0,
+                "valorLimite": 15000.0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                }
+            }
+        },
+        "produtos": {
+            "id": 4,
+            "descricao": "sabao em pó",
+            "unMedida": 0,
+            "grupoProduto": {
+                "id": 2,
+                "descricao": "material de limpeza"
+            }
+        },
+        "quantidade": 15.0,
+        "grupoCotacaoProduto": null
+    },
+    {
+        "id": 1,
+        "requisicao": {
+            "id": 1,
+            "data": "2021-10-25",
+            "status": 0,
+            "observacoes": "precisamos de um ps5 urgente na producao!",
+            "usuario": {
+                "id": 5,
+                "nome": "jorge ivelson",
+                "email": "jorge_ivelson@fatec.com",
+                "hashSenha": "00xff-hex",
+                "status": 0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                },
+                "funcao": {
+                    "id": 3,
+                    "descricao": "requisitante",
+                    "permissoes": [
+                        {
+                            "id": 2,
+                            "descricao": "criar requisicao"
+                        },
+                        {
+                            "id": 3,
+                            "descricao": "ler requisicao"
+                        }
+                    ]
+                }
+            },
+            "centroCusto": {
+                "id": 2,
+                "descricao": "controle de entradas e saídas",
+                "valorGasto": 10000.0,
+                "valorLimite": 15000.0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                }
+            }
+        },
+        "produtos": {
+            "id": 1,
+            "descricao": "ps5",
+            "unMedida": 0,
+            "grupoProduto": {
+                "id": 1,
+                "descricao": "eletrônicos"
+            }
+        },
+        "quantidade": 2.0,
+        "grupoCotacaoProduto": null
+    },
+    {
+        "id": 2,
+        "requisicao": {
+            "id": 2,
+            "data": "2021-10-25",
+            "status": 0,
+            "observacoes": "partiu uns ssds topzeira",
+            "usuario": {
+                "id": 2,
+                "nome": "caue da viola",
+                "email": "caue_viola@fatec.com",
+                "hashSenha": "00xff-hex",
+                "status": 0,
+                "setor": {
+                    "id": 3,
+                    "descricao": "ti",
+                    "centrosCusto": []
+                },
+                "funcao": {
+                    "id": 1,
+                    "descricao": "administrador",
+                    "permissoes": [
+                        {
+                            "id": 1,
+                            "descricao": "administrador"
+                        }
+                    ]
+                }
+            },
+            "centroCusto": {
+                "id": 4,
+                "descricao": "help desk",
+                "valorGasto": 0.0,
+                "valorLimite": 1000.0,
+                "setor": {
+                    "id": 3,
+                    "descricao": "ti",
+                    "centrosCusto": []
+                }
+            }
+        },
+        "produtos": {
+            "id": 2,
+            "descricao": "ssd intel 1tb",
+            "unMedida": 0,
+            "grupoProduto": {
+                "id": 1,
+                "descricao": "eletrônicos"
+            }
+        },
+        "quantidade": 20.0,
+        "grupoCotacaoProduto": null
+    },
+    {
+        "id": 3,
+        "requisicao": {
+            "id": 1,
+            "data": "2021-10-25",
+            "status": 0,
+            "observacoes": "precisamos de um ps5 urgente na producao!",
+            "usuario": {
+                "id": 5,
+                "nome": "jorge ivelson",
+                "email": "jorge_ivelson@fatec.com",
+                "hashSenha": "00xff-hex",
+                "status": 0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                },
+                "funcao": {
+                    "id": 3,
+                    "descricao": "requisitante",
+                    "permissoes": [
+                        {
+                            "id": 2,
+                            "descricao": "criar requisicao"
+                        },
+                        {
+                            "id": 3,
+                            "descricao": "ler requisicao"
+                        }
+                    ]
+                }
+            },
+            "centroCusto": {
+                "id": 2,
+                "descricao": "controle de entradas e saídas",
+                "valorGasto": 10000.0,
+                "valorLimite": 15000.0,
+                "setor": {
+                    "id": 2,
+                    "descricao": "almoxarifado",
+                    "centrosCusto": []
+                }
+            }
+        },
+        "produtos": {
+            "id": 3,
+            "descricao": "água sanitária",
+            "unMedida": 0,
+            "grupoProduto": {
+                "id": 2,
+                "descricao": "material de limpeza"
+            }
+        },
+        "quantidade": 10.0,
+        "grupoCotacaoProduto": null
+    }
+]

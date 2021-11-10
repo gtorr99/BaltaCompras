@@ -1,0 +1,96 @@
+[
+    {
+        "id": 1,
+        "descricao": "administrador",
+        "permissoes": [
+            {
+                "id": 1,
+                "descricao": "administrador"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "descricao": "comprador",
+        "permissoes": [
+            {
+                "id": 8,
+                "descricao": "ler ordem"
+            },
+            {
+                "id": 7,
+                "descricao": "criar ordem"
+            },
+            {
+                "id": 3,
+                "descricao": "ler requisicao"
+            },
+            {
+                "id": 5,
+                "descricao": "criar cotacao"
+            },
+            {
+                "id": 6,
+                "descricao": "ler cotacao"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "descricao": "requisitante",
+        "permissoes": [
+            {
+                "id": 3,
+                "descricao": "ler requisicao"
+            },
+            {
+                "id": 2,
+                "descricao": "criar requisicao"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "descricao": "aprovador requisicao",
+        "permissoes": [
+            {
+                "id": 3,
+                "descricao": "ler requisicao"
+            },
+            {
+                "id": 4,
+                "descricao": "aprovar requisicao"
+            },
+            {
+                "id": 2,
+                "descricao": "criar requisicao"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "descricao": "aprovador ordem",
+        "permissoes": [
+            {
+                "id": 8,
+                "descricao": "ler ordem"
+            },
+            {
+                "id": 7,
+                "descricao": "criar ordem"
+            },
+            {
+                "id": 3,
+                "descricao": "ler requisicao"
+            },
+            {
+                "id": 9,
+                "descricao": "aprovar ordem"
+            },
+            {
+                "id": 6,
+                "descricao": "ler cotacao"
+            }
+        ]
+    }
+]

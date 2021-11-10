@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "descricao": "ps5",
+        "unMedida": 0,
+        "grupoProduto": {
+            "id": 1,
+            "descricao": "eletrônicos"
+        }
+    },
+    {
+        "id": 2,
+        "descricao": "ssd intel 1tb",
+        "unMedida": 0,
+        "grupoProduto": {
+            "id": 1,
+            "descricao": "eletrônicos"
+        }
+    },
+    {
+        "id": 3,
+        "descricao": "água sanitária",
+        "unMedida": 0,
+        "grupoProduto": {
+            "id": 2,
+            "descricao": "material de limpeza"
+        }
+    },
+    {
+        "id": 4,
+        "descricao": "sabao em pó",
+        "unMedida": 0,
+        "grupoProduto": {
+            "id": 2,
+            "descricao": "material de limpeza"
+        }
+    }
+]

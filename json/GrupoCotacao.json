@@ -1,0 +1,90 @@
+[
+    {
+        "id": 1,
+        "data": "2021-10-25T23:57:15.000+00:00",
+        "prazoSolicitado": "2021-10-25T03:00:00.000+00:00",
+        "observacoes": null,
+        "usuario": {
+            "id": 4,
+            "nome": "vitor valoroso",
+            "email": "vitor_valoroso@fatec.com",
+            "hashSenha": "00xff-hex",
+            "status": 0,
+            "setor": {
+                "id": 1,
+                "descricao": "compras",
+                "centrosCusto": []
+            },
+            "funcao": {
+                "id": 2,
+                "descricao": "comprador",
+                "permissoes": [
+                    {
+                        "id": 6,
+                        "descricao": "ler cotacao"
+                    },
+                    {
+                        "id": 7,
+                        "descricao": "criar ordem"
+                    },
+                    {
+                        "id": 3,
+                        "descricao": "ler requisicao"
+                    },
+                    {
+                        "id": 5,
+                        "descricao": "criar cotacao"
+                    },
+                    {
+                        "id": 8,
+                        "descricao": "ler ordem"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": 2,
+        "data": "2021-10-25T23:57:15.000+00:00",
+        "prazoSolicitado": "2021-10-25T03:00:00.000+00:00",
+        "observacoes": null,
+        "usuario": {
+            "id": 4,
+            "nome": "vitor valoroso",
+            "email": "vitor_valoroso@fatec.com",
+            "hashSenha": "00xff-hex",
+            "status": 0,
+            "setor": {
+                "id": 1,
+                "descricao": "compras",
+                "centrosCusto": []
+            },
+            "funcao": {
+                "id": 2,
+                "descricao": "comprador",
+                "permissoes": [
+                    {
+                        "id": 6,
+                        "descricao": "ler cotacao"
+                    },
+                    {
+                        "id": 7,
+                        "descricao": "criar ordem"
+                    },
+                    {
+                        "id": 3,
+                        "descricao": "ler requisicao"
+                    },
+                    {
+                        "id": 5,
+                        "descricao": "criar cotacao"
+                    },
+                    {
+                        "id": 8,
+                        "descricao": "ler ordem"
+                    }
+                ]
+            }
+        }
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "descricao": "controle de compras",
+        "valorGasto": 10000.0,
+        "valorLimite": 20000.0
+    },
+    {
+        "id": 2,
+        "descricao": "controle de entradas e saídas",
+        "valorGasto": 10000.0,
+        "valorLimite": 15000.0
+    },
+    {
+        "id": 3,
+        "descricao": "big data",
+        "valorGasto": 5000.0,
+        "valorLimite": 10000.0
+    },
+    {
+        "id": 4,
+        "descricao": "help desk",
+        "valorGasto": 0.0,
+        "valorLimite": 1000.0
+    }
+]

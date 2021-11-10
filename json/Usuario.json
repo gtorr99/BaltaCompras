@@ -1,0 +1,200 @@
+[
+    {
+        "id": 1,
+        "nome": "joel nathan",
+        "email": "joel_nathan@fatec.com",
+        "hashSenha": "00xff-hex",
+        "status": 0,
+        "setor": {
+            "id": 3,
+            "descricao": "ti",
+            "centrosCusto": []
+        },
+        "funcao": {
+            "id": 1,
+            "descricao": "administrador",
+            "permissoes": [
+                {
+                    "id": 1,
+                    "descricao": "administrador"
+                }
+            ]
+        }
+    },
+    {
+        "id": 2,
+        "nome": "caue da viola",
+        "email": "caue_viola@fatec.com",
+        "hashSenha": "00xff-hex",
+        "status": 0,
+        "setor": {
+            "id": 3,
+            "descricao": "ti",
+            "centrosCusto": []
+        },
+        "funcao": {
+            "id": 1,
+            "descricao": "administrador",
+            "permissoes": [
+                {
+                    "id": 1,
+                    "descricao": "administrador"
+                }
+            ]
+        }
+    },
+    {
+        "id": 3,
+        "nome": "gabriel towers",
+        "email": "gabriel_towers@fatec.com",
+        "hashSenha": "00xff-hex",
+        "status": 0,
+        "setor": {
+            "id": 3,
+            "descricao": "ti",
+            "centrosCusto": []
+        },
+        "funcao": {
+            "id": 1,
+            "descricao": "administrador",
+            "permissoes": [
+                {
+                    "id": 1,
+                    "descricao": "administrador"
+                }
+            ]
+        }
+    },
+    {
+        "id": 4,
+        "nome": "vitor valoroso",
+        "email": "vitor_valoroso@fatec.com",
+        "hashSenha": "00xff-hex",
+        "status": 0,
+        "setor": {
+            "id": 1,
+            "descricao": "compras",
+            "centrosCusto": []
+        },
+        "funcao": {
+            "id": 2,
+            "descricao": "comprador",
+            "permissoes": [
+                {
+                    "id": 3,
+                    "descricao": "ler requisicao"
+                },
+                {
+                    "id": 5,
+                    "descricao": "criar cotacao"
+                },
+                {
+                    "id": 8,
+                    "descricao": "ler ordem"
+                },
+                {
+                    "id": 7,
+                    "descricao": "criar ordem"
+                },
+                {
+                    "id": 6,
+                    "descricao": "ler cotacao"
+                }
+            ]
+        }
+    },
+    {
+        "id": 5,
+        "nome": "jorge ivelson",
+        "email": "jorge_ivelson@fatec.com",
+        "hashSenha": "00xff-hex",
+        "status": 0,
+        "setor": {
+            "id": 2,
+            "descricao": "almoxarifado",
+            "centrosCusto": []
+        },
+        "funcao": {
+            "id": 3,
+            "descricao": "requisitante",
+            "permissoes": [
+                {
+                    "id": 2,
+                    "descricao": "criar requisicao"
+                },
+                {
+                    "id": 3,
+                    "descricao": "ler requisicao"
+                }
+            ]
+        }
+    },
+    {
+        "id": 6,
+        "nome": "boss do ivelson",
+        "email": "boss_ivelson@fatec.com",
+        "hashSenha": "00xff-hex",
+        "status": 0,
+        "setor": {
+            "id": 2,
+            "descricao": "almoxarifado",
+            "centrosCusto": []
+        },
+        "funcao": {
+            "id": 4,
+            "descricao": "aprovador requisicao",
+            "permissoes": [
+                {
+                    "id": 4,
+                    "descricao": "aprovar requisicao"
+                },
+                {
+                    "id": 2,
+                    "descricao": "criar requisicao"
+                },
+                {
+                    "id": 3,
+                    "descricao": "ler requisicao"
+                }
+            ]
+        }
+    },
+    {
+        "id": 7,
+        "nome": "boss do valoroso",
+        "email": "boss_valoroso@fatec.com",
+        "hashSenha": "00xff-hex",
+        "status": 0,
+        "setor": {
+            "id": 1,
+            "descricao": "compras",
+            "centrosCusto": []
+        },
+        "funcao": {
+            "id": 5,
+            "descricao": "aprovador ordem",
+            "permissoes": [
+                {
+                    "id": 3,
+                    "descricao": "ler requisicao"
+                },
+                {
+                    "id": 8,
+                    "descricao": "ler ordem"
+                },
+                {
+                    "id": 7,
+                    "descricao": "criar ordem"
+                },
+                {
+                    "id": 9,
+                    "descricao": "aprovar ordem"
+                },
+                {
+                    "id": 6,
+                    "descricao": "ler cotacao"
+                }
+            ]
+        }
+    }
+]
