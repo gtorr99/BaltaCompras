@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
 import { Fornecedor } from '@models/fornecedor.model';
 import { FornecedorService } from '@services/fornecedor.service';
 import { Filter, FilterType, SearchMap } from '@shared/components';
-import { TableStructure } from '@shared/components/table/table-structure.model';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
+import { StatusEnum } from '@models/enum';
 
 @Component({
   selector: 'app-fornecedor-tabela',
@@ -17,19 +17,17 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
   encapsulation: ViewEncapsulation.None
 })
 export class FornecedorTabelaComponent implements OnInit {
-  getRowClass = (row) => {
-    return {
-      'row-color': true
-    };
-  }
-  tabelaRequisicao: TableStructure
+
+  // Filtros
   textOptions: SearchMap[] = [];
-  filterOptions: Filter[] = [];
+  filters: Filter[] = [];
   query: string = '';
   filterQuery: string = '';
   sortQuery: string = '';
-  defaultStatus: string = 'status=ATIVO';
+  defaultStatus: string = '';
 
+  // Tabela
+  @ViewChild('myTable') table: any;
   page: Page<Fornecedor> = new Page<Fornecedor>();
   rows = new Array<Fornecedor>();
   ColumnMode = ColumnMode;
@@ -40,6 +38,30 @@ export class FornecedorTabelaComponent implements OnInit {
     totalMessage: 'resultados',
     // Footer selected message
     selectedMessage: 'selected'
+  }
+
+  expandRow(row) {
+    this.table.rowDetail.collapseAllRows(row);
+    this.table.rowDetail.toggleExpandRow(row);
+    console.log(row);
+    //Your code goes here - calling API 
+  }
+
+  collapseRow() {
+    this.table.rowDetail.collapseAllRows();
+  }
+
+  toggleExpandRow(row) {
+    console.log('Toggled Expand Row!', row);
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+
+  onDetailToggle(event) {
+    console.log('Detail Toggled', event);
+  }
+
+  getWindowSize() {
+    return window.innerWidth > 800;
   }
 
   private modalRef: NgbModalRef;
@@ -55,30 +77,14 @@ export class FornecedorTabelaComponent implements OnInit {
     this.page.page = 0;
     this.textOptions = [
       {
-        label: "CNPJ",
-        value: "cnpj"
-      },
-      {
         label: "Nome",
         value: "nomeFantasia"
+      },
+      {
+        label: "CNPJ",
+        value: "cnpj"
       }
     ];
-
-    this.filterOptions = [
-      {
-        label: "Data registo",
-        type: FilterType.DATE
-      },
-      {
-        label: "Grupo produto",
-        type: FilterType.DROPDOWN,
-        options: [
-          { label: "Grupo produto", value: "" },
-          { label: "Eletrônicos", value: "eletronicos" },
-          { label: "Material de limpeza", value: "materialLimpeza" }
-        ]
-      },
-    ]
 
     this.carregarTabela(0);
   }
@@ -103,6 +109,13 @@ export class FornecedorTabelaComponent implements OnInit {
     this.sortQuery = `sort=${s.prop},${s.dir}`;
     this.setQuery();
 
+    this.carregarTabela();
+  }
+
+  filtrar(filtro: string) {
+    this.loading = true;
+    this.filterQuery = filtro;
+    this.setQuery();
     this.carregarTabela();
   }
 
@@ -134,8 +147,45 @@ export class FornecedorTabelaComponent implements OnInit {
     return forn.gruposProduto.map(gp => gp.descricao).join(", ");
   }
 
+  getRowClass(row) {
+    return {
+      'table-row': true
+    };
+  }
+
+  getRowId(row) {
+  return row.guid;
+}
+
   onDownload() {
 
+  }
+
+  statusColor: string = 'default';
+  setStatusTag(status: any): string {
+    this.statusColor = 'default'
+    switch (status) {
+      case StatusEnum[StatusEnum.ATIVO]:
+      case StatusEnum[StatusEnum.CONCLUIDO]:
+        this.statusColor = 'success';
+        break;
+      case StatusEnum[StatusEnum.CANCELADO]:
+      case StatusEnum[StatusEnum.REPROVADO]:
+        this.statusColor = 'danger';
+        break;
+      case StatusEnum[StatusEnum.EM_PROCESSAMENTO]:
+        this.statusColor = 'orange';
+        break;
+      case StatusEnum[StatusEnum.ABERTO]:
+        this.statusColor = 'warning';
+        break;
+      case StatusEnum[StatusEnum.APROVADO]:
+        this.statusColor = 'primary';
+        break;
+      default:
+        break;
+    }
+    return this.statusColor;
   }
 
   private setQuery() {

@@ -3,12 +3,13 @@
 }
 
 .btn {
-    padding: 8px 16px;
     font: var(--font-bold-16);
-    height: 40px;
-    white-space: nowrap;
     outline: none;
     -webkit-appearance: none;
+    z-index: 20;
+    padding: 8px 16px;
+    height: 40px;
+    white-space: nowrap;
 }
 
 .btn:focus, .btn:active, .btn {
@@ -120,5 +121,3 @@
 .btn-tertiary-primary:hover {
     color: var(--blue-400);
 }
-
-

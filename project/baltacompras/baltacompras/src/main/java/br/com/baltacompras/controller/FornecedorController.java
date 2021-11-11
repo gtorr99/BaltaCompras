@@ -17,7 +17,7 @@ import br.com.baltacompras.serviceimplement.FornecedorServiceImplement;
 
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
-import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.In;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 
 @RestController
@@ -29,7 +29,7 @@ public class FornecedorController {
             @Spec(path = "nomeFantasia", spec = Like.class),
             @Spec(path = "inscricaoEstadual", spec = Like.class),
             @Spec(path = "razaoSocial", spec = Like.class),
-            @Spec(path = "status", spec = Equal.class),
+            @Spec(path = "status", spec = In.class),
             @Spec(path = "email", spec = Like.class)
     })
     interface FornecedorSpec<Fornecedor> extends NotDeletedEntity<Fornecedor> {

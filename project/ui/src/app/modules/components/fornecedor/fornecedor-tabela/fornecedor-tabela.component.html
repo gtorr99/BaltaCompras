@@ -1,24 +1,30 @@
 <app-title [title]="'Fornecedor'">
-    <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
-        Exportar CSV
-    </app-button>
-    <app-button [btnClass]="'btn-primary ms-sm-1 py-2'"
-        (click)="onRegistrarFornecedor()">
-        Registrar fornecedor
-    </app-button>
+    <div class="row">
+        <div class="col col-sm-auto">
+            <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
+                Exportar CSV
+            </app-button>
+        </div>
+        <div class="col col-sm-auto ms-1">
+            <app-button [btnClass]="'btn-primary py-2'" (click)="onRegistrarFornecedor()">
+                Registrar fornecedor
+            </app-button>
+        </div>
+    </div>
 </app-title>
 
-<app-filter [searchTextOptions]="textOptions" [filters]="filterOptions"></app-filter>
+<app-filter [searchTextOptions]="textOptions" [filters]="filters" (search)="filtrar($event)"></app-filter>
 
 <div class="mb-5">
-    <ngx-datatable class="material expandable fixed-header" 
-        [rows]="rows" 
+    <ngx-datatable class="material expandable" 
+        #myTable
+        [rows]="rows"
+        [rowClass]="getRowClass"
         [columnMode]="ColumnMode.force"
         [headerHeight]="50" 
         [footerHeight]="50" 
         rowHeight="auto" 
-        [rowClass]="getRowClass"
-        [externalPaging]="true" 
+        [externalPaging]="true"
         [count]="page.totalElements"
         [offset]="page.page" 
         [limit]="page.size" 
@@ -26,11 +32,112 @@
         [loadingIndicator]="loading"
         [messages]="messages"
         [reorderable]="false"
+        [scrollbarH]="getWindowSize()"
         (page)="carregarTabela($event)" 
         (sort)="ordenar($event)">
 
-        <ngx-datatable-column name="Nome" prop="nomeFantasia" headerClass="table-header">
-            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+        <!-- Row Detail Template -->
+        <ngx-datatable-row-detail 
+            [rowHeight]="500" #myMobileDetailRow>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="detalhes-fornecedor">
+                    <h3>Informações de registro</h3>
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Nome: </label>
+                            <span class="row-detail-item">{{ row.nomeFantasia }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">CNPJ: </label>
+                            <span class="row-detail-item">{{ row.cnpj }}</span>
+                        </div>
+                    </div> 
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Razão social: </label>
+                            <span class="row-detail-item">{{ row.razaoSocial }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Inscrição estadual: </label>
+                            <span class="row-detail-item">{{ row.inscricaoEstadual }}</span>
+                        </div>
+                    </div> 
+                    <h3 class="mt-4">Contato</h3>
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Email: </label>
+                            <span class="row-detail-item">{{ row.email }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Telefone: </label>
+                            <span class="row-detail-item">{{ row.telefone }}</span>
+                        </div>
+                    </div>
+                    <h3 class="mt-4">Endereço</h3>
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Rua: </label>
+                            <span class="row-detail-item">{{ row.rua }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">CEP: </label>
+                            <span class="row-detail-item">{{ row.cep }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Complemento: </label>
+                            <span class="row-detail-item">{{ row.complemento }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Nº: </label>
+                            <span class="row-detail-item">{{ row.numero }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Bairro: </label>
+                            <span class="row-detail-item">{{ row.bairro }}</span>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-sm-auto">
+                                <label class="form-label me-2">Cidade: </label>
+                                <span class="row-detail-item">{{ row.cidade }}</span>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-sm-auto">
+                                <label class="form-label me-2">Estado: </label>
+                                <span class="row-detail-item">{{ row.estado }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="mt-4">Informações de cotação</h3>
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Grupos produto: </label>
+                            <span class="row-detail-item">{{ getListaProdutos(row) }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Status: </label>
+                            <span class="row-detail-item">{{ row.status }}</span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!-- Column Templates -->
+        <ngx-datatable-column [width]="5" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                <a [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded"
+                    title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="Nome" prop="nomeFantasia" headerClass="header-mobile-expand">
+            <ng-template let-column="column" let-sort="sortFn"  ngx-datatable-header-template> 
                 <span (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="row['nomeFantasia']" ngx-datatable-cell-template>
@@ -38,49 +145,43 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="CNPJ" [headerClass]="'table-header'">
+        <ngx-datatable-column name="CNPJ" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
-                <span (click)="sort()">{{ column.name }}</span>
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{ value }} 
+                <span class="mobile-hidden">{{ value }}</span>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Email"  headerClass="table-header">
+        <ngx-datatable-column name="Email"  [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
-                <span (click)="sort()">{{ column.name }}</span>
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{ value }}
+                <span class="mobile-hidden">{{ value }}</span>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Telefone" [sortable]="false" headerClass="table-header">
-            <ng-template let-column="column" ngx-datatable-header-template> 
-                <span>{{ column.name }}</span>
+        <ngx-datatable-column name="Status"[sortable]="getWindowSize()" headerClass="header-mobile-hidden status">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{ value }}
+                <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" [sortable]="false" headerClass="table-header">
-            <ng-template let-column="column" ngx-datatable-header-template> 
-                <span>{{ column.name }}</span>
-            </ng-template>
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <span class="status-tag p-1 px-2 rounded text-success">{{ value }}</span>
-            </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Grupos Produto" [sortable]="false" headerClass="table-header">
+        <ngx-datatable-column name="Grupos Produto" [sortable]="false" [flexGrow]="1" headerClass="header-mobile-hidden">
             <ng-template let-column="column" ngx-datatable-header-template>
-                {{ column.name }}
+                <span class="mobile-hidden">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" ngx-datatable-cell-template>
                 <div class="d-flex">
-                    {{ getListaProdutos(row) }}
+                    <div class="me-auto">
+                    <span class="mobile-hidden">{{ getListaProdutos(row) }}</span>
+                    </div>
+                    <div>
                     <a class="ms-auto dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
                         <i class="bi bi-three-dots-vertical"></i>
                     </a>
@@ -90,6 +191,7 @@
                         <li><a class="dropdown-item" (click)="onExcluirFornecedor(row)">
                             <i class="bi bi-trash me-2"></i>Excluir</a></li>
                     </ul>
+                    </div>
                 </div>
             </ng-template>
         </ngx-datatable-column>

@@ -6,7 +6,10 @@
                 type="text" 
                 class="form-control" 
                 placeholder="Pesquisar..."
-                aria-label="barra de pesquisa">
+                aria-label="barra de pesquisa"
+                [(ngModel)]="searchText"
+                (keydown.Tab)="emitSearchEvent($event)"
+                (keydown.Enter)="emitSearchEvent($event)">
             <app-button [btnClass]="'btn-outline-gray input-button-end dropdown-toggle'" data-bs-toggle="dropdown"
             aria-expanded="false">
                 {{ selectedOption.label }}
@@ -40,7 +43,7 @@
                     </app-button>
                     <ul class="dropdown-menu">
                         <li *ngFor="let option of filter?.options">
-                            <a class="dropdown-item" (click)="filter.selectedOption = option.label">
+                            <a class="dropdown-item" (click)="alterarFiltro(filter, option)">
                                 {{ option.label }}
                             </a>
                         </li>

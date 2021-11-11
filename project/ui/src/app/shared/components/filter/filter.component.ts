@@ -7,13 +7,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class FilterComponent implements OnInit {
   
-  @Input() searchTextOptions: SearchMap[];
-  @Input() filters: Filter[];
+  @Input() searchTextOptions: SearchMap[] = [];
+  @Input() filters: Filter[] = [];
 
   @Output() optionEvent: EventEmitter<any> = new EventEmitter();
+  @Output() search: EventEmitter<any> = new EventEmitter();
 
   selectedOption: SearchMap = { label: "Filtro", value: "" };
-
+  searchText: string = '';
 
   constructor() { }
 
@@ -24,11 +25,20 @@ export class FilterComponent implements OnInit {
 
   updateDropdownLabel(option: SearchMap) {
     this.selectedOption = option;
-    this.optionEvent.emit(option);
+    this.emitSearchEvent();
   }
 
-  onChangeDefaultFilter(filter: any, option: SearchMap) {}
+  alterarFiltro(filter: any, option: SearchMap) {
+    filter.selectedOption = option.label;
+    this.emitSearchEvent();
+  }
 
+  emitSearchEvent(event?: any) {
+    let params = [];
+    this.filters.forEach(f => params.push(`${f.paramName}=${f.selectedOption}`));
+    params.push(`${this.selectedOption.value}=${event?.target?.value?.toLowerCase() ?? this.searchText.toLowerCase()}`);
+    this.search.emit(params.join('&'));
+  }
 }
 
 export class SearchMap {
@@ -39,6 +49,7 @@ export class SearchMap {
 export class Filter {
   label: string;
   type: FilterType;
+  paramName: string;
   iconClass?: string;
   options ?: SearchMap[];
   selectedOption?: string

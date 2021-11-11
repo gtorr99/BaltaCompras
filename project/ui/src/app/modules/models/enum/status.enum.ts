@@ -1,5 +1,5 @@
 export enum StatusEnum {
-    ABERTO,
+    ABERTO = 0,
     APROVADO,
     REPROVADO,
     EM_PROCESSAMENTO,

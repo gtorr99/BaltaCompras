@@ -14,7 +14,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 
 @NgModule({
-  declarations: [ FornecedorComponent, FornecedorTabelaComponent ],
+  declarations: [FornecedorComponent, FornecedorTabelaComponent ],
   imports: [
     CommonModule,
     FornecedorRoutingModule,

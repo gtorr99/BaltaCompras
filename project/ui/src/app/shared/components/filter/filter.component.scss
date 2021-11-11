@@ -1,4 +1,5 @@
 input#barraPesquisa {
+    margin: 0;
     padding: 0;
     border: var(--border);
     border-left: none;
@@ -7,6 +8,10 @@ input#barraPesquisa {
 }
 input::placeholder, #lupa {
     color: var(--gray-400);
+}
+
+.form-control:focus {
+  box-shadow: none;
 }
 
 #lupa {
