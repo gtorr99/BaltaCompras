@@ -2,8 +2,6 @@ package br.com.baltacompras.controller;
 
 import java.util.List;
 
-import br.com.baltacompras.model.ProdutoAgrupado;
-import br.com.baltacompras.serviceimplement.GrupoCotacaoServiceImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.baltacompras.model.GrupoCotacao;
 import br.com.baltacompras.repository.GrupoCotacaoRepository;
+import br.com.baltacompras.serviceimplement.GrupoCotacaoServiceImplement;
 
 @RestController
 @RequestMapping("/grupocotacao")

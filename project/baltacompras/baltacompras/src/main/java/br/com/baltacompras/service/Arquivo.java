@@ -13,6 +13,8 @@ public class Arquivo {
 
     public static final String QUEBRA_LINHA = "\r\n";
 
+    public static final String BARRA = "/";
+
     public static BufferedReader getReader(File file) throws Exception {
         return new BufferedReader(new InputStreamReader(new FileInputStream(file), DEFAULT_ENCODING));
     }
