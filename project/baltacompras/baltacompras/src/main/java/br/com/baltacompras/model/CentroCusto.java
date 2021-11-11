@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.com.baltacompras.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -26,6 +27,9 @@ public class CentroCusto {
 
     @Column(nullable = false, name = "valor_limite")
     private Float valorLimite;
+
+    @Column(nullable = false)
+    private Status status;
 
     @ManyToOne
     @JsonIgnore
@@ -72,5 +76,11 @@ public class CentroCusto {
         this.setor = setor;
     }
 
-    
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

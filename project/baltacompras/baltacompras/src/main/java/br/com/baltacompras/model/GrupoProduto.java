@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import br.com.baltacompras.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -18,6 +19,7 @@ public class GrupoProduto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String descricao;
+    private Status status;
     @JsonIgnore
     @ManyToMany(mappedBy = "gruposProduto")
     private Set<Fornecedor> fornecedores;
@@ -38,5 +40,13 @@ public class GrupoProduto {
     }
     public void setFornecedores(Set<Fornecedor> fornecedores) {
         this.fornecedores = fornecedores;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

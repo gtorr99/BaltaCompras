@@ -2,44 +2,53 @@ package br.com.baltacompras.controller;
 
 import java.util.List;
 
+import br.com.baltacompras.model.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.baltacompras.model.GrupoProduto;
 import br.com.baltacompras.repository.GrupoProdutoRepository;
 
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+
 @RestController
-@RequestMapping("/grupoproduto")
+@RequestMapping("/grupo-produto")
 public class GrupoProdutoController {
+
+    @And({
+            @Spec(path = "descricao", spec = Like.class),
+            @Spec(path = "status", spec = Equal.class),
+    })
+    interface GrupoProdutoSpec<GrupoProduto> extends NotDeletedEntity<GrupoProduto> {
+    }
+
     @Autowired
     private GrupoProdutoRepository repositorio;
 
-    @GetMapping
-    public List<GrupoProduto> listar(){
-        return repositorio.findAll();
+    @GetMapping("/listar")
+    public List<GrupoProduto> listar(GrupoProdutoSpec<GrupoProduto> spec) {
+        return repositorio.findAll(spec);
     }
-    
-    @PostMapping
-    public void salvar(@RequestBody GrupoProduto grupoProduto){
+
+    @PostMapping(value = "/salvar")
+    public void salvar(@RequestBody GrupoProduto grupoProduto) {
         repositorio.save(grupoProduto);
     }
 
-    @PutMapping
-    public void alterar(@RequestBody GrupoProduto grupoProduto){
-        if(grupoProduto.getId()>0){
-            repositorio.save(grupoProduto);
-        }
-    }
-
-    @DeleteMapping
-    public void excluir(@RequestBody GrupoProduto grupoProduto){
-        repositorio.delete(grupoProduto);
+    @DeleteMapping("/excluir/{id}")
+    public Boolean excluir(@PathVariable Integer id) {
+        GrupoProduto grupoProduto = repositorio.getById(id);
+        grupoProduto.setStatus(Status.INATIVO);
+        repositorio.save(grupoProduto);
+        return true;
     }
 
 }

@@ -1,5 +1,7 @@
 package br.com.baltacompras.model;
 
+import br.com.baltacompras.model.enums.Status;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ public class Funcao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String descricao;
+    private Status status;
     @ManyToMany
     @JoinTable(
         name="funcao_permissao",
@@ -43,5 +46,13 @@ public class Funcao {
     }
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

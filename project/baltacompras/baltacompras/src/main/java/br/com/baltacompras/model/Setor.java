@@ -1,5 +1,7 @@
 package br.com.baltacompras.model;
 
+import br.com.baltacompras.model.enums.Status;
+
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -21,6 +23,8 @@ public class Setor {
     @JoinColumn(name="id_setor", referencedColumnName = "id")
     private Set<CentroCusto> centrosCusto;
 
+    private Status status;
+
     public Integer getId() {
         return id;
     }
@@ -39,5 +43,12 @@ public class Setor {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-        
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

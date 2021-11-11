@@ -11,6 +11,7 @@
 CREATE TABLE setor (
      id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
+    ,status INT NOT NULL DEFAULT 6
     ,CONSTRAINT pk__setor PRIMARY KEY AUTO_INCREMENT (id)
 );
 
@@ -19,6 +20,7 @@ CREATE TABLE centro_custo (
     ,descricao VARCHAR(255)
     ,valor_gasto REAL(10,2) NOT NULL
     ,valor_limite REAL(10,2) NOT NULL
+    ,status INT NOT NULL DEFAULT 6
     ,id_setor INT NOT NULL
     ,CONSTRAINT pk__centro_custo PRIMARY KEY AUTO_INCREMENT (id)
 );
@@ -32,6 +34,7 @@ CREATE TABLE permissao (
 CREATE TABLE funcao (
      id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
+    ,status INT NOT NULL DEFAULT 6
     ,CONSTRAINT pk__funcao PRIMARY KEY AUTO_INCREMENT (id)
 );
 
@@ -55,6 +58,7 @@ CREATE TABLE usuario (
 CREATE TABLE grupo_produto (
      id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
+    ,status INT NOT NULL DEFAULT 6
     ,CONSTRAINT pk__grupo_produto PRIMARY KEY AUTO_INCREMENT (id)
 );
 
@@ -63,6 +67,7 @@ CREATE TABLE produto (
     ,descricao VARCHAR(255)
     ,un_medida INT NOT NULL
     ,id_grupo_produto INT NOT NULL
+    ,status INT NOT NULL DEFAULT 6
     ,CONSTRAINT pk__produto PRIMARY KEY AUTO_INCREMENT (id)
 );
 
@@ -173,6 +178,7 @@ CREATE TABLE ordem_compra (
 CREATE TABLE forma_pgto (
      id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
+    ,status INT NOT NULL DEFAULT 6
     ,CONSTRAINT pk__forma_pgto PRIMARY KEY AUTO_INCREMENT (id)
 );
 

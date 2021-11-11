@@ -1,11 +1,11 @@
 package br.com.baltacompras.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import br.com.baltacompras.model.Fornecedor;
 
 @Repository
-public interface FornecedorRepository extends JpaRepository<Fornecedor, Integer>{
-    
+public interface FornecedorRepository extends JpaRepository<Fornecedor, Integer>, JpaSpecificationExecutor<Fornecedor> {
 }

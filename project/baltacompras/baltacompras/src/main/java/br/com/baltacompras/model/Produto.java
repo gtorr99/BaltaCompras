@@ -1,5 +1,6 @@
 package br.com.baltacompras.model;
 
+import br.com.baltacompras.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -21,6 +22,8 @@ public class Produto {
     @JsonIgnore
     @OneToMany(mappedBy = "produto")
     private Set<RequisicaoProduto> requisicoes;
+
+    private Status status;
 
     public Integer getId() {
         return id;
@@ -49,5 +52,13 @@ public class Produto {
 
     public Set<RequisicaoProduto> getRequisicoes() {
         return requisicoes;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

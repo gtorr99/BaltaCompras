@@ -77,7 +77,7 @@ INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VA
 INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(7, 'boss do valoroso', 'boss_valoroso@fatec.com', '00xff-hex', 6, 1, 5);
 
 -- grupo produto
-INSERT INTO grupo_produto(id, descricao) VALUES(1, 'eletrônicos');
+INSERT INTO grupo_produto(id, descricao) VALUES(1, 'eletronicos');
 INSERT INTO grupo_produto(id, descricao) VALUES(2, 'material de limpeza');
 
 -- produtos
