@@ -1,15 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Fornecedor } from '@models/fornecedor.model';
 import { BaseEntity } from '@models/base-entity.model';
 import { Page } from '@models/page.model';
 import { Observable } from 'rxjs';
 import { Email } from '@models/email.model';
 
-const baseUrl = "http://localhost:4200";
+const baseUrl = "http://localhost:8080";
 const pageSize = 10;
-const page = 0;
-
 @Injectable({ providedIn: 'root' })
 export abstract class BaseService<T extends BaseEntity> {
     constructor(
@@ -17,12 +15,12 @@ export abstract class BaseService<T extends BaseEntity> {
         @Inject('') protected resourceUrl: string
     ) { }
 
-    listar(): Observable<Page<T>> {
-        return this.httpClient.get<Page<T>>(`${baseUrl}/${this.resourceUrl}/listar?page=${page}&size=${pageSize}`);
+    listar(query: string = ''): Observable<T[]> {
+        return this.httpClient.get<T[]>(`${baseUrl}/${this.resourceUrl}/listar?${query}`);
     }
 
-    filtrar(query: string): Observable<Page<T>> {
-        return this.httpClient.get<Page<T>>(`${baseUrl}/${this.resourceUrl}/filtrar?page=${page}&size=${pageSize}&${query}`);
+    listarPaginado(query: string = '', page: number = 0): Observable<Page<T>> {
+        return this.httpClient.get<Page<T>>(`${baseUrl}/${this.resourceUrl}/listar-paginado?page=${page}&size=${pageSize}&${query}`);
     }
 
     salvar(resource: T): Observable<any> {
@@ -33,8 +31,8 @@ export abstract class BaseService<T extends BaseEntity> {
         return this.httpClient.put<T>(`${baseUrl}/${this.resourceUrl}/alterar`, resource);
     }
 
-    excluir(id: number): Observable<any> {
-        return this.httpClient.delete(`${baseUrl}/${this.resourceUrl}/excluir/${id}`);
+    excluir(id: number): Observable<boolean> {
+        return this.httpClient.delete<boolean>(`${baseUrl}/${this.resourceUrl}/excluir/${id}`);
     }
 
     enviarEmail(email: Email, id: number = null): Observable<any> {

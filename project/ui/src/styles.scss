@@ -1,5 +1,8 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 @import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~@swimlane/ngx-datatable/index.css';
+@import '~@swimlane/ngx-datatable/themes/material.scss';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
 
 body {
   margin: 0;
@@ -34,7 +37,7 @@ body {
 
 @media (min-width: 1080px) {
   main.container {
-    padding: 0 100px;
+    padding: 0 80px;
   }
 }
 
@@ -61,6 +64,9 @@ body {
 
   --blue-400: #3d8bfd;
 
+  --green-100: #d1e7dd;
+  --green-300: #75b798;
+
   // Fontes
   --font-family: "Roboto", sans-serif;
   --logo: normal bold normal 20px var(--font-family);
@@ -71,9 +77,11 @@ body {
   --font-bold-20: normal bold normal 20px var(--font-family);
   --font-bold-16: normal bold normal 16px var(--font-family);
   --font-bold-15: normal bold normal 15px var(--font-family);
+  --font-bold-14: normal bold normal 14px var(--font-family);
   --font-bold-13: normal bold normal 13px var(--font-family);
   
   --font-regular-15: normal normal normal 15px var(--font-family);
+  --font-regular-14: normal normal normal 14px var(--font-family);
   --font-regular-13: normal normal normal 13px var(--font-family);
 
   // Box shadow

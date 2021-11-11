@@ -8,6 +8,7 @@ import { FornecedorTabelaComponent } from './fornecedor-tabela/fornecedor-tabela
 import { FornecedorComponent } from './fornecedor.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -20,6 +21,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     SharedModule,
     ReactiveFormsModule,
     NgSelectModule,
+    NgxDatatableModule,
     NgxMaskModule.forRoot()
   ]
 })

@@ -4,14 +4,19 @@ import { Fornecedor } from '@models/fornecedor.model';
 import { BaseService } from './base-service.service';
 import { Observable } from 'rxjs';
 import { CEP } from '@models/cep.model';
-
 @Injectable({ providedIn: 'root' })
 export class FornecedorService extends BaseService<Fornecedor> {
     constructor(protected httpClient: HttpClient) { 
         super(httpClient, 'fornecedor');
     }
 
+    fornecedorSelecionado: Fornecedor = new Fornecedor();
+
     verificarCEP(cep: string): Observable<CEP> {
         return this.httpClient.get<CEP>(`https://viacep.com.br/ws/${cep}/json/`);
+    }
+
+    validarCnpj(cnpj: string): Observable<boolean> {
+        return this.httpClient.get<boolean>(`http://localhost:8080/fornecedor/validarCnpj/${cnpj}`);
     }
 }

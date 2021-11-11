@@ -47,6 +47,7 @@
                     [mask]="cnpjMask" 
                     [clearIfNotMatch]="true"
                     formControlName="cnpj"
+                    (change)="onChangeCnpj()"
                     required>
                 <small class="valid-feedback"
                     *ngIf="fornecedorForm.get('info.cnpj').valid && fornecedorForm.get('info.cnpj').touched; else invalidCnpj">
@@ -130,14 +131,14 @@
         <div formGroupName="endereco">
             <h3>Endereço</h3>
             <div class="row">
-                <div class="col-4">
+                <div class="col-4 col-xl-2">
                     <label for="cep" class="form-label">
                         CEP <span class="text-danger">*</span>
                     </label>
                     <input type="text" id="cep" class="form-control" formControlName="cep"
                     [mask]="cepMask"
                     [clearIfNotMatch]="true"
-                    (change)="onSearch()"
+                    (change)="onChangeCEP()"
                     required>
                     <small class="valid-feedback"
                         *ngIf="fornecedorForm.get('endereco.cep').valid && fornecedorForm.get('endereco.cep').touched; else invalidCEP">
@@ -157,11 +158,11 @@
                     </label>
                     <input type="text" id="rua" class="form-control" formControlName="rua" required>
                 </div>
-                <div class="col-2 col-lg-1 ms-2">
+                <div class="col-3 col-lg-1 ms-2">
                     <label for="numero" class="form-label">
                         Nº <span class="text-danger">*</span>
                     </label>
-                    <input type="text" id="numero" class="form-control" formControlName="numero" required>
+                    <input type="text" id="numero" class="form-control" formControlName="numero" [mask]="numeroMask" required>
                 </div>
             </div>
             <div class="row">
@@ -227,8 +228,11 @@
     </div>
 </div>
 <div class="row justify-content-end mt-3 pb-5">
+    <div class="col-auto me-auto">
+        <app-button [btnClass]="'btn-tertiary-primary ps-0'" type="button" (click)="onReset($event)">Restaurar formulário</app-button>
+    </div>
     <div class="col-auto">
-        <app-button [btnClass]="'btn-outline-danger me-2'" type="button" (click)="onReset($event)">Cancelar</app-button>
+        <app-button [btnClass]="'btn-outline-danger me-2'" type="button" (click)="onCancelar($event)">Cancelar</app-button>
     </div>
     <div class="col-auto">
         <app-button [btnClass]="'btn-primary'" type="submit">Salvar</app-button>

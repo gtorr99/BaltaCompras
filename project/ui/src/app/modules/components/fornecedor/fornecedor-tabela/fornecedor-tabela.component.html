@@ -1,14 +1,97 @@
-<app-title [title]="'Fornecedor'" [route]="'/fornecedor/registrar'" [primaryButtonLabel]="'Registrar fornecedor'">
+<app-title [title]="'Fornecedor'">
+    <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
+        Exportar CSV
+    </app-button>
+    <app-button [btnClass]="'btn-primary ms-sm-1 py-2'"
+        (click)="onRegistrarFornecedor()">
+        Registrar fornecedor
+    </app-button>
 </app-title>
 
 <app-filter [searchTextOptions]="textOptions" [filters]="filterOptions"></app-filter>
-<!-- <ngx-datatable class="material" 
-    [rows]="rows" 
-    [columns]="columns" 
-    [sortType]="SortType.multi"
-    [columnMode]="ColumnMode.force" 
-    [headerHeight]="50" 
-    [footerHeight]="50" 
-    [rowHeight]="50" 
-    [scrollbarV]="true">
-</ngx-datatable> -->
+
+<div class="mb-5">
+    <ngx-datatable class="material expandable fixed-header" 
+        [rows]="rows" 
+        [columnMode]="ColumnMode.force"
+        [headerHeight]="50" 
+        [footerHeight]="50" 
+        rowHeight="auto" 
+        [rowClass]="getRowClass"
+        [externalPaging]="true" 
+        [count]="page.totalElements"
+        [offset]="page.page" 
+        [limit]="page.size" 
+        [externalSorting]="true"
+        [loadingIndicator]="loading"
+        [messages]="messages"
+        [reorderable]="false"
+        (page)="carregarTabela($event)" 
+        (sort)="ordenar($event)">
+
+        <ngx-datatable-column name="Nome" prop="nomeFantasia" headerClass="table-header">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="row['nomeFantasia']" ngx-datatable-cell-template>
+                {{ value }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="CNPJ" [headerClass]="'table-header'">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ value }} 
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Email"  headerClass="table-header">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ value }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Telefone" [sortable]="false" headerClass="table-header">
+            <ng-template let-column="column" ngx-datatable-header-template> 
+                <span>{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ value }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" [sortable]="false" headerClass="table-header">
+            <ng-template let-column="column" ngx-datatable-header-template> 
+                <span>{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="status-tag p-1 px-2 rounded text-success">{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Grupos Produto" [sortable]="false" headerClass="table-header">
+            <ng-template let-column="column" ngx-datatable-header-template>
+                {{ column.name }}
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="d-flex">
+                    {{ getListaProdutos(row) }}
+                    <a class="ms-auto dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" (click)="onEditarFornecedor(row)">
+                            <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
+                        <li><a class="dropdown-item" (click)="onExcluirFornecedor(row)">
+                            <i class="bi bi-trash me-2"></i>Excluir</a></li>
+                    </ul>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>

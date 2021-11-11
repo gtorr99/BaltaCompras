@@ -7,8 +7,12 @@
     font: var(--font-bold-16);
     height: 40px;
     white-space: nowrap;
-    outline:none;
+    outline: none;
     -webkit-appearance: none;
+}
+
+.btn:focus, .btn:active, .btn {
+    box-shadow: none;
 }
 
 .input-button-start {

@@ -6,4 +6,8 @@ export class Page<T extends BaseEntity> {
     totalPages: number = 0;
     totalElements: number = 0;
     content: T[];
+
+    constructor(data?: Partial<Page<T>>) {
+        Object.assign(this, data);
+    }
 }

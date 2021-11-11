@@ -2,18 +2,7 @@
     <div class="col-sm-auto p-0">
         <h2>{{ title }}</h2>
     </div>
-    <div class="col-4 ms-auto d-sm-flex justify-content-end" *ngIf="primaryButtonLabel">
-        <app-button [btnClass]="'btn-outline-primary dropdown-toggle'" data-bs-toggle="dropdown">
-            Exportar
-            <i class="bi bi-chevron-down ms-2"></i>
-        </app-button>
-        <ul class="dropdown-menu dropdown-menu-end" style="margin-top: -20px !important;">
-            <li><a class="dropdown-item"><i class="bi bi-file-earmark-pdf me-2"></i> PDF</a></li>
-            <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item"><i class="bi bi-file-earmark-excel me-2"></i> CSV</a></li>
-        </ul>
-        <app-button [btnClass]="'btn-primary ms-sm-1 py-2'" [routerLink]="route">
-            {{ primaryButtonLabel }}
-        </app-button>
+    <div class="col-4 ms-auto d-sm-flex justify-content-end">
+        <ng-content></ng-content>
     </div>
 </div>

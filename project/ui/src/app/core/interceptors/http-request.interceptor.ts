@@ -17,29 +17,35 @@ export class HttpRequestInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler):
         Observable<HttpEvent<any>> {
-        return next.handle(req).pipe(
+        return next.handle(req)
+        .pipe(
             catchError((error: HttpErrorResponse) => {
-                let defaultErrorMsg = 'Falha na comunicação com o servidor';
-
+                let defaultErrorMsg: string = 'Falha na comunicação com o servidor';
+                let errorMsg: string = (error && error.error && typeof (error.error === 'string')) ? error.error.error : defaultErrorMsg
+                
                 switch(error.status) {
+                    case 200:
+                    case 201:
+                        this.toastrService.success(error.error.text)
+                        break;
                     case 400:
                     case 403:
                     case 404:
                     case 409:
-                        this.toastrService.error(error.error, 'Erro HTTP: Cliente');
+                        this.toastrService.error(errorMsg, 'Erro HTTP: Cliente');
                         break;
                     case 401:
-                        this.toastrService.error(error.error, 'Acesso negado');
+                        this.toastrService.error(errorMsg, 'Acesso negado');
                         this.router.navigate(['/login']);
                         break;
                     case 500:
-                        this.toastrService.error(error.error, 'Erro HTTP: Servidor');
+                        this.toastrService.error(errorMsg, 'Erro HTTP: Servidor');
                         break;
                     default:
                         this.toastrService.error(defaultErrorMsg, 'HTTP Erro');
                         break;
                 }
-                return throwError(defaultErrorMsg);
+                return throwError(error);
             })
         )
     }

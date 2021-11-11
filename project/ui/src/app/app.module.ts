@@ -14,6 +14,7 @@ import { DatePipe } from '@angular/common';
 
 // External libs
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgbModule,
     NgbModalModule,
     NgSelectModule,
+    NgxDatatableModule,
     BrowserAnimationsModule,
     HttpClientModule
   ],
