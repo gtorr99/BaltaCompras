@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.baltacompras.model.Requisicao;
 import br.com.baltacompras.repository.RequisicaoCustomRepository;
 import br.com.baltacompras.repository.RequisicaoRepository;
+import br.com.baltacompras.serviceimplement.Email;
 
 @RestController
 @RequestMapping("/requisicao")
@@ -31,6 +32,9 @@ public class RequisicaoController {
 
     @Autowired 
     private RequisicaoCustomRepository customRepo;
+
+    @Autowired
+    private Email email;
 
     @GetMapping("/findall")
     public ResponseEntity<?> listar(Pageable pageable) {
@@ -86,5 +90,14 @@ public class RequisicaoController {
     @DeleteMapping
     public void excluir(@RequestBody Requisicao requisicao) {
         repositorio.delete(requisicao);
+    }
+    
+    
+    @PostMapping("/email")
+    public void gerarRelatorio(@RequestParam(value = "link") String link, @RequestParam(value = "destinatarios") String[] destinatarios) throws Exception{
+        String mensagem = "<h4>Uma nova requisição está aguardando sua análise!</h4><br><a href=" + link + ">Clique aqui para acessar!</a>";
+        String assunto = "Nova Requisição para análise";
+        String arquivo = null;
+        email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
     }
 }
