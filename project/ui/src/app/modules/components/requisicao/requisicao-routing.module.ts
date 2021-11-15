@@ -9,7 +9,7 @@ import { RequisicaoAprovacaoComponent } from './requisicao-aprovacao/requisicao-
 
 const routes: Routes = [
     {
-        path: 'criar',
+        path: 'nova',
         component: RequisicaoComponent
     },
     {

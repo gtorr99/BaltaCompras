@@ -1,0 +1,51 @@
+<div class="modal-header">
+    <h5 class="modal-title">Enviar email</h5>
+    <button type="button" class="btn-close" (click)="onCancelar()"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="emailForm" (ngSubmit)="onEnviarEmail($event)" (keydown)="onEnviarEmail($event)" class="needs-validation" novalidate>
+        <div class="row">
+            <div class="col">
+                <label for="mailTo" class="form-label">Destinatários</label>
+                <ng-select 
+                    id="mailTo" 
+                    [multiple]="true"
+                    formControlName="mailTo">
+                </ng-select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <label for="copy" class="form-label">Cópia</label>
+                <ng-select 
+                    id="copy"
+                    [addTag]="true"
+                    [multiple]="true" 
+                    [searchable]="true"
+                    [closeOnSelect]="false"
+                    [hideSelected]="true" 
+                    [notFoundText]="'Digite um novo email'"
+                    [addTagText]="'Adicionar email: '"
+                    placeholder="Adicionar emails à cópia"
+                    formControlName="copy">
+                </ng-select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <label for="subject" class="form-label">Assunto</label>
+                <input type="text" class="form-control" id="subject" formControlName="subject">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <label for="text" class="form-label">Texto</label>
+                <textarea id="text" rows="5" class="form-control" formControlName="text"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <app-button [btnClass]="'btn-outline-danger'" (click)="onCancelar()">Cancelar</app-button>
+    <app-button [btnClass]="'btn-primary'" (click)="onEnviarEmail($event)" type="submit" ngbAutoFocus>Enviar</app-button>
+</div>

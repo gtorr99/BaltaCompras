@@ -1,2 +1,7 @@
 export * from './base-service.service'
 export * from './fornecedor.service'
+export * from './centro-custo.service'
+export * from './cotacao.service'
+export * from './grupo-produto.service'
+export * from './produto.service'
+export * from './requisicao.service'

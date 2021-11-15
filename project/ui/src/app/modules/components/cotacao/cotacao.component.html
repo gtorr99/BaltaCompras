@@ -1,0 +1,261 @@
+<app-title [title]="'Gerenciar cotação'">
+    <div class="row justify-content-end p-0">
+        <div class="col-auto p-0">
+            <app-button [btnClass]="'btn-primary'">
+                <i class="bi bi-plus-lg me-1"></i>
+                Adicionar forncedor
+            </app-button>
+        </div>
+    </div>
+</app-title>
+
+<form [formGroup]="grupoCotacaoForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation" novalidate>
+
+    <div class="container h-scroll">
+        <div class="row h-scroll-row">
+            <div class="col-4 pe-2 mb-3">
+
+                <!-- Informações -->
+                <div class="row justify-content-between align-items-center header b-right" style="height: 78px;">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-auto me-1">
+                                <h4>Prazo solicitado: </h4>
+                            </div>
+                            <div class="col">
+                                <h4 class="header-info">{{ prazo | date: 'dd/MM/yyyy' }}</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-auto me-1">
+                                <h4>Código:</h4>
+                            </div>
+                            <div class="col-auto">
+                                <h4 class="header-info">1234</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produtos Header -->
+                <div class="row justify-content-between mt-2">
+                    <div class="col">
+                        <span class="span-label">Produto</span>
+                    </div>
+                    <div class="col d-flex justify-content-end align-items-center me-4">
+                        <span class="span-label">Quantidade</span>
+                    </div>
+                    <div class="col-1">
+                        <span class="span-label">Un.</span>
+                    </div>
+                </div>
+
+                <!-- Produtos lista -->
+                <div class="row py-1 mt-1 produto-row" *ngFor="let produto of listaProdutos" style="height: 40px;">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col align-items-center">
+                                <span class="span-value">Água sanitária</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col me-4">
+                        <div class="row justify-content-end">
+                            <div class="col-auto align-items-center">
+                                <span class="span-value ms-auto">1000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="row">
+                            <div class="col">
+                                <span class="span-value">g</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <label class="form-label">Fornecedor escolhido</label>
+                    <ng-select 
+                        [items]="listaFornecedores" 
+                        bindLabel="nomeFantasia" 
+                        bindValue="id" [multiple]="false"
+                        [searchable]="true" 
+                        [closeOnSelect]="true" 
+                        placeholder="Selecionar fornecedor" required>
+                        <!-- (change)="onSelecionarFornecedor()" -->
+                    </ng-select>
+                </div>
+
+                <!-- footer -->
+                <!-- <div class="row mt-3 justify-content-end">
+                    <div class="col-2">
+                        <span class="span-label ms-auto">Desconto</span>
+                    </div>
+                </div>
+                <div class="row my-1 justify-content-end">
+                    <div class="col-2">
+                        <span class="span-label">Frete</span>
+                    </div>
+                </div>
+                <div class="row mt-2 justify-content-end">
+                    <div class="col-2">
+                        <span class="span-label">Total</span>
+                    </div>
+                </div> -->
+                
+                <!-- Informações transporte -->
+                <!-- <div class="row mt-3 justify-content-end">
+                    <div class="col-auto">
+                        <h3>Informações de transporte</h3>
+                    </div>
+                </div>
+                <div class="row mt-2 justify-content-end">
+                    <div class="col-auto">
+                        <span class="span-label">Transportadora</span>
+                    </div>
+                </div>
+                <div class="row mt-1 justify-content-end">
+                    <div class="col-auto">
+                        <span class="span-label">Meio de transporte</span>
+                    </div>
+                </div>-->
+            </div> 
+
+            
+            <!-- Fornecedores -->
+            <div class="col-4 ps-3" *ngFor="let fornecedor of listaFornecedores"  (mouseover)="show = true" (mouseout)="show = false"> 
+                <div class="header pb-2">
+                    <div class="row">
+                        <!-- <i class="bi bi-x" [ngClass]="{'visually-hidden': !show}"></i> -->
+                        <div class="col">
+                            <ng-select [items]="listaFornecedores" bindLabel="nomeFantasia" bindValue="id" [multiple]="false"
+                                [searchable]="true" [closeOnSelect]="true" placeholder="Selecionar fornecedor" required>
+                                <!-- (change)="onSelecionarFornecedor()" -->
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-auto">
+                            <span class="span-label me-1">Cnpj:</span>
+                            <span class="span-value">00.000.000/0001-00</span>
+                        </div>
+                        <div class="col-auto">
+                            <app-button [btnClass]="'btn-tertiary-primary'">
+                                Novo link
+                            </app-button>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row mt-3">
+                    <div class="col">
+                        <span class="span-label flex-col">R$ / Un.</span>
+                    </div>
+                    <div class="col">
+                        <span class="span-label flex-col">Aliq. IPI</span>
+                    </div>
+                    <div class="col">
+                        <span class="span-label flex-col">Subtotal</span>
+                    </div>
+                </div>
+                <div class="row w-100" *ngFor="let produto of listaProdutos">
+                    <div class="col py-1 pe-1">
+                        <input type="text" 
+                            class="form-control" 
+                            [(ngModel)]="valor" 
+                            [ngModelOptions]="{standalone: true}"
+                            (click)="setValor()" 
+                            (focusout)="onTransformarValor()" 
+                            [mask]="inputing ? '0*,00': ''"
+                            [dropSpecialCharacters]="false">
+                    </div>
+                    <div class="col p-1">
+                        <input type="text" 
+                            class="form-control text-center" 
+                            [(ngModel)]="aliqIpi" 
+                            [ngModelOptions]="{standalone: true}"
+                            mask="separator.2"
+                            thousandSeparator="."
+                            [suffix]="'%'"
+                            [dropSpecialCharacters]="false">
+                    </div>
+                    <div class="col py-1 ps-1">
+                        <input type="text" 
+                            class="form-control" 
+                            readonly
+                            [value]="'R$ 12.000,00'">
+                    </div>
+                </div>
+                <div class="row mt-3 justify-content-between">
+                    <div class="col-auto">
+                        <span class="span-label">Desconto</span>
+                    </div>
+                    <div class="col-auto">
+                        <span class="span-value">R$ 120,00</span>
+                    </div>
+                </div>
+                <div class="row my-1 justify-content-between">
+                    <div class="col-auto">
+                        <span class="span-label">Frete</span>
+                    </div>
+                    <div class="col-auto">
+                        <span class="span-value">R$ 20,00</span>
+                    </div>
+                </div>
+                <hr>
+                <div class="row mt-2 justify-content-between">
+                    <div class="col-auto">
+                        <span class="span-label">Total</span>
+                    </div>
+                    <div class="col-auto">
+                        <span class="span-label">R$ 1200,00</span>
+                    </div>
+                </div>
+                <!-- <div class="row mt-3">
+                    <div class="col-auto">
+                        <h3>Informações de transporte</h3>
+                    </div>
+                </div> -->
+                <div class="row mt-3 justify-content-between">
+                    <div class="col-auto">
+                        <span class="span-label">Transportadora</span>
+                    </div>
+                    <div class="col-auto">
+                        <span class="span-value">TransTest</span>
+                    </div>
+                </div>
+                <div class="row mt-1 mb-3 justify-content-between">
+                    <div class="col-auto">
+                        <span class="span-label">Meio de transporte</span>
+                    </div>
+                    <div class="col-auto">
+                        <span class="span-value">Jureg</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-end mt-3">
+        <div class="col-auto me-auto d-flex align-items-center">
+            <app-button [btnClass]="'btn-tertiary-primary'"
+                (click)="onRestaurar($event)">
+                Restaurar
+            </app-button>
+        </div>
+        <div class="col-auto">
+            <app-button [btnClass]="'btn-outline-danger me-1 me-md-2'"
+                (click)="onCancelar($event)">
+                Cancelar
+            </app-button>
+        </div>
+        <div class="col-auto">
+            <app-button [btnClass]="'btn-outline-primary me-1 me-md-2'" (click)="onEnviarEmail()">Enviar email</app-button>
+        </div>
+        <div class="col-auto">
+            <app-button [btnClass]="'btn-primary'" type="submit">Nova ordem de compra</app-button>
+        </div>
+    </div>
+</form>

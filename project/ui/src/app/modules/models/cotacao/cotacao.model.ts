@@ -1,4 +1,4 @@
-import { StatusEnum } from "./enum";
+import { StatusEnum } from "../enum";
 import { BaseEntity } from "@models/base-entity.model";
 
 export class Cotacao extends BaseEntity {

@@ -1,4 +1,4 @@
-<app-title [title]="'Registrar fornecedor'"></app-title>
+<app-title [title]="'Novo fornecedor'"></app-title>
 
 <form [formGroup]="fornecedorForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation" novalidate>
 <div class="box">
@@ -44,7 +44,7 @@
                     CNPJ <span class="text-danger">*</span>
                 </label>
                 <input type="text" id="cnpj" class="form-control" 
-                    [mask]="cnpjMask" 
+                    [mask]="cnpjMask"
                     [clearIfNotMatch]="true"
                     formControlName="cnpj"
                     (change)="onChangeCnpj()"

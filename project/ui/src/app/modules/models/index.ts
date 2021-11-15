@@ -10,8 +10,8 @@ export * from './requisicao/requisicao-produto.model';
 export * from './requisicao/produto-selecionado.model';
 export * from './setor.model';
 export * from './usuario.model';
-export * from './cotacao.model';
-export * from './grupo-cotacao.model';
+export * from './cotacao/cotacao.model';
+export * from './cotacao/grupo-cotacao.model';
 export * from './forma-pagamento';
 export * from './ordem-compra.model';
 

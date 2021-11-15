@@ -1,6 +1,7 @@
 package br.com.baltacompras.controller;
 
 import br.com.baltacompras.model.enums.Status;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -19,17 +20,21 @@ import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.domain.In;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/fornecedor")
 public class FornecedorController {
 
+    @Join(path = "gruposProduto", alias = "gp")
     @And({
             @Spec(path = "cnpj", spec = Like.class),
             @Spec(path = "nomeFantasia", spec = Like.class),
             @Spec(path = "inscricaoEstadual", spec = Like.class),
             @Spec(path = "razaoSocial", spec = Like.class),
             @Spec(path = "status", spec = In.class),
-            @Spec(path = "email", spec = Like.class)
+            @Spec(path = "email", spec = Like.class),
+            @Spec(path = "gp.descricao", params="grupoProduto", spec = Like.class)
     })
     interface FornecedorSpec<Fornecedor> extends NotDeletedEntity<Fornecedor> {
     }
@@ -45,6 +50,11 @@ public class FornecedorController {
     @GetMapping("/listar-paginado")
     public Page<Fornecedor> listarPaginado(FornecedorSpec<Fornecedor> spec, Pageable page) {
         return repositorio.findAll(spec, page);
+    }
+
+    @GetMapping("/listar")
+    public List<Fornecedor> listar(FornecedorSpec<Fornecedor> spec) {
+        return repositorio.findAll(spec);
     }
 
     @GetMapping("/validarCnpj/{cnpj}")

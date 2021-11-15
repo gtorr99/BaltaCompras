@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
-import { Requisicao } from '@models/index';
-import { RequisicaoService } from '@services/requisicao.service';
-import { Filter, FilterType, SearchMap } from '@shared/components';
+import { Cotacao, GrupoCotacao } from '@models/index';
+import { CotacaoService } from '@services/cotacao.service';
+import { Filter, SearchMap } from '@shared/components';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -11,12 +11,12 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { StatusEnum } from '@models/enum';
 
 @Component({
-  selector: 'app-requisicao-tabela',
-  templateUrl: './requisicao-tabela.component.html',
-  styleUrls: ['./requisicao-tabela.component.scss'],
+  selector: 'app-cotacao-tabela',
+  templateUrl: './cotacao-tabela.component.html',
+  styleUrls: ['./cotacao-tabela.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class RequisicaoTabelaComponent implements OnInit {
+export class CotacaoTabelaComponent implements OnInit {
   
   // Filtros
   textOptions: SearchMap[] = [];
@@ -28,8 +28,8 @@ export class RequisicaoTabelaComponent implements OnInit {
 
   // Tabela
   @ViewChild('myTable') table: any;
-  page: Page<Requisicao> = new Page<Requisicao>();
-  rows = new Array<Requisicao>();
+  page: Page<GrupoCotacao> = new Page<GrupoCotacao>();
+  rows = new Array<GrupoCotacao>();
   ColumnMode = ColumnMode;
   loading: boolean = false;
   messages = {
@@ -45,62 +45,25 @@ export class RequisicaoTabelaComponent implements OnInit {
   private modalRef: NgbModalRef;
 
   constructor(
-    private requisicaoService: RequisicaoService,
+    private cotacaoService: CotacaoService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.textOptions = [
-      {
-        label: "Nº Requisição",
-        value: "id"
-      },
-      {
-        label: "Requisitante",
-        value: "requisitante"
-      },
-      // {
-      //   label: "Setor",
-      //   value: "setor"
-      // },
-      {
-        label: "Centro de Custo",
-        value: "centroCusto"
-      }
-    ];
-
-    let statusKeys = Object.keys(StatusEnum);
-    this.filters = [
-      {
-        label: "Status",
-        paramName: "status",
-        type: FilterType.DROPDOWN,
-        options: [...statusKeys.slice(statusKeys.length / 2).map(k => {
-          return { label: k, value: StatusEnum[k] }
-        })
-        , { label: 'Status', value: '' }]
-      },
-      {
-        label: "Prazo",
-        paramName: "prazo",
-        type: FilterType.DATE
-      },
-    ]
-
     this.page.page = 0;
     this.carregarTabela(0);
   }
 
   carregarTabela(pageEvent: any = null) {
     this.setQuery();
-    this.requisicaoService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<Requisicao>) => {
+    this.cotacaoService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<GrupoCotacao>) => {
       this.atualizarTabela(response);
     });
   }
 
-  atualizarTabela(response: Page<Requisicao>) {
+  atualizarTabela(response: Page<GrupoCotacao>) {
     this.page = response;
     this.rows = [...response.content];
     this.loading = false;
@@ -123,24 +86,23 @@ export class RequisicaoTabelaComponent implements OnInit {
     this.carregarTabela();
   }
 
-  onEditarRequisicao(requisicao: Requisicao = null) {
-    this.requisicaoService.requisicaoSelecionada = requisicao ?? new Requisicao();
-    this.router.navigate(['/requisicao/nova']);
+  onEditar(grupoCotacao: GrupoCotacao = null) {
+    this.cotacaoService.grupoCotacaoSelecionado = grupoCotacao;
+    this.router.navigate(['/cotacao/grupo-cotacao']);
   }
 
-  onNovaRequisicao() {
-    this.requisicaoService.requisicaoSelecionada = new Requisicao();
-    this.router.navigate(['/requisicao/nova']);
+  onGerarCotacoes() {
+    this.cotacaoService.gerarCotacoes().subscribe(() => this.carregarTabela());
   }
 
-  onCancelarRequisicao(requisicao: Requisicao) {
+  onCancelar(grupoCotacao: GrupoCotacao) {
     this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar requisição";
-    this.modalRef.componentInstance.message = "Ao prosseguir, a requisição será cancelada. Você tem certeza que deseja prosseguir?";
+    this.modalRef.componentInstance.title = "Cancelar cotação";
+    this.modalRef.componentInstance.message = "Ao prosseguir, a cotação será cancelada. Você tem certeza que deseja prosseguir?";
     this.modalRef.closed.subscribe(response => {
       if (response) {
-        this.requisicaoService.cancelar(requisicao.id).subscribe(() => {
-          this.toastrService.success("Requisição cancelada!");
+        this.cotacaoService.cancelar(grupoCotacao.id).subscribe(() => {
+          this.toastrService.success("Cotação cancelada!");
           this.carregarTabela();
         });
       }

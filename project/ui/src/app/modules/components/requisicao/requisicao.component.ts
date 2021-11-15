@@ -52,6 +52,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 })
 export class RequisicaoComponent implements OnInit {
 
+  titulo: string;
   requisicao: Requisicao = new Requisicao();
   requisicaoForm: FormGroup;
   listaCentrosCusto: CentroCusto[] = [];
@@ -80,6 +81,7 @@ export class RequisicaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.requisicao = this.requisicaoService.requisicaoSelecionada;
+    this.titulo = this.requisicao.id ? 'Editar requisição' : 'Nova requisição';
     if (this.requisicao.prazo) {
       let prazo = this.requisicao?.prazo;
       this.requisicao.prazo = new Date(Date.parse(prazo.toString()));
@@ -113,8 +115,6 @@ export class RequisicaoComponent implements OnInit {
           quantidade: 0
         })
       )})];
-      console.log(this.listaProdutos);
-      
       this.removerProdutosJaAdicionados();
     });
   }
@@ -202,8 +202,9 @@ export class RequisicaoComponent implements OnInit {
               this.toastrService.success("Requisição atualizada!");
             })
           } else {
-            this.listaProdutosAdicionados.forEach(p => { p.requisicaoProduto.converterQuantidadeParaUnMedidaPadrao(p.medidaSelecionada); console.log("Medida: " + p.medidaSelecionada);
-            });
+            this.listaProdutosAdicionados.forEach(p => 
+              p.requisicaoProduto.converterQuantidadeParaUnMedidaPadrao(p.medidaSelecionada)
+            );
             
             this.requisicao.id = this.requisicao.id ?? 0;
             this.requisicao.centroCusto = this.requisicaoForm.get('centroCusto').value;
@@ -222,8 +223,6 @@ export class RequisicaoComponent implements OnInit {
                 this.toastrService.success("Nova requisição salva com sucesso!");
               });
             }
-            console.log(this.requisicao);
-            
             this.router.navigate(['/requisicao']);
           }
         }

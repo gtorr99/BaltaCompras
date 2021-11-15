@@ -1,5 +1,5 @@
 import { StatusEnum } from "./enum/status.enum";
-import { Cotacao } from "@models/cotacao.model";
+import { Cotacao } from "@models/cotacao/cotacao.model";
 import { Usuario } from "@models/usuario.model";
 import { BaseEntity } from "@models/base-entity.model";
 import { TipoCompraEnum } from "./enum/tipo-compra.enum";

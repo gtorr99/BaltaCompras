@@ -21,6 +21,10 @@ const routes: Routes = [
         loadChildren: () => import('@modules/requisicao/requisicao.module').then(m => m.RequisicaoModule)
     },
     {
+        path: 'cotacao',
+        loadChildren: () => import('@modules/cotacao/cotacao.module').then(m => m.CotacaoModule)
+    },
+    {
         path: 'fornecedor',
         loadChildren: () => import('@modules/fornecedor/fornecedor.module').then(m => m.FornecedorModule)
     },

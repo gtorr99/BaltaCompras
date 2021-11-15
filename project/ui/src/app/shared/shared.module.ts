@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { TitleComponent } from './components/title/title.component';
 import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 @NgModule({
   declarations: [...fromComponents.components, TitleComponent, ConfirmModalComponent],
   imports: [
@@ -14,8 +15,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    NgSelectModule
   ],
-  exports: [...fromComponents.components, RouterModule, NgbModule]
+  exports: [...fromComponents.components, RouterModule, NgbModule, NgSelectModule]
 })
 export class SharedModule { }

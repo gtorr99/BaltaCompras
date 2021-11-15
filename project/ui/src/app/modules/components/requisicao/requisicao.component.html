@@ -1,4 +1,4 @@
-<app-title [title]="'Nova requisição'"></app-title>
+<app-title [title]="titulo"></app-title>
 
 <form [formGroup]="requisicaoForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation" novalidate>
     <div class="row justify-content-between">
