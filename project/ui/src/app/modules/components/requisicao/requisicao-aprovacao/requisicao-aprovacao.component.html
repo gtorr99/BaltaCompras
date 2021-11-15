@@ -1,19 +1,14 @@
-<app-title [title]="'Requisição'">
+<app-title [title]="'Aprovar Requisição'">
     <div class="row no-pm">
         <div class="col col-sm-auto">
             <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
                 Exportar CSV
             </app-button>
         </div>
-        <div class="col col-sm-auto ms-1">
-            <app-button [btnClass]="'btn-primary py-2'" (click)="onCriarRequisicao()">
-                Nova requisição
-            </app-button>
-        </div>
     </div>
 </app-title>
 
-<app-filter [searchTextOptions]="textOptions" [filters]="filters" (search)="filtrar($event)"></app-filter>
+<app-filter [exibirBarraPesquisa]="true" (search)="filtrar($event)"></app-filter>
 
 <div class="mb-5">
     <ngx-datatable class="material expandable" #myTable [rows]="rows" [rowClass]="getRowClass"
@@ -159,10 +154,10 @@
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" (click)="onEditarRequisicao(row)">
-                                    <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
-                            <li><a class="dropdown-item" (click)="onCancelarRequisicao(row)">
-                                    <i class="bi bi-x-lg me-2"></i>Cancelar</a></li>
+                            <li><a class="dropdown-item" (click)="onAprovarRequisicao(row)">
+                                    <i class="bi bi-check-lg me-2 text-success"></i>Aprovar</a></li>
+                            <li><a class="dropdown-item" (click)="onReprovarRequisicao(row)">
+                                    <i class="bi bi-x-lg me-2 text-danger"></i>Reprovar</a></li>
                         </ul>
                     </div>
                 </div>

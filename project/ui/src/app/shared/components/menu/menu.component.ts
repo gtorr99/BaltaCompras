@@ -65,7 +65,7 @@ export class MenuComponent implements OnInit {
         itens: [
           {
             name: "Aprovar requisição",
-            value: null
+            value: "'/requisicao/aprovacao'"
           },
           {
             name: "Aprovar ordem",

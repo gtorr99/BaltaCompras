@@ -1,7 +1,7 @@
 /* Balta Compras DB
 *
-*   CREATE DATABASE balta_compras CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-*   USE balta_compras;
+*   CREATE DATABASE baltacompras CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+*   USE baltacompras;
 *
 *   Rodar comando abaixo (após executar o gradle pela primeira vez), deve exibir 21 tabelas criadas
 *   SHOW TABLES;

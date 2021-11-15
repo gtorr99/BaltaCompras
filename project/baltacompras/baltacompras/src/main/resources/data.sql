@@ -137,10 +137,10 @@ INSERT INTO grupo_cotacao_produto(id, quantidade_total, id_grupo_cotacao) VALUES
 INSERT INTO grupo_cotacao_produto(id, quantidade_total, id_grupo_cotacao) VALUES(4, 15, 2);
 
 -- atualiza requisicões produto com o grupocotacao_produto que agrupa o somatório das quantidades por produto
-UPDATE requisicao_produto SET id = 1 WHERE id_produto = 1;
-UPDATE requisicao_produto SET id = 2 WHERE id_produto = 2;
-UPDATE requisicao_produto SET id = 3 WHERE id_produto = 3;
-UPDATE requisicao_produto SET id = 4 WHERE id_produto = 4;
+UPDATE requisicao_produto SET id_grupo_cotacao_produto = 1 WHERE id_produto = 1;
+UPDATE requisicao_produto SET id_grupo_cotacao_produto = 2 WHERE id_produto = 2;
+UPDATE requisicao_produto SET id_grupo_cotacao_produto = 3 WHERE id_produto = 3;
+UPDATE requisicao_produto SET id_grupo_cotacao_produto = 4 WHERE id_produto = 4;
 
 -- cotacao
 INSERT INTO cotacao(id, frete, desconto, prazo, selecionada, status, transportadora, meio_transporte, id_fornecedor, id_grupo_cotacao) VALUES(1, 515.9, 200, (SELECT now()), false, 0, 'fedex', 'carro', 1, 1);

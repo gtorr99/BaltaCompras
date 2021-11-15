@@ -1,6 +1,6 @@
 export enum UnMedidaEnum {
-    g,
+    un = 0,
     L,
-    unidade,
-    m
+    m,
+    g
 }

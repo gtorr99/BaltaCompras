@@ -1,14 +1,15 @@
 package br.com.baltacompras.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ProdutoAgrupado {
     private Integer idGrupoProduto;
     private Integer idProduto;
     private float quantidadeTotal;
-    private Date prazo;
+    private LocalDate prazo;
 
-    public ProdutoAgrupado(Integer idGrupoProduto, Integer idProduto, float quantidadeTotal, Date prazo) {
+    public ProdutoAgrupado(Integer idGrupoProduto, Integer idProduto, float quantidadeTotal, LocalDate prazo) {
         this.idGrupoProduto = idGrupoProduto;
         this.idProduto= idProduto;
         this.quantidadeTotal = quantidadeTotal;
@@ -24,7 +25,7 @@ public class ProdutoAgrupado {
     public float getQuantidadeTotal() {
         return quantidadeTotal;
     }
-    public Date getPrazo() {
+    public LocalDate getPrazo() {
         return prazo;
     }
 }

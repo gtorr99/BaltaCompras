@@ -13,7 +13,6 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String descricao;
-    @Column(nullable = false)
     private Integer unMedida;
     @ManyToOne
     @JoinColumn(name = "id_grupo_produto", referencedColumnName = "id")

@@ -1,11 +1,24 @@
+ * {
+  padding: 0;
+  margin: 0;
+}
+
 input#barraPesquisa {
     margin: 0;
     padding: 0;
     border: var(--border);
     border-left: none;
-    border-right: none;
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
     height: 40px;
 }
+
+input#barraPesquisa.remove-border-right {
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 input::placeholder, #lupa {
     color: var(--gray-400);
 }

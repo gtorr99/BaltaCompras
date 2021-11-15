@@ -10,12 +10,11 @@ import { httpInterceptorProviders } from './interceptors';
   imports: [
     CommonModule,
     ToastrModule.forRoot({
-      timeOut: 10000,
+      timeOut: 5000,
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
       newestOnTop: true,
       autoDismiss: true,
-      closeButton: true,
       progressBar: true,
       maxOpened: 5
     })

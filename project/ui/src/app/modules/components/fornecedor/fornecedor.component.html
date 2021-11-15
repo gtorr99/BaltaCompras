@@ -1,6 +1,6 @@
 <app-title [title]="'Registrar fornecedor'"></app-title>
 
-<form [formGroup]="fornecedorForm" (ngSubmit)="onSubmit($event)" (keydown)="onSubmit($event)" class="needs-validation" novalidate>
+<form [formGroup]="fornecedorForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation" novalidate>
 <div class="box">
     <h3>Informações</h3>
     <div formGroupName="info">
@@ -229,7 +229,7 @@
 </div>
 <div class="row justify-content-end mt-3 pb-5">
     <div class="col-auto me-auto">
-        <app-button [btnClass]="'btn-tertiary-primary ps-0'" type="button" (click)="onReset($event)">Restaurar formulário</app-button>
+        <app-button [btnClass]="'btn-tertiary-primary ps-0'" type="button" (click)="onRestaurar($event)">Restaurar formulário</app-button>
     </div>
     <div class="col-auto">
         <app-button [btnClass]="'btn-outline-danger me-2'" type="button" (click)="onCancelar($event)">Cancelar</app-button>

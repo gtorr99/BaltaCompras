@@ -1,5 +1,5 @@
 <app-title [title]="'Fornecedor'">
-    <div class="row">
+    <div class="row no-pm">
         <div class="col col-sm-auto">
             <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
                 Exportar CSV
@@ -20,7 +20,7 @@
         #myTable
         [rows]="rows"
         [rowClass]="getRowClass"
-        [columnMode]="ColumnMode.force"
+        [columnMode]="ColumnMode.standard"
         [headerHeight]="50" 
         [footerHeight]="50" 
         rowHeight="auto" 
@@ -37,8 +37,7 @@
         (sort)="ordenar($event)">
 
         <!-- Row Detail Template -->
-        <ngx-datatable-row-detail 
-            [rowHeight]="500" #myMobileDetailRow>
+        <ngx-datatable-row-detail #myMobileDetailRow>
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                 <div class="detalhes-fornecedor">
                     <h3>Informações de registro</h3>

@@ -3,8 +3,8 @@ import { Setor } from "@models/setor.model";
 
 export class CentroCusto extends BaseEntity {
     descricao: string;
-    valorGasto: number;
-    valorLimite: number;
+    valorGasto?: number;
+    valorLimite?: number;
     setor: Setor;
     
     constructor(data?: Partial<CentroCusto>) {

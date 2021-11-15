@@ -4,12 +4,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Fornecedor } from '@models/fornecedor.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
-import { ToastrService } from 'ngx-toastr';
 import { FornecedorService } from 'app/modules/services/fornecedor.service';
 import { CEP } from '@models/cep.model';
 import { Router } from '@angular/router';
 import { GrupoProdutoService } from '@services/grupo-produto.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-fornecedor',
@@ -21,7 +19,6 @@ export class FornecedorComponent implements OnInit {
   fornecedor: Fornecedor = new Fornecedor();
   fornecedorForm: FormGroup;
   estados: { label: string, value: string }[] = [];
-  // grupoProdutoList: Observable<GrupoProduto[]>;
   grupoProdutoList: GrupoProduto[] = [];
 
   // Form masks
@@ -47,7 +44,6 @@ export class FornecedorComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private toastrService: ToastrService,
     private fornecedorService: FornecedorService,
     private grupoProdutoService: GrupoProdutoService,
     private router: Router
@@ -75,7 +71,7 @@ export class FornecedorComponent implements OnInit {
         cidade: [this.fornecedor.cidade, this.textValidator],
         estado: [this.fornecedor.estado?.toUpperCase() ?? null, this.commonValidators],
       }),
-      gruposProduto: [['Test'], this.commonValidators]
+      gruposProduto: ['', this.commonValidators]
     });
 
     // this.grupoProdutoList = this.grupoProdutoService.listar();
@@ -145,7 +141,7 @@ export class FornecedorComponent implements OnInit {
     form.classList.add(...['was-validated', 'is-valid']);
   }
 
-  onSubmit(event: any) {
+  onSalvar(event: any) {
     if (event.key == "Enter" || event.type == "submit") {
       this.fornecedorForm.markAllAsTouched();
       var form = document.getElementsByClassName('needs-validation')[0] as HTMLFormElement;
@@ -183,10 +179,22 @@ export class FornecedorComponent implements OnInit {
     }
   }
 
-  onReset(event: any) {
-    if (event.key == "Enter") {
-      return
-    }
+  onCancelar(event: any) {
+    event.preventDefault();
+    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+    this.modalRef.componentInstance.title = "Cancelar edição";
+    this.modalRef.componentInstance.message = "Todas as alterações serão perdidas. Você tem certeza que deseja cancelar?";
+    this.modalRef.closed.subscribe(response => {
+      if (response) {
+        this.router.navigate(['/fornecedor']);
+      }
+    });
+  }
+
+  onRestaurar(event: any) {
+    // if (event.key == "Enter") {
+    //   return
+    // }
     event.preventDefault();
     this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
     this.modalRef.componentInstance.title = "Restaurar formulário";
@@ -204,18 +212,6 @@ export class FornecedorComponent implements OnInit {
             forms[i]?.classList.remove(...['was-validated', 'is-valid', 'is-invalid']);
           }
         }
-      }
-    });
-  }
-
-  onCancelar(event: any) {
-    event.preventDefault();
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar edição";
-    this.modalRef.componentInstance.message = "Todas as alterações serão perdidas. Você tem certeza que deseja cancelar?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.router.navigate(['/fornecedor']);
       }
     });
   }

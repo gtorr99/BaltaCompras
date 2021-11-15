@@ -15,29 +15,29 @@ import br.com.baltacompras.model.CentroCusto;
 import br.com.baltacompras.repository.CentroCustoRepository;
 
 @RestController
-@RequestMapping("/centrocusto")
+@RequestMapping("/centro-custo")
 public class CentroCustoController {
     @Autowired
     private CentroCustoRepository repositorio;
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<CentroCusto> listar(){
         return repositorio.findAll();
     }
     
-    @PostMapping
+    @PostMapping("/salvar")
     public void salvar(@RequestBody CentroCusto centroCusto){
         repositorio.save(centroCusto);
     }
 
-    @PutMapping
+     @PutMapping("/alterar")
     public void alterar(@RequestBody CentroCusto centroCusto){
         if(centroCusto.getId()>0){
             repositorio.save(centroCusto);
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/excluir/{id}")
     public void excluir(@RequestBody CentroCusto centroCusto){
         repositorio.delete(centroCusto);
     }

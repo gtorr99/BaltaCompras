@@ -3,7 +3,7 @@ import { CentroCusto } from "@models/centro-custo.model";
 
 export class Setor extends BaseEntity {
     descricao: string;
-    centroCusto: CentroCusto[];
+    centroCusto?: CentroCusto[];
 
     constructor(data ?: Partial<Setor>) {
         super();

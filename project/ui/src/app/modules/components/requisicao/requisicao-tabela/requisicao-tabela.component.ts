@@ -1,150 +1,201 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ColumnMode } from '@models/enum/column-mode.enum';
+import { Router } from '@angular/router';
+import { Requisicao } from '@models/index';
+import { RequisicaoService } from '@services/requisicao.service';
 import { Filter, FilterType, SearchMap } from '@shared/components';
+import { Page } from '@models/page.model';
+import { ToastrService } from 'ngx-toastr';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
+import { StatusEnum } from '@models/enum';
 
 @Component({
   selector: 'app-requisicao-tabela',
   templateUrl: './requisicao-tabela.component.html',
-  styleUrls: ['./requisicao-tabela.component.scss']
+  styleUrls: ['./requisicao-tabela.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class RequisicaoTabelaComponent implements OnInit {
+  
+  // Filtros
   textOptions: SearchMap[] = [];
-  filterOptions: Filter[] = [];
+  filters: Filter[] = [];
+  query: string = '';
+  filterQuery: string = '';
+  sortQuery: string = '';
+  defaultStatus: string = '';
 
-  constructor() { }
+  // Tabela
+  @ViewChild('myTable') table: any;
+  page: Page<Requisicao> = new Page<Requisicao>();
+  rows = new Array<Requisicao>();
+  ColumnMode = ColumnMode;
+  loading: boolean = false;
+  messages = {
+    emptyMessage: 'Nenhum registro encontrado',
+    // Footer total message
+    totalMessage: 'resultados',
+    // Footer selected message
+    selectedMessage: 'selected'
+  }
+
+  statusColor: string = 'default';
+
+  private modalRef: NgbModalRef;
+
+  constructor(
+    private requisicaoService: RequisicaoService,
+    private toastrService: ToastrService,
+    private modalService: NgbModal,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.textOptions = [
       {
         label: "Nº Requisição",
-        value: "requisicaoId"
+        value: "id"
       },
       {
         label: "Requisitante",
-        value: "usuario"
+        value: "requisitante"
       },
-      {
-        label: "Setor",
-        value: "setor"
-      },
+      // {
+      //   label: "Setor",
+      //   value: "setor"
+      // },
       {
         label: "Centro de Custo",
         value: "centroCusto"
       }
     ];
 
-    // let statusKeys = Object.keys(StatusEnum);
-    // this.filters = [
-    //   {
-    //     label: "Status",
-    //     paramName: "status",
-    //     type: FilterType.DROPDOWN,
-    //     options: [...statusKeys.slice(statusKeys.length / 2).map(k => {
-    //       return { label: k, value: StatusEnum[k] }
-    //     })
-    //     ]
-    //   }
-    // ]
-
-    this.filterOptions = [
-      // {
-      //   label: "Data",
-      //   type: FilterType.DATE
-      // },
-      // {
-      //   label: "Status",
-      //   type: FilterType.DROPDOWN,
-      //   options: [
-      //     { label: "Aberto", value: "ABERTO" },
-      //     { label: "Em processamento", value: "EM_PROCESSAMENTO" },
-      //     { label: "Cancelado", value: "CANCELADO" }
-      //   ]
-      // }
+    let statusKeys = Object.keys(StatusEnum);
+    this.filters = [
+      {
+        label: "Status",
+        paramName: "status",
+        type: FilterType.DROPDOWN,
+        options: [...statusKeys.slice(statusKeys.length / 2).map(k => {
+          return { label: k, value: StatusEnum[k] }
+        })
+        , { label: 'Status', value: '' }]
+      },
+      {
+        label: "Prazo",
+        paramName: "prazo",
+        type: FilterType.DATE
+      },
     ]
-    // this.tabelaRequisicao =
-    // {
-    //   headers: [
-    //     {
-    //       label: "Nº Requisição",
-    //       isSortable: true
-    //     },
-    //     {
-    //       label: "Data",
-    //       isSortable: true
-    //     },
-    //     {
-    //       label: "Requisitante",
-    //       isSortable: true
-    //     },
-    //     {
-    //       label: "Setor",
-    //       isSortable: true
-    //     },
-    //     {
-    //       label: "Centro de Custo",
-    //       isSortable: true
-    //     },
-    //     {
-    //       label: "Status",
-    //       isSortable: true
-    //     }
-    //   ],
 
-    //   rows: [
-    //     {
-    //       items: [
-    //         { value: "REQ0001" },
-    //         { value: new Date().toLocaleString() },
-    //         { value: "Vitor Valoroso" },
-    //         { value: "Produção" },
-    //         { value: "1901" },
-    //         { value: "Aberto", isStatus: true }
-    //       ]
-    //     },
-    //     {
-    //       items: [
-    //         { value: "REQ0002" },
-    //         { value: new Date().toLocaleString() },
-    //         { value: "Vitor Valoroso" },
-    //         { value: "Produção" },
-    //         { value: "1901" },
-    //         { value: "Aberto", isStatus: true }
-    //       ]
-    //     },
-    //     {
-    //       items: [
-    //         { value: "REQ0003" },
-    //         { value: new Date().toLocaleString() },
-    //         { value: "Vitor Valoroso" },
-    //         { value: "Produção" },
-    //         { value: "1901" },
-    //         { value: "Aberto", isStatus: true }
-    //       ]
-    //     },
-    //     {
-    //       items: [
-    //         { value: "REQ0004" },
-    //         { value: new Date().toLocaleString() },
-    //         { value: "Vitor Valoroso" },
-    //         { value: "Produção" },
-    //         { value: "1901" },
-    //         { value: "Aberto", isStatus: true }
-    //       ]
-    //     }
-    //   ],
-    //   contextMenu: [
-    //     {
-    //       label: "Detalhes",
-    //       value: "detalhes"
-    //     },
-    //     {
-    //       label: "Editar",
-    //       value: "editar"
-    //     },
-    //     {
-    //       label: "Cancelar",
-    //       value: "cancelar"
-    //     }
-    //   ]
-    // };
+    this.page.page = 0;
+    this.carregarTabela(0);
+  }
+
+  carregarTabela(pageEvent: any = null) {
+    this.setQuery();
+    this.requisicaoService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<Requisicao>) => {
+      this.atualizarTabela(response);
+    });
+  }
+
+  atualizarTabela(response: Page<Requisicao>) {
+    this.page = response;
+    this.rows = [...response.content];
+    this.loading = false;
+  }
+
+  ordenar(event: any) {
+    this.loading = true;
+
+    let s = event.sorts[0];
+    this.sortQuery = `sort=${s.prop},${s.dir}`;
+    this.setQuery();
+
+    this.carregarTabela();
+  }
+
+  filtrar(filtro: string) {
+    this.loading = true;
+    this.filterQuery = filtro;
+    this.setQuery();
+    this.carregarTabela();
+  }
+
+  onEditarRequisicao(requisicao: Requisicao = null) {
+    this.requisicaoService.requisicaoSelecionada = requisicao ?? new Requisicao();
+    this.router.navigate(['/requisicao/criar']);
+  }
+
+  onCriarRequisicao() {
+    this.requisicaoService.requisicaoSelecionada = new Requisicao();
+    this.router.navigate(['/requisicao/criar']);
+  }
+
+  onCancelarRequisicao(requisicao: Requisicao) {
+    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+    this.modalRef.componentInstance.title = "Cancelar requisição";
+    this.modalRef.componentInstance.message = "Ao prosseguir, a requisição será cancelada. Você tem certeza que deseja prosseguir?";
+    this.modalRef.closed.subscribe(response => {
+      if (response) {
+        this.requisicaoService.cancelar(requisicao.id).subscribe(() => {
+          this.toastrService.success("Requisição cancelada!");
+          this.carregarTabela();
+        });
+      }
+    });
+  }
+
+  toggleExpandRow(row) {
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+
+  getWindowSize() {
+    return window.innerWidth > 800;
+  }
+
+  getRowClass(row) {
+    return {
+      'table-row': true
+    };
+  }
+
+  onDownload() {
+
+  }
+
+  setStatusTag(status: any): string {
+    this.statusColor = 'default'
+    switch (status) {
+      case StatusEnum[StatusEnum.ATIVO]:
+      case StatusEnum[StatusEnum.CONCLUIDO]:
+        this.statusColor = 'success';
+        break;
+      case StatusEnum[StatusEnum.CANCELADO]:
+      case StatusEnum[StatusEnum.REPROVADO]:
+        this.statusColor = 'danger';
+        break;
+      case StatusEnum[StatusEnum.EM_PROCESSAMENTO]:
+        this.statusColor = 'orange';
+        break;
+      case StatusEnum[StatusEnum.ABERTO]:
+        this.statusColor = 'warning';
+        break;
+      case StatusEnum[StatusEnum.APROVADO]:
+        this.statusColor = 'primary';
+        break;
+      default:
+        break;
+    }
+    return this.statusColor;
+  }
+
+  private setQuery() {
+    let params = [];
+    params.push(this.filterQuery);
+    params.push(this.sortQuery);
+    this.query = params.join('&');
+    console.log(this.query);
   }
 }

@@ -1,219 +1,291 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SearchMap } from '@shared/components';
-// import { UnMedidaEnum } from '../../models/enum';
-import { UnMedidaEnum } from '@models/enum';
-import { CentroCusto, DropdownModel, Produto, RequisicaoProduto } from '@models/index';
+import { Component, Injectable, OnInit } from '@angular/core';
+import { RequisicaoService } from '@services/requisicao.service';
+import { CentroCustoService } from '@services/centro-custo.service';
+import { ProdutoService } from '@services/produto.service';
+import { NgbDateParserFormatter, NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
+import { 
+  CentroCusto,
+  Produto,
+  RequisicaoProduto,
+  Requisicao,
+  Usuario, 
+  ProdutoSelecionado
+} from '@models/index';
+import { DatePipe } from '@angular/common';
+
+/**
+ * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.
+ */
+@Injectable()
+export class CustomDateParserFormatter extends NgbDateParserFormatter {
+
+  readonly DELIMITER = '/';
+
+  parse(value: string): NgbDateStruct | null {
+    if (value) {
+      let date = value.split(this.DELIMITER);
+      return {
+        day: parseInt(date[0], 10),
+        month: parseInt(date[1], 10),
+        year: parseInt(date[2], 10)
+      };
+    }
+    return null;
+  }
+
+  format(date: NgbDateStruct | null): string {
+    return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : '';
+  }
+}
 @Component({
   selector: 'app-requisicao',
   templateUrl: './requisicao.component.html',
-  styleUrls: ['./requisicao.component.scss']
+  styleUrls: ['./requisicao.component.scss'],
+  providers: [
+    { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }
+  ]
 })
 export class RequisicaoComponent implements OnInit {
 
-  currentUser: string = "Admin";
-  today: Date = new Date();
+  requisicao: Requisicao = new Requisicao();
+  requisicaoForm: FormGroup;
+  listaCentrosCusto: CentroCusto[] = [];
+  listaProdutos: ProdutoSelecionado[] = [];
+  listaProdutosAdicionados: ProdutoSelecionado[] = [];
 
-  textOptions: SearchMap[] = [];
-  listaProdutos: Produto[] = [];
-  listaProdutosFiltrados: { reqProd: RequisicaoProduto, isChecked: boolean, medidaSelecionada: string }[] = [];
-  listaProdutosAdicionados: { reqProd: RequisicaoProduto, isChecked: boolean, medidaSelecionada: string }[] = [];
+  /* Filtro */
+  query: string = '';
 
-  centroCustoLista: CentroCusto[];
+  /* NgbDatePicker */
+  hoje: NgbDateStruct = this.converterDateParaNgbDateStruct(new Date());
+  prazo: NgbDateStruct;
+
+  private modalRef: NgbModalRef;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private requisicaoService: RequisicaoService,
+    private centroCustoService: CentroCustoService,
+    private produtoService: ProdutoService,
+    private toastrService: ToastrService,
+    private modalService: NgbModal,
+    private datePipe: DatePipe,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.textOptions = [
-      {
-        label: "Grupo produtos",
-        value: ""
-      },
-      {
-        label: "Eletrônicos",
-        value: "eletronicos"
-      },
-      {
-        label: "Material de limpeza",
-        value: "limpeza"
-      }
-    ];
-
-    this.listaProdutos = [
-      {
-        id: 1,
-        descricao: "ps5",
-        unMedida: UnMedidaEnum.unidade,
-        grupoProduto: {
-          id: 1,
-          descricao: "Eletrônicos"
-        }
-      },
-      {
-        id: 2,
-        descricao: "ssd intel 1tb",
-        unMedida: UnMedidaEnum.unidade,
-        grupoProduto: {
-          id: 1,
-          descricao: "Eletrônicos"
-        }
-      },
-      {
-        id: 3,
-        descricao: "Água sanitária",
-        unMedida: UnMedidaEnum.L,
-        grupoProduto: {
-          id: 2,
-          descricao: "Material de limpeza"
-        }
-      },
-      {
-        id: 4,
-        descricao: "Sabão em pó",
-        unMedida: UnMedidaEnum.g,
-        grupoProduto: {
-          id: 2,
-          descricao: "Material de limpeza"
-        }
-      },
-      {
-        id: 4,
-        descricao: "Sabão em pó",
-        unMedida: UnMedidaEnum.g,
-        grupoProduto: {
-          id: 2,
-          descricao: "Material de limpeza"
-        }
-      },
-      {
-        id: 4,
-        descricao: "Sabão em pó",
-        unMedida: UnMedidaEnum.g,
-        grupoProduto: {
-          id: 2,
-          descricao: "Material de limpeza"
-        }
-      },
-      {
-        id: 4,
-        descricao: "Sabão em pó",
-        unMedida: UnMedidaEnum.g,
-        grupoProduto: {
-          id: 2,
-          descricao: "Material de limpeza"
-        }
-      },
-      {
-        id: 4,
-        descricao: "Sabão em pó",
-        unMedida: UnMedidaEnum.g,
-        grupoProduto: {
-          id: 2,
-          descricao: "Material de limpeza"
-        }
-      },
-      {
-        id: 4,
-        descricao: "Sabão em pó",
-        unMedida: UnMedidaEnum.g,
-        grupoProduto: {
-          id: 2,
-          descricao: "Material de limpeza"
-        }
-      },
-    ];
-
-    this.preencherListaProdutosFiltrados(this.listaProdutos);
-
-    this.centroCustoLista = [
-      new CentroCusto({
-        descricao: "1901 - Produção"
-      }),
-      new CentroCusto({
-        descricao: "2001 - TI"
-      })
-    ]
-  }
-
-  grupo: string = "Todos";
-  onSearch(filtro: SearchMap) {
-    if(filtro.value != '') {
-      this.grupo = filtro.label;
-      this.preencherListaProdutosFiltrados(this.listaProdutos.filter(p => p.grupoProduto.descricao == this.grupo));
+    this.requisicao = this.requisicaoService.requisicaoSelecionada;
+    if (this.requisicao.prazo) {
+      let prazo = this.requisicao?.prazo;
+      this.requisicao.prazo = new Date(Date.parse(prazo.toString()));
     }
-    else {
-      this.grupo = "Todos";
-      this.preencherListaProdutosFiltrados(this.listaProdutos);
-    }
-  }
-
-  onAdd() {
-    this.listaProdutosFiltrados.forEach(rp => {
-      if (rp.isChecked) {
-        this.listaProdutosAdicionados.push(rp);
-        this.listaProdutosFiltrados.splice(this.listaProdutosFiltrados.indexOf(rp), 1);
-      }
+      
+    this.requisicaoForm = this.formBuilder.group({
+      prazo: [this.requisicao?.prazo ? this.converterDateParaNgbDateStruct(this.requisicao?.prazo) : null, Validators.required],
+      centroCusto: [this.requisicao.centroCusto ?? null, Validators.required],
+      observacoes: [this.requisicao.observacoes ?? '', Validators.maxLength(65.000)],
+      radioListaProdutos: ['filtrados']
     });
-  }
 
-  onRemove() {
-    this.listaProdutosAdicionados.forEach(rp => {
-      if (!rp.isChecked) {
-        this.listaProdutosAdicionados.splice(this.listaProdutosAdicionados.indexOf(rp), 1);
-        this.listaProdutosFiltrados.push(rp);
-      }
+    // if (this.requisicao.produtos) {
+    //   this.listaProdutosAdicionados = [...this.requisicao.produtos.map(p =>
+    //     new ProdutoSelecionado(p)
+    //   )];
+    // }
+
+    this.centroCustoService.listar().subscribe((centrosCusto: CentroCusto[]) => {
+      this.listaCentrosCusto = [...centrosCusto.map(cc => new CentroCusto(cc))];
     });
+
+    this.carregarProdutos();
   }
 
-  onIncreaseQuantity(lista: {reqProd: RequisicaoProduto, isChecked: boolean}[], reqProd: RequisicaoProduto) {
-    lista.find(rp => { if (rp.reqProd == reqProd) rp.reqProd.quantidade += 1 });
-  }
-
-  onDecreaseQuantity(lista: {reqProd: RequisicaoProduto, isChecked: boolean}[], reqProd: RequisicaoProduto) {
-    lista.find(rp => { if (rp.reqProd == reqProd) rp.reqProd.quantidade -= 1 })
-  }
-
-  preencherListaProdutosFiltrados(produtos: Produto[]) {
-    this.listaProdutosFiltrados = [];
-    produtos.forEach(p => {
-      let prod = new Produto(p);
-      this.listaProdutosFiltrados.push({
-        reqProd: new RequisicaoProduto({
-          id: 0,
-          produto: prod,
+  carregarProdutos() {
+    this.produtoService.listar(this.query).subscribe((produtos: Produto[]) => {
+      this.listaProdutos = [...produtos.map(p => { return new ProdutoSelecionado(
+        new RequisicaoProduto ({
+          produto: new Produto(p),
           quantidade: 0
-        }),
-        isChecked: false,
-        medidaSelecionada: prod.getListaMedidas()[0]
-      });
+        })
+      )})];
+      console.log(this.listaProdutos);
+      
+      this.removerProdutosJaAdicionados();
     });
   }
 
-  @ViewChild('btnMedida') btnMedida: ElementRef;
-  checkListSize(reqProd: RequisicaoProduto): boolean {
-    if (reqProd.produto.getListaMedidas().length > 1) {
-      return true;
-    }
-    // this.btnMedida.nativeElement.removeAttribute()
-    return false;
+  removerProdutosJaAdicionados() {
+    let produtos = [...this.listaProdutos];
+    produtos.forEach(p => {
+      if (this.listaProdutosAdicionados.find(pAdd => pAdd.requisicaoProduto.produto.id == p.requisicaoProduto.produto.id)) {
+        this.listaProdutos.splice(this.listaProdutos.findIndex(p2 => p2.requisicaoProduto.produto.id == p.requisicaoProduto.produto.id), 1);
+      }
+    })
   }
-  // keyword = 'name';
-  // data = [
-  //   {
-  //     id: 1,
-  //     name: 'Usa'
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'England'
-  //   }
-  // ];
 
+  filtrar(filtro: string) {
+    this.query = filtro;
+    this.carregarProdutos();
+  }
 
-  // selectEvent(item) {
-  // }
+  onAdicionarProduto(produtoSelecionado?: ProdutoSelecionado) {
+    let funcaoAdicionarProduto = (p: ProdutoSelecionado) => {
+      if (p.isChecked && this.onValidarQuantidade(p)) {
+        this.listaProdutosAdicionados.push(p);
+        this.listaProdutos.splice(this.listaProdutos.findIndex(item => item.requisicaoProduto.produto.id == p.requisicaoProduto.produto.id), 1);
+      }
+    };
 
-  // onChangeSearch(val: string) {
-  // }
+    if (produtoSelecionado) {
+      produtoSelecionado.isChecked = true;
+      funcaoAdicionarProduto(produtoSelecionado);
+    } else {
+      let listaProdutosTemp = [...this.listaProdutos];
+      listaProdutosTemp.forEach(produto => {
+        funcaoAdicionarProduto(produto);
+      });
+    }
+  }
 
-  // onFocused(e) {
-  // }
+  onRemoverProduto(produtoSelecionado?: ProdutoSelecionado) {
+    let funcaoRemoverProduto = (p: ProdutoSelecionado) => {
+      if (!p.isChecked) {
+        p.requisicaoProduto.quantidade = 0;
+        this.listaProdutosAdicionados.splice(this.listaProdutosAdicionados.findIndex(item => item.requisicaoProduto.produto.id == p.requisicaoProduto.produto.id), 1);
+        this.listaProdutos.unshift(p);
+        this.carregarProdutos();
+      }
+    }
+
+    if (produtoSelecionado) {
+      produtoSelecionado.isChecked = false;
+      funcaoRemoverProduto(produtoSelecionado);
+    } else {
+      let produtosAdicionadosTemp = [...this.listaProdutosAdicionados];
+      produtosAdicionadosTemp.forEach((p: ProdutoSelecionado) => {
+        funcaoRemoverProduto(p);
+      });
+    }
+  }
+
+  onValidarQuantidade(produtoSelecionado: ProdutoSelecionado): boolean {
+    if (produtoSelecionado.requisicaoProduto.quantidade < 1) {
+      produtoSelecionado.requisicaoProduto.quantidade = 0;
+      produtoSelecionado.inputVermelhoSeQuantidadeZero = true;
+      this.toastrService.warning("Por favor, insira a quantidade");
+      return false;
+    }
+    return true;
+  }
+
+  onSalvar(event: any) {
+    if (event.type == "submit") {
+      this.requisicaoForm.markAllAsTouched();
+
+      if (!this.requisicaoForm.valid) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.toastrService.error("Todos os campos obrigatórios devem ser preenchidos");
+      } else {
+        if (!this.listaProdutosAdicionados.length) {
+          event.preventDefault();
+          event.stopPropagation();
+          this.toastrService.warning("Ao menos um produto deve ser adicionado");
+        } else {
+          if (this.requisicao.id) {
+            this.requisicaoService.alterar(this.requisicao).subscribe(() => {
+              this.toastrService.success("Requisição atualizada!");
+            })
+          } else {
+            this.listaProdutosAdicionados.forEach(p => { p.requisicaoProduto.converterQuantidadeParaUnMedidaPadrao(p.medidaSelecionada); console.log("Medida: " + p.medidaSelecionada);
+            });
+            
+            this.requisicao.id = this.requisicao.id ?? 0;
+            this.requisicao.centroCusto = this.requisicaoForm.get('centroCusto').value;
+            this.requisicao.data = new Date();
+            this.requisicao.prazo = this.converterNgbDateStructParaDate(this.requisicaoForm.get('prazo').value),
+            this.requisicao.observacoes = this.requisicaoForm.get('observacoes').value ?? '';
+            this.requisicao.usuario = this.requisicao.usuario ?? new Usuario({ id: 1 });
+            this.requisicao.produtos = [...this.listaProdutosAdicionados.map(p => p.requisicaoProduto)];
+
+            if (this.requisicao.id) {
+              this.requisicaoService.alterar(this.requisicao).subscribe(() => {
+                this.toastrService.success("Requisição atualizada!");
+              });
+            } else {
+              this.requisicaoService.salvar(this.requisicao).subscribe(() => {
+                this.toastrService.success("Nova requisição salva com sucesso!");
+              });
+            }
+            console.log(this.requisicao);
+            
+            this.router.navigate(['/requisicao']);
+          }
+        }
+      }
+    }
+  }
+
+  onCancelar(event: any) {
+    event.preventDefault();
+    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+    this.modalRef.componentInstance.title = "Cancelar edição";
+    this.modalRef.componentInstance.message = "Todas as alterações serão perdidas. Você tem certeza que deseja cancelar?";
+    this.modalRef.closed.subscribe(response => {
+      if (response) {
+        this.router.navigate(['/requisicao']);
+      }
+    });
+  }
+
+  onRestaurar(event: any) {
+    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+    this.modalRef.componentInstance.title = "Restaurar formulário";
+    this.modalRef.componentInstance.message = "Todas as alterações serão perdidas. Você tem certeza que deseja restaurar?";
+    this.modalRef.closed.subscribe(response => {
+      if (response) {
+        this.requisicaoForm.reset();
+        this.requisicaoForm.get('radioListaProdutos').setValue('filtrados');
+      }
+    });
+  }
+
+  onAumentarQuantidade(reqProd: RequisicaoProduto) {
+    reqProd.quantidade += 1;
+  }
+
+  onDiminuirQuantidade(reqProd: RequisicaoProduto) {
+    if (reqProd.quantidade > 0) {
+      reqProd.quantidade -= 1;
+    }
+  }
+
+  verificarTamanhoListaMedidas(reqProd: RequisicaoProduto): boolean {
+    return reqProd.produto.getListaMedidas().length > 1;
+  }
+
+  verificarTamanhoTela(): boolean {
+    return window.innerWidth >= 992;
+  }
+
+  verificarHaProdutosSelecionados(produtos: ProdutoSelecionado[], checked: boolean) {
+    return produtos.find(p => p.isChecked == checked);
+  }
+
+  onDateSelect(date: any | NgbDateStruct) {
+    this.requisicaoForm.get('prazo').patchValue(date);
+  }
+
+  private converterNgbDateStructParaDate(ngbDate: NgbDateStruct): Date {
+    return new Date(ngbDate.year, ngbDate.month - 1, ngbDate.day);
+  }
+
+  private converterDateParaNgbDateStruct(date: Date): NgbDateStruct {
+    return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+  }
 }

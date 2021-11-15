@@ -1,6 +1,6 @@
 import { UnMedidaEnum } from "./enum/un-medida.enum";
 
-export class ListUnidadeMedida {
+export class ListaUnidadeMedida {
     getLista(unMedida: UnMedidaEnum): string[] {
         switch(unMedida) {
             case UnMedidaEnum.L:
@@ -9,7 +9,7 @@ export class ListUnidadeMedida {
                 return ["Kg", "g", "mg"];
             case UnMedidaEnum.m:
                 return ["m", "cm", "mm"];
-            case UnMedidaEnum.unidade:
+            case UnMedidaEnum.un:
                 return ["un"];
         }
     }

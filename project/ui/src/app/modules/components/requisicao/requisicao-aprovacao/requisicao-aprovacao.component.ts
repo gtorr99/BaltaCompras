@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
-import { Fornecedor } from '@models/fornecedor.model';
-import { FornecedorService } from '@services/fornecedor.service';
+import { Requisicao } from '@models/index';
+import { RequisicaoService } from '@services/requisicao.service';
 import { Filter, FilterType, SearchMap } from '@shared/components';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
@@ -11,24 +11,25 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { StatusEnum } from '@models/enum';
 
 @Component({
-  selector: 'app-fornecedor-tabela',
-  templateUrl: './fornecedor-tabela.component.html',
-  styleUrls: ['./fornecedor-tabela.component.scss'],
+  selector: 'app-requisicao-aprovacao',
+  templateUrl: './requisicao-aprovacao.component.html',
+  styleUrls: ['./requisicao-aprovacao.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class FornecedorTabelaComponent implements OnInit {
-
+export class RequisicaoAprovacaoComponent implements OnInit {
+  
   // Filtros
   textOptions: SearchMap[] = [];
   filters: Filter[] = [];
   query: string = '';
   filterQuery: string = '';
   sortQuery: string = '';
+  defaultStatus: string = 'status=ABERTO';
 
   // Tabela
   @ViewChild('myTable') table: any;
-  page: Page<Fornecedor> = new Page<Fornecedor>();
-  rows = new Array<Fornecedor>();
+  page: Page<Requisicao> = new Page<Requisicao>();
+  rows = new Array<Requisicao>();
   ColumnMode = ColumnMode;
   loading: boolean = false;
   messages = {
@@ -44,7 +45,7 @@ export class FornecedorTabelaComponent implements OnInit {
   private modalRef: NgbModalRef;
 
   constructor(
-    private fornecedorService: FornecedorService,
+    private requisicaoService: RequisicaoService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private router: Router
@@ -53,27 +54,53 @@ export class FornecedorTabelaComponent implements OnInit {
   ngOnInit(): void {
     this.textOptions = [
       {
-        label: "Nome",
-        value: "nomeFantasia"
+        label: "Nº Requisição",
+        value: "id"
       },
       {
-        label: "CNPJ",
-        value: "cnpj"
+        label: "Requisitante",
+        value: "requisitante"
+      },
+      // {
+      //   label: "Setor",
+      //   value: "setor"
+      // },
+      {
+        label: "Centro de Custo",
+        value: "centroCusto"
       }
     ];
-    
+
+    let statusKeys = Object.keys(StatusEnum);
+    this.filters = [
+      {
+        label: "Status",
+        paramName: "status",
+        type: FilterType.DROPDOWN,
+        options: [...statusKeys.slice(statusKeys.length / 2).map(k => {
+          return { label: k, value: StatusEnum[k] }
+        })
+        , { label: 'Status', value: '' }]
+      },
+      {
+        label: "Prazo",
+        paramName: "prazo",
+        type: FilterType.DATE
+      },
+    ]
+
     this.page.page = 0;
     this.carregarTabela(0);
   }
 
   carregarTabela(pageEvent: any = null) {
     this.setQuery();
-    this.fornecedorService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<Fornecedor>) => {
+    this.requisicaoService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<Requisicao>) => {
       this.atualizarTabela(response);
     });
   }
 
-  atualizarTabela(response: Page<Fornecedor>) {
+  atualizarTabela(response: Page<Requisicao>) {
     this.page = response;
     this.rows = [...response.content];
     this.loading = false;
@@ -96,32 +123,19 @@ export class FornecedorTabelaComponent implements OnInit {
     this.carregarTabela();
   }
 
-  onEditarFornecedor(fornecedor: Fornecedor = null) {
-    this.fornecedorService.fornecedorSelecionado = fornecedor ?? new Fornecedor(); 
-    this.router.navigate(['/fornecedor/registrar']);
+  onAprovarRequisicao(req: Requisicao) {
+    this.requisicaoService.aprovar(req.id).subscribe(() => this.carregarTabela());
   }
 
-  onRegistrarFornecedor() {
-    this.fornecedorService.fornecedorSelecionado = new Fornecedor();
-    this.router.navigate(['/fornecedor/registrar']);
-  }
-
-  onExcluirFornecedor(fornecedor: Fornecedor) {
+  onReprovarRequisicao(req: Requisicao) {
     this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Excluir fornecedor";
-    this.modalRef.componentInstance.message = "Ao prosseguir, o fornecedor será excluído. Você tem certeza que deseja prosseguir?";
+    this.modalRef.componentInstance.title = "Cancelar requisição";
+    this.modalRef.componentInstance.message = "Ao prosseguir, a requisição será cancelada. Você tem certeza que deseja prosseguir?";
     this.modalRef.closed.subscribe(response => {
       if (response) {
-        this.fornecedorService.excluir(fornecedor.id).subscribe(() => {
-          this.toastrService.success("Fornecedor excluído!");
-          this.carregarTabela();
-        });
+        this.requisicaoService.reprovar(req.id).subscribe(() => this.carregarTabela());
       }
     });
-  }
-
-  getListaProdutos(forn: Fornecedor): string {
-    return forn.gruposProduto.map(gp => gp.descricao).join(", ");
   }
 
   toggleExpandRow(row) {
@@ -172,6 +186,8 @@ export class FornecedorTabelaComponent implements OnInit {
     let params = [];
     params.push(this.filterQuery);
     params.push(this.sortQuery);
+    params.push(this.defaultStatus);
     this.query = params.join('&');
+    console.log(this.query);
   }
 }

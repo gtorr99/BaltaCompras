@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +37,8 @@ public class FornecedorController {
     @Autowired
     private FornecedorRepository repositorio;
 
-    @Autowired
-    private FornecedorCustomRepository customRepo;
+//    @Autowired
+//    private FornecedorCustomRepository customRepo;
 
     private final FornecedorServiceImplement fornecedorServiceImpl = new FornecedorServiceImplement();
 
@@ -79,17 +78,21 @@ public class FornecedorController {
     public ResponseEntity<?> alterar(@RequestBody Fornecedor fornecedor) {
         if (fornecedor.getId() > 0) {
             repositorio.save(fornecedor);
-            return ResponseEntity.status(HttpStatus.OK).body("Dados do fornecedor alterados com sucesso!");
+            return ResponseEntity.status(HttpStatus.OK).body("Dados do fornecedor atualizados com sucesso!");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
     }
 
     @DeleteMapping("/excluir/{id}")
     public Boolean excluir(@PathVariable Integer id) {
-        Fornecedor fornecedorSalvo = repositorio.getById(id);
-        fornecedorSalvo.setStatus(Status.DELETADO);
-        repositorio.save(fornecedorSalvo);
-        return true;
+        try {
+            Fornecedor fornecedorSalvo = repositorio.getById(id);
+            fornecedorSalvo.setStatus(Status.DELETADO);
+            repositorio.save(fornecedorSalvo);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
 //    @GetMapping("/filtrar")

@@ -14,7 +14,7 @@ a.logo {
     font: var(--logo);
     white-space: nowrap;
     position: absolute;
-    z-index: 21;
+    z-index: 1001;
     margin-left: 32px;
     cursor: pointer;
 }
@@ -49,7 +49,7 @@ i.bi-bell-fill::before {
 .sidebar {
     height: 100%;
     position: absolute;
-    z-index: 20;
+    z-index: 1000;
     background-color: var(--black);
     overflow-x: hidden;
     transition: 0.3s;

@@ -5,17 +5,17 @@ import { PageNotFoundComponent } from '@shared/components/page-not-found/page-no
 const routes: Routes = [
     { 
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'requisicao',
         pathMatch: 'full'
     },
     {
         path: 'login',
         loadChildren: () => import('@modules/login/login.module').then(m => m.LoginModule)
     },
-    {
-        path: 'home',
-        loadChildren: () => import('@modules/home/home.module').then(m => m.HomeModule)
-    },
+    // {
+    //     path: 'home',
+    //     loadChildren: () => import('@modules/home/home.module').then(m => m.HomeModule)
+    // },
     {
         path: 'requisicao',
         loadChildren: () => import('@modules/requisicao/requisicao.module').then(m => m.RequisicaoModule)

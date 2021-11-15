@@ -16,6 +16,10 @@
     box-shadow: none;
 }
 
+.btn:disabled {
+    background-color: var(--gray-300);
+}
+
 .input-button-start {
     &,
     &:hover {
@@ -69,6 +73,12 @@
     padding: 8px 16px;
     border: 2px solid var(--primary);
     color: var(--primary);
+}
+
+.btn-tertiary-dark, .btn-tertiary-primary {
+    padding: 0;
+    height: fit-content;
+    width: fit-content;
 }
 
 .btn-tertiary-dark {

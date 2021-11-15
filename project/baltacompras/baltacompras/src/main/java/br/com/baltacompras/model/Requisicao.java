@@ -3,6 +3,7 @@ package br.com.baltacompras.model;
 import br.com.baltacompras.model.enums.Status;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class Requisicao {
     @Column(nullable = false)
     private Date data;
     @Column(nullable = false)
-    private Date prazo;
+    private LocalDate prazo;
     @Column(nullable = false)
     private Status status;
     private String observacoes;
@@ -71,11 +72,12 @@ public class Requisicao {
         return produtos;
     }
 
-    public Date getPrazo() {
+    public LocalDate getPrazo() {
         return prazo;
     }
 
-    public void setPrazo(Date prazo) {
+    public void setPrazo(LocalDate prazo) {
         this.prazo = prazo;
     }
+
 }
