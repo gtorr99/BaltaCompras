@@ -1,0 +1,226 @@
+<app-title [title]="'Olá, fornecedor!'"></app-title>
+
+<form [formGroup]="cotacaoExternaForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation"
+    novalidate>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-6 pe-2 mb-3">
+
+                <!-- Informações -->
+                <div class="row justify-content-between align-items-center header" style="height: 78px;">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-auto me-1">
+                                <h4>Comprador:</h4>
+                            </div>
+                            <div class="col-auto">
+                                <h4 class="header-info">Vitor Valoroso</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-auto me-1">
+                                <h4>Email de contato:</h4>
+                            </div>
+                            <div class="col-auto">
+                                <h4 class="header-info">comprador@email.com</h4>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-auto me-1">
+                                <h4>Prazo solicitado: </h4>
+                            </div>
+                            <div class="col">
+                                <h4 class="header-info">{{ prazo | date: 'dd/MM/yyyy' }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produtos Header -->
+                <div class="row justify-content-between mt-2">
+                    <div class="col">
+                        <span class="span-label">Produto</span>
+                    </div>
+                    <div class="col d-flex justify-content-end align-items-center me-4">
+                        <span class="span-label">Quantidade</span>
+                    </div>
+                    <div class="col-1">
+                        <span class="span-label">Un.</span>
+                    </div>
+                </div>
+
+                <!-- Produtos lista -->
+                <div class="row py-1 mt-1 produto-row" *ngFor="let produto of listaProdutos" style="height: 40px;">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col align-items-center">
+                                <span class="span-value">Água sanitária</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col me-4">
+                        <div class="row justify-content-end">
+                            <div class="col-auto align-items-center">
+                                <span class="span-value ms-auto">1000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="row">
+                            <div class="col">
+                                <span class="span-value">g</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Fornecedores -->
+            <div class="col-6 ps-3">
+                <div class="header pb-2" style="height: 78px;">
+                    <div class="row justify-content-end">
+                        <div class="col-auto">
+                            <label class="form-label">
+                                Prazo fornecedor
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input ngbDatepicker #dp="ngbDatepicker" 
+                                    class="form-control datepicker" 
+                                    placeholder="DD/MM/AAAA" 
+                                    name="dp"
+                                    [startDate]="hoje" 
+                                    [minDate]="hoje" 
+                                    outsideDays="hidden" 
+                                    (click)="dp.toggle()"
+                                    (dateSelect)="onDateSelect($event)" 
+                                    formControlName="prazoFornecedor" readonly>
+                                <i class="bi bi-calendar pb-1" 
+                                    (click)="dp.toggle()" 
+                                    (dateSelect)="onDateSelect($event)" 
+                                    [ngClass]="cotacaoExternaForm.get('prazoFornecedor').touched ? (cotacaoExternaForm.get('prazoFornecedor').valid ?
+                                            'icone-valido' : 'icone-invalido') : ''">
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <span class="span-label flex-col">Disponibilidade</span>
+                    </div>
+                    <div class="col">
+                        <span class="span-label flex-col">Valor unitário</span>
+                    </div>
+                    <div class="col">
+                        <span class="span-label flex-col">Alíquota IPI</span>
+                    </div>
+                    <div class="col">
+                        <span class="span-label flex-col">Subtotal</span>
+                    </div>
+                </div>
+                <div class="row w-100" *ngFor="let produto of listaProdutos">
+                    <div class="col py-1 pe-1">
+                        <ng-select
+                            [items]="['Disponível', 'Indisponível']"
+                            ></ng-select>
+                    </div>
+                    <div class="col py-1 pe-1">
+                        <input type="text" class="form-control" [(ngModel)]="valor"
+                            [ngModelOptions]="{standalone: true}" (click)="setValor()" (focusout)="onTransformarValor()"
+                            [mask]="inputing ? '0*,00': ''" [dropSpecialCharacters]="false">
+                    </div>
+                    <div class="col p-1">
+                        <input type="text" class="form-control text-center" [(ngModel)]="aliqIpi"
+                            [ngModelOptions]="{standalone: true}" mask="separator.2" thousandSeparator="."
+                            [suffix]="'%'" [dropSpecialCharacters]="false">
+                    </div>
+                    <div class="col py-1 ps-1">
+                        <input type="text" class="form-control" readonly [value]="'R$ 12.000,00'">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-2 justify-content-between">
+            <div class="col mt-2 me-3">
+                <div class="row justify-content-between">
+                    <div class="col me-1">
+                        <label class="form-label">
+                            Transportadora
+                        </label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">
+                            Meio de transporte
+                        </label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col mt-2">
+                <div class="row">
+                    <div class="col me-1">
+                        <label class="form-label">
+                            Frete
+                        </label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col me-1">
+                        <label class="form-label">
+                            Desconto
+                        </label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">
+                            Total
+                        </label>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Observações -->
+            <div class="row mt-3 justify-content-between">
+                <div class="col me-3">
+                    <label for="observacoesTextArea" class="form-label">Observações</label>
+                    <textarea class="form-control px-2" id="observacoesTextArea" formControlName="observacoes"></textarea>
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Formas de pagamento</label>
+                    <ng-select
+                        [addTag]="true"
+                        [multiple]="true" 
+                        [searchable]="true"
+                        [closeOnSelect]="false"
+                        [hideSelected]="true" 
+                        [notFoundText]="'Digite uma forma de pgto'"
+                        [addTagText]="'Adicionar forma pgto: '">
+                    </ng-select>
+                </div>
+            </div>
+    </div>
+
+    <div class="row justify-content-end mt-3">
+        <div class="col-auto me-auto d-flex align-items-center">
+            <app-button [btnClass]="'btn-tertiary-primary'" (click)="onRestaurar($event)">
+                Restaurar
+            </app-button>
+        </div>
+        <div class="col-auto">
+            <app-button [btnClass]="'btn-outline-danger me-1 me-md-2'" (click)="onCancelar($event)">
+                Cancelar
+            </app-button>
+        </div>
+        <div class="col-auto">
+            <app-button [btnClass]="'btn-primary'" type="submit">Enviar cotação</app-button>
+        </div>
+    </div>
+</form>

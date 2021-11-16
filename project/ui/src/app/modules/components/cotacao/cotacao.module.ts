@@ -11,9 +11,10 @@ import { RouterModule } from '@angular/router';
 import { CotacaoComponent } from './cotacao.component';
 import { CotacaoTabelaComponent } from './cotacao-tabela/cotacao-tabela.component';
 import { CotacaoRoutingModule } from './cotacao-routing.module';
+import { CotacaoExternaComponent } from './cotacao-externa/cotacao-externa.component';
 
 @NgModule({
-    declarations: [ CotacaoComponent, CotacaoTabelaComponent ],
+    declarations: [ CotacaoComponent, CotacaoTabelaComponent, CotacaoExternaComponent ],
     imports: [
         CommonModule,
         SharedModule,

@@ -18,7 +18,7 @@ h4 {
 :host ::ng-deep ng-select.ng-select div.ng-select-container {
     padding: 0;
     border: var(--border);
-    height: 40px;
+    height: 36px;
 }
 
 #title {
@@ -120,63 +120,86 @@ ul.list-group {
     padding-left: 8px;
 }
 
-/* Input number */
-input[type="number"] {
-    -webkit-appearance: textfield;
-    -moz-appearance: textfield;
-    appearance: textfield;
-    outline:none;
+input:focus {
     box-shadow: none;
-    height: 35px;
+    outline: none;
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
+input.ng-invalid.ng-touched,
+::ng-deep ng-select.ng-invalid.ng-touched .ng-select-container {
+    border: 1px solid red !important;
 }
 
-input.form-control.quantity {
-    text-align: end;
-    border: var(--border);
-    border-top: none;
-    border-bottom: none;
-    margin: 0;
-    height: 31px;
+input.ng-valid.ng-touched,
+::ng-deep ng-select.ng-valid.ng-touched .ng-select-container {
+    border: 1px solid green !important;
 }
 
-.number-input, .btn-medida {
-    border: var(--border);
-    border-radius: var(--radius);
+
+/* Produtos */
+.container {
     background-color: white;
-    height: 35px;
+    border-radius: var(--radius);
+    box-shadow: var(--box-shadow);
+    padding: 16px;
+    padding-right: 20px;
 }
 
-.btn-number-spinner {
-    outline:none;
-    box-shadow: none;
-    padding: 4px 8px;
-    height: 31px;
+.v-scroll {
+    overflow-y: scroll;
+    max-height: 550px;
 }
 
-.btn-number-spinner:hover {
-    background-color: var(--gray-400);
-    color: white;
-    border-radius: 0;
+.span-value {
+    font: var(--font-regular-14);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.btn-medida {
-    padding: 0.2rem 0.2rem;
-    width: 50px;
+.span-label {
+    font: var(--font-bold-14);
 }
 
-.btn-medida::after {
-    display: none;
+.flex-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.btn-medida > .bi-chevron-down::before {
-    font-size: small;
+.header {
+    border-bottom: 2px solid var(--gray-200);
 }
 
+h4.header-info {
+   font-weight: 100;
+}
+
+.b-right {
+    border-right: 2px solid var(--gray-200);
+}
+
+.produto-row:not(:last-child) {
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.form-control {
+    font: var(--font-regular-13);
+}
+
+.contextmenu {
+    position: absolute;
+}
+/* Fornecedores */
+
+/* Media queries */
+@media (min-width: 991.98px) {
+    ul.list-group {
+        border: var(--border);
+        border-radius: var(--radius);
+        padding: 0;
+    }
+}
 
 /* Datepicker */
 .bi-calendar, .datepicker {
@@ -188,7 +211,6 @@ input.form-control.quantity {
 }
 
 input.form-control.datepicker {
-    font: var(--font-regular-15) !important;
   min-width: 120px !important;
   width: 120px !important;
   padding-right: 0;
@@ -249,14 +271,4 @@ input.ng-invalid.ng-touched,
 input.ng-valid.ng-touched,
 ::ng-deep ng-select.ng-valid.ng-touched .ng-select-container {
     border: 1px solid green !important;
-}
-
-
-/* Media queries */
-@media (min-width: 991.98px) {
-    ul.list-group {
-        border: var(--border);
-        border-radius: var(--radius);
-        padding: 0;
-    }
 }
