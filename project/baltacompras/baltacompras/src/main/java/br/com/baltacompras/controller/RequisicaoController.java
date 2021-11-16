@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.baltacompras.model.Requisicao;
 import br.com.baltacompras.repository.RequisicaoRepository;
+import br.com.baltacompras.serviceimplement.Email;
 
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
@@ -138,4 +139,13 @@ public class RequisicaoController {
 //
 //        return customRepo.filtrar(id, dateIni, dateFim, status, observacao);
 //    }
+    
+    
+    @PostMapping("/email")
+    public void gerarRelatorio(@RequestParam(value = "link") String link, @RequestParam(value = "destinatarios") String[] destinatarios) throws Exception{
+        String mensagem = "<h4>Uma nova requisição está aguardando sua análise!</h4><br><a href=" + link + ">Clique aqui para acessar!</a>";
+        String assunto = "Nova Requisição para análise";
+        String arquivo = null;
+        email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
+    }
 }
