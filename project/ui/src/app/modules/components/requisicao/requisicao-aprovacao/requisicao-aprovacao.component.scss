@@ -118,11 +118,42 @@ div.datatable-row-detail {
     padding: 15px 20px !important;
 }
 
+table {
+    background-color: white;
+    border-radius: var(--radius);
+    box-shadow: var(--box-shadow);
+    margin-left: 12px; 
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.tb {
+    max-width: 500px;       
+}
+
+thead th {
+    border-bottom: var(--border) !important;
+    border-color: var(--gray-200) !important;
+    font: var(--font-bold-14);
+}
+
+tbody td {
+    font: var(--font-regular-14);
+}  
+
+tbody th {
+    font: var(--font-bold-14);
+}
+
+tbody tr:last-child {
+    border-color: transparent;
+}
+
 /* Status */
 .status-tag {
     font: var(--font-bold-14);
     padding: 8px 16px !important;
-    min-width: 50px;
+    min-width: 120px;
     max-width: 120px;
     border-radius: var(--radius);
     border: none;

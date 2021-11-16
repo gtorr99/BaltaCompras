@@ -1,0 +1,91 @@
+<div class="modal-header">
+    <h5 class="modal-title">Gerenciar filtros</h5>
+    <button type="button" class="btn-close" (click)="onDismiss()"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col">
+            <label class="form-label">Atributo</label>
+        </div>
+        <div class="col">
+            <label class="form-label">Parâmetro</label>
+        </div>
+        <div class="col">
+            <label class="form-label">Valor</label>
+        </div>
+    </div>
+    <div class="row mt-1" *ngFor="let filtro of filtrosAdicionados; let i = index">
+        <div class="col me-1">
+            <ng-select 
+                [items]="atributos"
+                bindLabel="nome" 
+                bindValue="atributo" 
+                [multiple]="false"
+                [searchable]="true"
+                [closeOnSelect]="true"
+                [(ngModel)]="filtrosAdicionados[i].atributo.atributo"
+                (change)="onAlterarFiltroAtributo($event, filtro)">
+            </ng-select>
+        </div>
+        <div class="col me-1">
+            <ng-select 
+                [items]="filtro.parametros ?? getParametros(filtro)"
+                bindLabel="nome" 
+                bindValue="parametro" 
+                [multiple]="false"
+                [searchable]="true"
+                [closeOnSelect]="true"
+                [(ngModel)]="filtrosAdicionados[i].parametro">
+            </ng-select>
+        </div>
+        <div class="col">
+            <div class="row" [ngSwitch]="filtro.atributo.tipo">
+                <ng-container *ngSwitchCase="2">
+                    <div class="col input-group">
+                        <input ngbDatepicker #dp="ngbDatepicker" 
+                            class="form-control datepicker"
+                            name="dp"
+                            [startDate]="hoje" 
+                            outsideDays="hidden" 
+                            (click)="dp.toggle()" 
+                            (dateSelect)="onDateSelect($event, filtro)"
+                            [value]="getData(filtro)"
+                            readonly>
+                        <i class="bi bi-calendar pb-1" (click)="dp.toggle()" 
+                            (dateSelect)="onDateSelect($event, filtro)"></i>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="3">
+                    <div class="col">
+                        <ng-select 
+                            [items]="filtro.statusOptions ?? getStatus()"
+                            [multiple]="false" 
+                            [searchable]="true"
+                            [closeOnSelect]="true"
+                            [(ngModel)]="filtrosAdicionados[i].valor">
+                        </ng-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    <div class="col">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosAdicionados[i].valor">
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div class="col-auto d-flex align-items-center">
+            <i class="bi bi-x-lg ms-1" (click)="onRemoverFiltro(i)"></i>
+        </div>
+    </div>
+</div>
+<div class="modal-footer row justify-content-between">
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-tertiary-primary me-auto'" (action)="onAdicionarFiltro()">
+            Adicionar filtro
+        </app-button>
+    </div>
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-outline-danger me-1'" (click)="onDismiss()">Cancelar</app-button>
+        <app-button [btnClass]="'btn-primary'" (click)="onFiltrar()" type="submit" ngbAutoFocus>Aplicar filtros</app-button>
+    </div>
+</div>

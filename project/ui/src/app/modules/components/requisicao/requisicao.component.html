@@ -70,8 +70,7 @@
     <div class="row">
         <div class="col">
             <label class="form-label">Pesquisar produtos</label>
-            <app-filter [exibirBarraPesquisa]="true" [inputPlaceholder]="['produto', 'grupo']" (search)="filtrar($event)">
-            </app-filter>
+            <app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
         </div>
     </div>        
 

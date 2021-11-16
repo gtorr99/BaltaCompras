@@ -3,12 +3,12 @@ import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
 import { Fornecedor } from '@models/fornecedor.model';
 import { FornecedorService } from '@services/fornecedor.service';
-import { Filter, FilterType, SearchMap } from '@shared/components';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { StatusEnum } from '@models/enum';
+import { Atributo, TipoFiltro } from '@shared/components/filter/filter-select/filter.model';
 
 @Component({
   selector: 'app-fornecedor-tabela',
@@ -19,8 +19,7 @@ import { StatusEnum } from '@models/enum';
 export class FornecedorTabelaComponent implements OnInit {
 
   // Filtros
-  textOptions: SearchMap[] = [];
-  filters: Filter[] = [];
+  atributosPesquisa: Atributo[] = [];
   query: string = '';
   filterQuery: string = '';
   sortQuery: string = '';
@@ -51,14 +50,31 @@ export class FornecedorTabelaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.textOptions = [
+    this.atributosPesquisa = [
       {
-        label: "Nome",
-        value: "nomeFantasia"
+        nome: "Nome",
+        atributo: "nomeFantasia",
+        tipo: TipoFiltro.STRING
       },
       {
-        label: "CNPJ",
-        value: "cnpj"
+        nome: "Cnpj",
+        atributo: "cnpj",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Status",
+        atributo: "status",
+        tipo: TipoFiltro.STATUS
+      },
+      {
+        nome: "Email",
+        atributo: "email",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Grupo Produto",
+        atributo: "grupoProduto",
+        tipo: TipoFiltro.STRING
       }
     ];
     

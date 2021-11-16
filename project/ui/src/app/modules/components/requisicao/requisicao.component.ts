@@ -17,6 +17,7 @@ import {
   ProdutoSelecionado
 } from '@models/index';
 import { DatePipe } from '@angular/common';
+import { Atributo, TipoFiltro } from '@shared/components';
 
 /**
  * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.
@@ -61,6 +62,7 @@ export class RequisicaoComponent implements OnInit {
 
   /* Filtro */
   query: string = '';
+  atributosPesquisa: Atributo[] = [];
 
   /* NgbDatePicker */
   hoje: NgbDateStruct = this.converterDateParaNgbDateStruct(new Date());
@@ -82,6 +84,24 @@ export class RequisicaoComponent implements OnInit {
   ngOnInit(): void {
     this.requisicao = this.requisicaoService.requisicaoSelecionada;
     this.titulo = this.requisicao.id ? 'Editar requisição' : 'Nova requisição';
+    this.atributosPesquisa = [
+      {
+        nome: "Produto",
+        atributo: "descricao",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Un. Medida",
+        atributo: "unMedida",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Grupo produto",
+        atributo: "grupoProduto",
+        tipo: TipoFiltro.STRING
+      }
+    ];
+
     if (this.requisicao.prazo) {
       let prazo = this.requisicao?.prazo;
       this.requisicao.prazo = new Date(Date.parse(prazo.toString()));

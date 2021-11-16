@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FilterSelectComponent } from './filter-select/filter-select.component';
+import { Atributo, Filtro } from './filter-select/filter.model';
 
 @Component({
   selector: 'app-filter',
@@ -7,84 +10,38 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class FilterComponent implements OnInit {
   
-  @Input() exibirBarraPesquisa: boolean = false;
-  @Input() searchTextOptions: SearchMap[] = [];
-  @Input() filters: Filter[] = [];
-  @Input() inputPlaceholder: string[] = [];
-  placeholder: string = "Pesquisar...";
-
-  @Output() optionEvent: EventEmitter<any> = new EventEmitter();
+  @Input() atributos: Atributo[] = [];
+  @Input() filtroAvancado: boolean = false;
   @Output() search: EventEmitter<any> = new EventEmitter();
 
-  selectedOption: SearchMap = { label: "Filtro", value: "" };
-  searchText: string = '';
-  dateRange: string = '';
+  filtrosAdicionados: Filtro[] = [];
+  textoPesquisa: string = '';
+  private modalRef: NgbModalRef;
 
-  constructor() { }
+  constructor(
+    private modalService: NgbModal
+  ) { }
 
   ngOnInit(): void {
-    if (this.searchTextOptions) {
-      this.selectedOption = this.searchTextOptions[0];
-      this.exibirBarraPesquisa = true;
-    }
-    if (this.inputPlaceholder) {
-      this.placeholder = "Pesquisar por " + this.inputPlaceholder.join(' ou ');
-    }
-  }
-
-  updateDropdownLabel(option: SearchMap) {
-    this.selectedOption = option;
-    this.emitSearchEvent();
-  }
-
-  alterarFiltro(filter: any, option: SearchMap) {
-    filter.selectedOption = option.label;
-    this.emitSearchEvent();
-  }
-
-  emitSearchEvent(event?: any) {
-    console.log(event);
     
+  }
+
+  onFiltrar(filtro?: string) {
     let params = [];
-    this.filters.forEach(f => params.push(`${f.paramName}=${f.selectedOption == f.label ? '' : f.selectedOption ?? ''}`));
-
-    if (this.selectedOption) {
-      params.push(`${this.selectedOption.value}=${event?.target?.value?.toLowerCase() ?? this.searchText.toLowerCase()}`);
-    } else {
-      this.inputPlaceholder.forEach(i => {
-        params.push(`${i}=${event?.target?.value?.toLowerCase() ?? this.searchText.toLowerCase()}`);
-      });
+    this.atributos.forEach(a => params.push(`${a.atributo}=${this.textoPesquisa}`));
+    if (filtro) {
+      params.push(filtro);
     }
-
-    params.push(this.dateRange);
     this.search.emit(params.join('&'));
-    console.log(params);
-    
   }
 
-  onSelectDate(selectedDateRange: any) {
-    console.log(selectedDateRange);
-    
-    this.dateRange = selectedDateRange;
-    this.emitSearchEvent();
+  onAdicionarFiltros() {
+    this.modalRef = this.modalService.open(FilterSelectComponent, { size: 'lg' });
+    this.modalRef.componentInstance.filtrosAdicionados = this.filtrosAdicionados;
+    this.modalRef.componentInstance.atributos = this.atributos;
+    this.modalRef.closed.subscribe(filtro => {
+      this.filtrosAdicionados = this.modalRef.componentInstance.filtrosAdicionados;
+      this.onFiltrar(filtro);
+    });
   }
-}
-
-export class SearchMap {
-  label: string;
-  value: string;
-}
-
-export class Filter {
-  label: string;
-  type: FilterType;
-  paramName: string;
-  iconClass?: string;
-  options ?: SearchMap[];
-  selectedOption?: string
-}
-
-export enum FilterType {
-  DATE = 1,
-  DROPDOWN
 }

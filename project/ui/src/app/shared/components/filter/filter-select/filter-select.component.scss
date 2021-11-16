@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.modal-header {
+    padding: 24px;
+    padding-bottom: 16px;
+}
+
+.modal-title {
+    font: var(--font-bold-24);
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+.modal-footer {
+    padding: 24px;
+    padding-top: 16px;
+}
+
+.modal-body {
+    font: var(--font-regular-16);
+    padding: 0 24px;
+}
+
+.form-label {
+    font: var(--font-bold-15);
+    margin-top: 16px; 
+    margin-bottom: 4px;
+}
+
+input.form-control {
+    height: 36px;
+    padding-left: 8px;
+}
+
+i.bi.bi-x-lg {
+    cursor: pointer;
+    color: var(--gray-400);
+}
+
+i.bi.bi-x-lg:hover {
+    color: var(--black);
+}
+
+/* Datepicker */
+.bi-calendar, .datepicker {
+  height: 40px;
+  background-color: white;
+  border: var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+input.form-control.datepicker {
+    font: var(--font-regular-14) !important;
+  min-width: 40px !important;
+  width: 40px !important;
+  padding-right: 0;
+  padding-left: 8px;
+  border-right: none;
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+}
+
+input.datepicker:focus, i.bi.bi-calendar:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+input.datepicker.ng-touched {
+    border-right: none;
+}
+
+i.bi.bi-calendar {
+  border-left: none;
+  align-items: center;
+  display: flex;
+  width: 30px;
+  height: 36px;
+  padding-right: 2px;
+  padding-top: 2px;
+  z-index: 20;
+}
+
+i.bi.bi-calendar.icone-invalido {
+    border: 1px solid red;
+    border-left: none;
+}
+
+i.bi.bi-calendar.icone-valido {
+    border: 1px solid green;
+    border-left: none;
+}
+
+:host ::ng-deep ngb-datepicker-navigation-select.ngb-dp-navigation-select select.custom-select {
+    border-radius: var(--radius);
+    font: var(--font-regular-14);
+    margin-right: 4px;
+}
+
+:host ::ng-deep ngb-dp-day:hover {
+    background-color: var(--gray);
+}
+
+:host ::ng-deep ngb-datepicker-navigation-select >.custom-select {
+    flex: none;
+    width: 70px;
+}

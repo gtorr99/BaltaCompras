@@ -13,14 +13,14 @@
     </div>
 </app-title>
 
-<app-filter [searchTextOptions]="textOptions" [filters]="filters" (search)="filtrar($event)"></app-filter>
+<app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
 
-<div class="mb-5">
+<div class="mb-5 mt-2 mt-md-0">
     <ngx-datatable class="material expandable" 
         #myTable
         [rows]="rows"
         [rowClass]="getRowClass"
-        [columnMode]="ColumnMode.standard"
+        [columnMode]="ColumnMode.force"
         [headerHeight]="50" 
         [footerHeight]="50" 
         rowHeight="auto" 
@@ -32,7 +32,6 @@
         [loadingIndicator]="loading"
         [messages]="messages"
         [reorderable]="false"
-        [scrollbarH]="getWindowSize()"
         (page)="carregarTabela($event)" 
         (sort)="ordenar($event)">
 
@@ -162,34 +161,32 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status"[sortable]="getWindowSize()" headerClass="header-mobile-hidden status">
+        <ngx-datatable-column name="Telefone"  [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
+                <span class="mobile-hidden">{{ value }}</span>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grupos Produto" [sortable]="false" [flexGrow]="1" headerClass="header-mobile-hidden">
-            <ng-template let-column="column" ngx-datatable-header-template>
-                <span class="mobile-hidden">{{ column.name }}</span>
+        <ngx-datatable-column name="Status" [sortable]="getWindowSize()" headerClass="header-mobile-hidden status">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
-            <ng-template let-row="row" ngx-datatable-cell-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="d-flex">
-                    <div class="me-auto">
-                    <span class="mobile-hidden">{{ getListaProdutos(row) }}</span>
-                    </div>
-                    <div>
-                    <a class="ms-auto dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" (click)="onEditarFornecedor(row)">
-                            <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
-                        <li><a class="dropdown-item" (click)="onExcluirFornecedor(row)">
-                            <i class="bi bi-trash me-2"></i>Excluir</a></li>
-                    </ul>
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" (click)="onEditarFornecedor(row)">
+                                    <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
+                            <li><a class="dropdown-item" (click)="onExcluirFornecedor(row)">
+                                    <i class="bi bi-trash me-2"></i>Excluir</a></li>
+                        </ul>
                     </div>
                 </div>
             </ng-template>

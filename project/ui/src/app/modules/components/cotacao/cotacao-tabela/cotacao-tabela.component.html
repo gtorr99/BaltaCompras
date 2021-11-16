@@ -13,16 +13,92 @@
     </div>
 </app-title>
 
-<app-filter [exibirBarraPesquisa]="true" (search)="filtrar($event)"></app-filter>
+<app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
 
 <div class="mb-5">
-    <ngx-datatable class="material expandable" #myTable [rows]="rows" [rowClass]="getRowClass"
+    <ngx-datatable class="material expandable" 
+        #myTable [rows]="rows" [rowClass]="getRowClass"
         [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
         [count]="page.totalElements" [offset]="page.page" [limit]="page.size" [externalSorting]="true"
-        [loadingIndicator]="loading" [messages]="messages" [reorderable]="false" [scrollbarH]="getWindowSize()"
+        [loadingIndicator]="loading" [messages]="messages" [reorderable]="false"
         (page)="carregarTabela($event)" (sort)="ordenar($event)">
 
-        <ngx-datatable-column name="Nº Cotação" prop="id" >
+        <!-- Row Detail Template -->
+        <ngx-datatable-row-detail #myMobileDetailRow>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div>
+                    <h3>Informações</h3>
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Nº Grupo cotação: </label>
+                            <span class="row-detail-item">{{ row.id }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Data abertura: </label>
+                            <span class="row-detail-item">{{ row.data | date: 'dd/MM/yyyy' }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Comprador: </label>
+                            <span class="row-detail-item">{{ row.usuario.nome }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Prazo: </label>
+                            <span class="row-detail-item">{{ row.prazo | date: 'dd/MM/yyyy' }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <!-- <div class="col-sm-auto">
+                            <label class="form-label me-2">Centro de custo: </label>
+                            <span class="row-detail-item">{{ row.centroCusto.descricao }}</span>
+                        </div> -->
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Status: </label>
+                            <span class="row-detail-item">{{ row.status }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Observações: </label>
+                            <span class="row-detail-item">{{ row.observacoes }}</span>
+                        </div>
+                    </div>
+                    <!-- <h3 class="mt-4">Produtos</h3>
+                    <div class="row mt-2 tb">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="ps-3">#</th>
+                                    <th scope="col">Produto</th>
+                                    <th scope="col" class="text-end">Quantidade</th>
+                                    <th scope="col" class="text-center">Un.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="align-items-center">
+                                    <th scope="row" class="ps-3">1</th>
+                                    <td>PS5</td>
+                                    <td class="text-end">2</td>
+                                    <td class="text-center">un</td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                    <!-- </div> -->
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+        
+        <!-- Column Templates -->
+        <ngx-datatable-column [width]="5" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                <a [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
+                    (click)="toggleExpandRow(row)">
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nº Grupo Cotação" prop="id" >
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span (click)="sort()">{{ column.name }}</span>
             </ng-template>
@@ -49,16 +125,6 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" [sortable]="getWindowSize()">
-            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
-            </ng-template>
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
-            </ng-template>
-        </ngx-datatable-column>
-
-        
         <ngx-datatable-column name="Fornecedor selecionado" prop="fornecedorSelecionado" [sortable]="getWindowSize()"
             headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
@@ -66,9 +132,22 @@
             </ng-template>
             <ng-template let-row="row" let-value="row['fornecedorSelecionado']" ngx-datatable-cell-template>
                 <div class="d-flex justify-content-between">
-                    <span class="mobile-hidden">{{ value.nomeFantasia }}</span>
-                    <div>
-                        <a class="ms-auto dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
+                    <span class="mobile-hidden">
+                        {{ value.nomeFantasia }}
+                    </span>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" [sortable]="getWindowSize()">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="d-flex">
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">

@@ -3,12 +3,12 @@ import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
 import { Cotacao, GrupoCotacao } from '@models/index';
 import { CotacaoService } from '@services/cotacao.service';
-import { Filter, SearchMap } from '@shared/components';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { StatusEnum } from '@models/enum';
+import { Atributo, TipoFiltro } from '@shared/components';
 
 @Component({
   selector: 'app-cotacao-tabela',
@@ -19,8 +19,7 @@ import { StatusEnum } from '@models/enum';
 export class CotacaoTabelaComponent implements OnInit {
   
   // Filtros
-  textOptions: SearchMap[] = [];
-  filters: Filter[] = [];
+  atributosPesquisa: Atributo[] = [];  
   query: string = '';
   filterQuery: string = '';
   sortQuery: string = '';
@@ -52,6 +51,34 @@ export class CotacaoTabelaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.atributosPesquisa = [
+      {
+        nome: "Nº Requisição",
+        atributo: "id",
+        tipo: TipoFiltro.NUMBER
+      },
+      {
+        nome: "Data solicitação",
+        atributo: "data",
+        tipo: TipoFiltro.DATE
+      },
+      {
+        nome: "Prazo",
+        atributo: "prazo",
+        tipo: TipoFiltro.DATE
+      },
+      {
+        nome: "Status",
+        atributo: "status",
+        tipo: TipoFiltro.STATUS
+      },
+      {
+        nome: "Requisitante",
+        atributo: "usuario",
+        tipo: TipoFiltro.STRING
+      }
+    ];
+
     this.page.page = 0;
     this.carregarTabela(0);
   }

@@ -8,14 +8,14 @@
     </div>
 </app-title>
 
-<app-filter [exibirBarraPesquisa]="true" (search)="filtrar($event)"></app-filter>
+<app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
 
 <div class="mb-5">
     <ngx-datatable class="material expandable" #myTable [rows]="rows" [rowClass]="getRowClass"
         [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
         [count]="page.totalElements" [offset]="page.page" [limit]="page.size" [externalSorting]="true"
-        [loadingIndicator]="loading" [messages]="messages" [reorderable]="false" [scrollbarH]="getWindowSize()"
-        (page)="carregarTabela($event)" (sort)="ordenar($event)">
+        [loadingIndicator]="loading" [messages]="messages" [reorderable]="false" (page)="carregarTabela($event)"
+        (sort)="ordenar($event)">
 
         <!-- Row Detail Template -->
         <ngx-datatable-row-detail #myMobileDetailRow>
@@ -59,22 +59,22 @@
                         </div>
                     </div>
                     <h3 class="mt-4">Produtos</h3>
-                    <div class="row justify-content-between mt-2">
-                        <table class="table table-hover px-3 py-2">
+                    <div class="row mt-2 tb">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="ps-3 pb-1">#</th>
-                                    <th scope="col" class="pb-1">Produto</th>
-                                    <th scope="col" class="pb-1">Quantidade</th>
-                                    <th scope="col" class="pe-3 pb-1">Un.</th>
+                                    <th scope="col" class="ps-3">#</th>
+                                    <th scope="col">Produto</th>
+                                    <th scope="col" class="text-end">Quantidade</th>
+                                    <th scope="col" class="text-center">Un.</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-light">
-                                <tr>
-                                    <th scope="row" class="ps-3 py-1">1</th>
-                                    <td class="py-1">PS5</td>
-                                    <td class="py-1">2</td>
-                                    <td class="py-1">un</td>
+                            <tbody>
+                                <tr class="align-items-center">
+                                    <th scope="row" class="ps-3">1</th>
+                                    <td>PS5</td>
+                                    <td class="text-end">2</td>
+                                    <td class="text-center">un</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -94,17 +94,17 @@
         </ngx-datatable-column>
 
         <!-- headerClass="header-mobile-expand" -->
-        <ngx-datatable-column name="Nº Requisição" prop="id" >
+        <ngx-datatable-column name="Nº Requisição" prop="id">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <!-- <span class="id">{{ value }}</span> -->
                 <span>{{ value }}</span>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Data de abertura" prop="data" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+        <ngx-datatable-column name="Data solicitação" prop="data" [sortable]="getWindowSize()"
+            headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
@@ -122,7 +122,8 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Requisitante" prop="usuario" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+        <ngx-datatable-column name="Requisitante" prop="usuario" [sortable]="getWindowSize()"
+            headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
@@ -136,28 +137,23 @@
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
-            </ng-template>
-        </ngx-datatable-column>
-
-        
-        <ngx-datatable-column name="Centro de custo" prop="centroCusto" [sortable]="getWindowSize()"
-            headerClass="header-mobile-hidden">
-            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
-            </ng-template>
-            <ng-template let-row="row" let-value="row['centroCusto']" ngx-datatable-cell-template>
-                <div class="d-flex justify-content-between">
-                    <span class="mobile-hidden">{{ value.descricao }}</span>
-                    <div>
-                        <a class="ms-auto dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
+                <div class="d-flex">
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" (click)="onAprovarRequisicao(row)">
-                                    <i class="bi bi-check-lg me-2 text-success"></i>Aprovar</a></li>
+                                    <i class="bi bi-check-lg me-2 text-success"></i>
+                                    <span class="text-success">Aprovar</span>
+                                </a>
+                            </li>
                             <li><a class="dropdown-item" (click)="onReprovarRequisicao(row)">
-                                    <i class="bi bi-x-lg me-2 text-danger"></i>Reprovar</a></li>
+                                    <i class="bi bi-x-lg me-2 text-danger"></i>
+                                    <span class="text-danger">Reprovar</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

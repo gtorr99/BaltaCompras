@@ -3,12 +3,12 @@ import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
 import { Requisicao } from '@models/index';
 import { RequisicaoService } from '@services/requisicao.service';
-import { Filter, FilterType, SearchMap } from '@shared/components';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { StatusEnum } from '@models/enum';
+import { Atributo, TipoFiltro } from '@shared/components';
 
 @Component({
   selector: 'app-requisicao-aprovacao',
@@ -19,8 +19,7 @@ import { StatusEnum } from '@models/enum';
 export class RequisicaoAprovacaoComponent implements OnInit {
   
   // Filtros
-  textOptions: SearchMap[] = [];
-  filters: Filter[] = [];
+  atributosPesquisa: Atributo[] = [];
   query: string = '';
   filterQuery: string = '';
   sortQuery: string = '';
@@ -52,42 +51,33 @@ export class RequisicaoAprovacaoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.textOptions = [
+    this.atributosPesquisa = [
       {
-        label: "Nº Requisição",
-        value: "id"
+        nome: "Nº Requisição",
+        atributo: "id",
+        tipo: TipoFiltro.NUMBER
       },
       {
-        label: "Requisitante",
-        value: "requisitante"
+        nome: "Data solicitação",
+        atributo: "data",
+        tipo: TipoFiltro.DATE
       },
-      // {
-      //   label: "Setor",
-      //   value: "setor"
-      // },
       {
-        label: "Centro de Custo",
-        value: "centroCusto"
+        nome: "Prazo",
+        atributo: "prazo",
+        tipo: TipoFiltro.DATE
+      },
+      {
+        nome: "Status",
+        atributo: "status",
+        tipo: TipoFiltro.STATUS
+      },
+      {
+        nome: "Requisitante",
+        atributo: "usuario",
+        tipo: TipoFiltro.STRING
       }
     ];
-
-    let statusKeys = Object.keys(StatusEnum);
-    this.filters = [
-      {
-        label: "Status",
-        paramName: "status",
-        type: FilterType.DROPDOWN,
-        options: [...statusKeys.slice(statusKeys.length / 2).map(k => {
-          return { label: k, value: StatusEnum[k] }
-        })
-        , { label: 'Status', value: '' }]
-      },
-      {
-        label: "Prazo",
-        paramName: "prazo",
-        type: FilterType.DATE
-      },
-    ]
 
     this.page.page = 0;
     this.carregarTabela(0);
