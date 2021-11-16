@@ -7,10 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.baltacompras.model.enums.Status;
 import org.hibernate.annotations.Type;
+
+import br.com.baltacompras.model.enums.Status;
 
 @Entity
 @Table(name = "cotacao")
@@ -31,6 +34,27 @@ public class Cotacao {
     private Status status;
     @Type(type = "text")
     private String observacoes;
+    @ManyToOne
+    @JoinColumn(name = "id_grupo_cotacao")
+    private GrupoCotacao grupoCotacao;
+
+    @ManyToOne
+    @JoinColumn(name = "id_fornecedor")
+    private Fornecedor fornecedor;
+
+    public GrupoCotacao getGrupoCotacao() {
+        return grupoCotacao;
+    }
+    public void setGrupoCotacao(GrupoCotacao grupoCotacao) {
+        this.grupoCotacao = grupoCotacao;
+    }
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+    
 
     public Integer getId() {
         return id;
