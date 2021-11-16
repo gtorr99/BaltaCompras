@@ -57,12 +57,24 @@ public class GrupoCotacaoController {
     }
 
     @PostMapping("/email-para-fornecedor")
-    public void gerarRelatorio(@RequestParam(value = "link") String link,
+    public void enviarEmailParaFornecedor(@RequestParam(value = "link") String link,
             @RequestParam(value = "destinatarios") String[] destinatarios,
             @RequestParam(value = "mensagem") String mensagem) throws Exception {
         String assunto = "Nova Cotação";
         if (link != null) {
             mensagem += "<br><br><a href=" + link + ">Clique aqui para acessar a Cotacao</a>";
+        }
+        String arquivo = null;
+        email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
+    }
+    
+    @PostMapping("/email-para-comprador")
+    public void enviarEmailParaComprador(@RequestParam(value = "link") String link,
+            @RequestParam(value = "destinatarios") String[] destinatarios,
+            @RequestParam(value = "mensagem") String mensagem) throws Exception {
+        String assunto = "Nova Cotação preenchida";
+        if (link != null) {
+            mensagem += "<br><br><a href=" + link + ">Clique aqui para acessar a Cotacao preenchida</a>";
         }
         String arquivo = null;
         email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
