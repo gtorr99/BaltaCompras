@@ -59,10 +59,10 @@ public class GrupoCotacaoController {
     @PostMapping("/email-para-fornecedor")
     public void enviarEmailParaFornecedor(@RequestParam(value = "link") String link,
             @RequestParam(value = "destinatarios") String[] destinatarios,
-            @RequestParam(value = "mensagem") String mensagem) throws Exception {
-        String assunto = "Nova Cotação";
+            @RequestParam(value = "mensagem") String mensagem,
+            @RequestParam(value = "assunto") String assunto) throws Exception {
         if (link != null) {
-            mensagem += "<br><br><a href=" + link + ">Clique aqui para acessar a Cotacao</a>";
+            mensagem += "<br><br><a href=" + link + ">Clique aqui para acessar a Cotação</a>";
         }
         String arquivo = null;
         email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
@@ -71,10 +71,10 @@ public class GrupoCotacaoController {
     @PostMapping("/email-para-comprador")
     public void enviarEmailParaComprador(@RequestParam(value = "link") String link,
             @RequestParam(value = "destinatarios") String[] destinatarios,
-            @RequestParam(value = "mensagem") String mensagem) throws Exception {
-        String assunto = "Nova Cotação preenchida";
+            @RequestParam(value = "mensagem") String mensagem,
+            @RequestParam(value = "assunto") String assunto) throws Exception {
         if (link != null) {
-            mensagem += "<br><br><a href=" + link + ">Clique aqui para acessar a Cotacao preenchida</a>";
+            mensagem += "<br><br><a href=" + link + ">Clique aqui para acessar a Cotação preenchida</a>";
         }
         String arquivo = null;
         email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
