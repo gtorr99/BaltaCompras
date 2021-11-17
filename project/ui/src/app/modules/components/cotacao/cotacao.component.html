@@ -1,7 +1,7 @@
 <app-title [title]="'Gerenciar cotação'">
     <div class="row justify-content-end p-0">
         <div class="col-auto p-0">
-            <app-button [btnClass]="'btn-primary'">
+            <app-button [btnClass]="'btn-primary'" (click)="onAdicionarFornecedor()">
                 Adicionar forncedor
             </app-button>
         </div>
@@ -22,7 +22,8 @@
                                 <h4>Prazo solicitado: </h4>
                             </div>
                             <div class="col">
-                                <h4 class="header-info">{{ prazo | date: 'dd/MM/yyyy' }}</h4>
+                                <!-- <h4 class="header-info">{{ prazo | date: 'dd/MM/yyyy' }}</h4> -->
+                                <h4 class="header-info">{{ prazo  }}</h4>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -30,7 +31,7 @@
                                 <h4>Código:</h4>
                             </div>
                             <div class="col-auto">
-                                <h4 class="header-info">1234</h4>
+                                <h4 class="header-info">0000</h4>
                             </div>
                         </div>
                     </div>
@@ -50,11 +51,12 @@
                 </div>
 
                 <!-- Produtos lista -->
-                <div class="row py-1 mt-1 produto-row" *ngFor="let produto of listaProdutos" style="height: 40px;">
+                <div class="row py-1 mt-1 produto-row" 
+                *ngFor="let produto of listaProdutos" >
                     <div class="col">
                         <div class="row">
                             <div class="col align-items-center">
-                                <span class="span-value">Água sanitária</span>
+                                <span class="span-value">Produto</span>
                             </div>
                         </div>
                     </div>
@@ -156,7 +158,7 @@
                         <input type="text" 
                             class="form-control" 
                             readonly
-                            [value]="'R$ 12.000,00'">
+                            >
                     </div>
                 </div>
                 <div class="row mt-3 justify-content-between">
@@ -164,7 +166,7 @@
                         <span class="span-label">Desconto</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value">R$ 120,00</span>
+                        <span class="span-value">R$ 0,00</span>
                     </div>
                 </div>
                 <div class="row my-1 justify-content-between">
@@ -172,7 +174,7 @@
                         <span class="span-label">Frete</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value">R$ 20,00</span>
+                        <span class="span-value">R$ 0,00</span>
                     </div>
                 </div>
                 <hr>
@@ -181,7 +183,7 @@
                         <span class="span-label">Total</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-label">R$ 1200,00</span>
+                        <span class="span-label">R$ 0,00</span>
                     </div>
                 </div>
                 <div class="row mt-3 justify-content-between">
@@ -189,7 +191,7 @@
                         <span class="span-label">Transportadora</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value">TransTest</span>
+                        <span class="span-value"></span>
                     </div>
                 </div>
                 <div class="row mt-1 justify-content-between">
@@ -197,7 +199,7 @@
                         <span class="span-label">Meio de transporte</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value">Jureg</span>
+                        <span class="span-value"></span>
                     </div>
                 </div>
                 <div class="row mt-1 mb-3 justify-content-between">
@@ -205,7 +207,7 @@
                         <span class="span-label">Prazo fornecedor</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value">20/11/2021</span>
+                        <span class="span-value"></span>
                     </div>
                 </div>
                 <div class="row mt-1 mb-3 justify-content-between">
@@ -213,9 +215,8 @@
                         <span class="span-label">Formas pgto</span>
                     </div>
                     <div class="col-auto text-end">
-                        <span class="span-value d-block mt-1">À vista</span>
-                        <span class="span-value d-block mt-1">12x sem juros (s/ desconto)</span>
-                        <span class="span-value d-block mt-1">Financiamento da alma</span>
+                        <!-- <span class="span-value d-block mt-1">À vista</span>
+                        <span class="span-value d-block mt-1">12x sem juros (s/ desconto)</span> -->
                     </div>
                 </div>
             </div>

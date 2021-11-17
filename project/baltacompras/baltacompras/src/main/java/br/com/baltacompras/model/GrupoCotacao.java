@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import br.com.baltacompras.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Type;
 
@@ -18,6 +19,8 @@ public class GrupoCotacao {
     private Date data;
     @Column(name = "prazo_solicitado")
     private LocalDate prazoSolicitado;
+
+    private Status status;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.EAGER)

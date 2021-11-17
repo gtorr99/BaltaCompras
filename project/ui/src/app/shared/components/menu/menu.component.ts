@@ -48,7 +48,7 @@ export class MenuComponent implements OnInit {
       },
       {
         name: "Ordem de compra",
-        value: null,
+        value: '/ordem-compra',
         icon: "bi-cart2"
       },
       {
@@ -65,11 +65,11 @@ export class MenuComponent implements OnInit {
         itens: [
           {
             name: "Aprovar requisição",
-            value: "'/requisicao/aprovacao'"
+            value: "requisicao/aprovacao"
           },
           {
             name: "Aprovar ordem",
-            value: null
+            value: "ordem-compra/aprovacao"
           }
         ]
       }

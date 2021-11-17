@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h5 class="modal-title">{{titulo}}</h5>
+    <button type="button" class="btn-close" (click)="onCancelar()"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="produtoForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation" novalidate>
+        <div class="row">
+            <div class="col-12">
+                <label for="descricao" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="descricao" formControlName="descricao">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <label for="grupoProduto" class="form-label">Grupo</label>
+                <ng-select id="grupoProduto" 
+                    [items]="listaGrupoProduto"
+                    [bindLabel]="'descricao'"
+                    [bindValue]="'id'"
+                    [addTag]="true" 
+                    [multiple]="false" 
+                    [searchable]="true" 
+                    [closeOnSelect]="false"
+                    [hideSelected]="true" 
+                    [notFoundText]="'Adicione um novo grupo'" 
+                    [addTagText]="'Adicionar grupo: '"
+                    placeholder="Selecionar/Adicionar grupo produto" formControlName="grupoProduto">
+                </ng-select>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <app-button [btnClass]="'btn-outline-danger'" (click)="onCancelar()">Cancelar</app-button>
+    <app-button [btnClass]="'btn-primary'" (click)="onSalvar($event)" type="submit" ngbAutoFocus>Salvar</app-button>
+</div>

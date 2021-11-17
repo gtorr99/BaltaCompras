@@ -1,0 +1,276 @@
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ColumnMode } from '@models/enum/column-mode.enum';
+import { Router } from '@angular/router';
+import { OrdemCompra, Fornecedor, Usuario, GrupoProduto, Cotacao } from '@models/index';
+import { OrdemCompraService } from '@services/ordem-compra.service';
+import { Page } from '@models/page.model';
+import { ToastrService } from 'ngx-toastr';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
+import { StatusEnum, UnMedidaEnum } from '@models/enum';
+import { Atributo, TipoFiltro } from '@shared/components';
+
+@Component({
+  selector: 'app-ordem-compra-tabela',
+  templateUrl: './ordem-compra-tabela.component.html',
+  styleUrls: ['./ordem-compra-tabela.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class OrdemCompraTabelaComponent implements OnInit {
+  
+  // Filtros
+  atributosPesquisa: Atributo[] = [];  
+  query: string = '';
+  filterQuery: string = '';
+  sortQuery: string = '';
+  defaultStatus: string = '';
+
+  // Tabela
+  @ViewChild('myTable') table: any;
+  page: Page<OrdemCompra> = new Page<OrdemCompra>();
+  rows = new Array<OrdemCompra>();
+  ColumnMode = ColumnMode;
+  loading: boolean = false;
+  messages = {
+    emptyMessage: 'Nenhum registro encontrado',
+    // Footer total message
+    totalMessage: 'resultados',
+    // Footer selected message
+    selectedMessage: 'selected'
+  }
+
+  statusColor: string = 'default';
+
+  private modalRef: NgbModalRef;
+
+  constructor(
+    private ordemCompraService: OrdemCompraService,
+    private toastrService: ToastrService,
+    private modalService: NgbModal,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.atributosPesquisa = [
+      {
+        nome: "Nº Ordem",
+        atributo: "id",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Data abertura",
+        atributo: "data",
+        tipo: TipoFiltro.DATE
+      },
+      {
+        nome: "Prazo",
+        atributo: "prazo",
+        tipo: TipoFiltro.DATE
+      },
+      {
+        nome: "Status",
+        atributo: "status",
+        tipo: TipoFiltro.STATUS
+      },
+      {
+        nome: "Comprador",
+        atributo: "usuario",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Grupo produto",
+        atributo: "grupoProduto",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Tipo de compra",
+        atributo: "tipoCompra",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Fornecedor",
+        atributo: "fornecedor",
+        tipo: TipoFiltro.STRING
+      },
+      {
+        nome: "Total",
+        atributo: "total",
+        tipo: TipoFiltro.NUMBER
+      }
+    ];
+
+    this.page.page = 0;
+    this.carregarTabela(0);
+
+    this.loadFake();
+  }
+
+  carregarTabela(pageEvent: any = null) {
+    this.setQuery();
+    this.ordemCompraService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<OrdemCompra>) => {
+      // this.atualizarTabela(response);
+    });
+  }
+
+  atualizarTabela(response: Page<OrdemCompra>) {
+    this.page = response;
+    this.rows = [...response.content];
+    this.loading = false;
+  }
+
+  ordenar(event: any) {
+    this.loading = true;
+
+    let s = event.sorts[0];
+    this.sortQuery = `sort=${s.prop},${s.dir}`;
+    this.setQuery();
+
+    this.carregarTabela();
+  }
+
+  filtrar(filtro: string) {
+    this.loading = true;
+    this.filterQuery = filtro;
+    this.setQuery();
+    this.carregarTabela();
+  }
+
+  onCancelar(ordemCompra: OrdemCompra) {
+    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+    this.modalRef.componentInstance.title = "Cancelar cotação";
+    this.modalRef.componentInstance.message = "Ao prosseguir, a cotação será cancelada. Você tem certeza que deseja prosseguir?";
+    this.modalRef.closed.subscribe(response => {
+      if (response) {
+        this.ordemCompraService.cancelar(ordemCompra.id).subscribe(() => {
+          this.toastrService.success("Cotação cancelada!");
+          this.carregarTabela();
+        });
+      }
+    });
+  }
+
+  toggleExpandRow(row) {
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+
+  getWindowSize() {
+    return window.innerWidth > 800;
+  }
+
+  getRowClass(row) {
+    return {
+      'table-row': true
+    };
+  }
+
+  onDownload() {
+
+  }
+
+  setStatusTag(status: any): string {
+    this.statusColor = 'default'
+    switch (status) {
+      case StatusEnum[StatusEnum.ATIVO]:
+      case StatusEnum[StatusEnum.CONCLUIDO]:
+        this.statusColor = 'success';
+        break;
+      case StatusEnum[StatusEnum.CANCELADO]:
+      case StatusEnum[StatusEnum.REPROVADO]:
+        this.statusColor = 'danger';
+        break;
+      case StatusEnum[StatusEnum.EM_PROCESSAMENTO]:
+        this.statusColor = 'orange';
+        break;
+      case StatusEnum[StatusEnum.ABERTO]:
+        this.statusColor = 'warning';
+        break;
+      case StatusEnum[StatusEnum.APROVADO]:
+        this.statusColor = 'primary';
+        break;
+      default:
+        break;
+    }
+    return this.statusColor;
+  }
+
+  private setQuery() {
+    let params = [];
+    params.push(this.filterQuery);
+    params.push(this.sortQuery);
+    this.query = params.join('&');
+    console.log(this.query);
+  }
+
+  loadFake() {
+    this.page = {
+      page: 0,
+      size: 10,
+      totalElements: 2,
+      totalPages: 1,
+      content: [
+        new OrdemCompra({
+          id: 1,
+          data: new Date(Date.parse('10/11/2021')),
+          status: StatusEnum[StatusEnum.ABERTO],
+          observacoes: '',
+          usuario: new Usuario({
+            nome: "Jorge Ivel"
+          }),
+          grupoProduto: new GrupoProduto({
+            descricao: 'Material de limpeza'
+          })
+        }),
+        new OrdemCompra({
+          id: 2,
+          data: new Date(Date.parse('10/11/2021')),
+          status: StatusEnum[StatusEnum.CONCLUIDO],
+          observacoes: '',
+          usuario: new Usuario({
+            nome: "Caue Sampaio"
+          }),
+          grupoProduto: new GrupoProduto({
+            descricao: 'Eletrônicos'
+          }),
+          cotacao: new Cotacao({
+              id: 1,
+              prazoFornecedor: new Date(),
+              desconto: 200.00,
+              frete: 0.00,
+              transportadora: 'Amazon Transportadora',
+              meioTransporte: 'Drone',
+              formasPgto: ['À vista', '10x s/ juros'],
+              status: StatusEnum.CONCLUIDO,
+              observacoes: '',
+              selecionada: true,
+              fornecedor: new Fornecedor({
+                nomeFantasia: 'Amazon Inc',
+                cnpj: '15.454.650/0001-84'
+              }),
+              total: 500.00,
+              produtos: [
+                {
+                  id: 1,
+                  descricao: 'SSD Kingston - 256GB',
+                  quantidade: 3,
+                  unMedida: 'un',
+                  precoUnitario: 200.00,
+                  aliqIpi: 0.5,
+                  subtotal: 600.00
+                },
+                {
+                  id: 2,
+                  descricao: 'Teclado DELL KB216',
+                  quantidade: 1,
+                  unMedida: 'un',
+                  precoUnitario: 100.00,
+                  aliqIpi: 0.2,
+                  subtotal: 100.00
+                }
+              ]
+            })
+        })
+      ]
+    }
+    this.rows = [...this.page.content];
+  }
+}

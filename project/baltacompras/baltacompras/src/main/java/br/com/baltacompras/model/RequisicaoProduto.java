@@ -17,7 +17,6 @@ public class RequisicaoProduto {
     @JoinColumn(name = "id_requisicao")
     private Requisicao requisicao;
 
-    @JsonIgnore
     @ManyToOne
     @MapsId("idProduto")
     @JoinColumn(name = "id_produto")

@@ -72,6 +72,11 @@ export class FornecedorTabelaComponent implements OnInit {
         tipo: TipoFiltro.STRING
       },
       {
+        nome: "Telefone",
+        atributo: "telefone",
+        tipo: TipoFiltro.STRING
+      },
+      {
         nome: "Grupo Produto",
         atributo: "grupoProduto",
         tipo: TipoFiltro.STRING

@@ -1,7 +1,9 @@
 package br.com.baltacompras.controller;
 
 import br.com.baltacompras.model.enums.Status;
+import net.kaczmarzyk.spring.data.jpa.domain.*;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -16,8 +18,6 @@ import br.com.baltacompras.repository.FornecedorRepository;
 import br.com.baltacompras.serviceimplement.FornecedorServiceImplement;
 
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
-import net.kaczmarzyk.spring.data.jpa.domain.In;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 
 import java.util.List;
@@ -27,14 +27,32 @@ import java.util.List;
 public class FornecedorController {
 
     @Join(path = "gruposProduto", alias = "gp")
-    @And({
-            @Spec(path = "cnpj", spec = Like.class),
-            @Spec(path = "nomeFantasia", spec = Like.class),
-            @Spec(path = "inscricaoEstadual", spec = Like.class),
-            @Spec(path = "razaoSocial", spec = Like.class),
+    @Or({
+            @Spec(path = "cnpj", spec = LikeIgnoreCase.class),
+            @Spec(path = "nomeFantasia", spec = LikeIgnoreCase.class),
             @Spec(path = "status", spec = In.class),
-            @Spec(path = "email", spec = Like.class),
-            @Spec(path = "gp.descricao", params="grupoProduto", spec = Like.class)
+            @Spec(path = "email", spec = LikeIgnoreCase.class),
+            @Spec(path = "telefone", spec = LikeIgnoreCase.class),
+            @Spec(path = "gp.descricao", params="grupoProduto", spec = LikeIgnoreCase.class)
+    })
+    @And({
+            @Spec(path = "cnpj", params = "cnpjLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "cnpj", params = "cnpjEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "cnpj", params = "cnpjNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "nomeFantasia", params = "nomeFantasiaLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "nomeFantasia", params = "nomeFantasiaEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "nomeFantasia", params = "nomeFantasiaNotEqualLikeIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "status", params = "statusEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "status", params = "statusNotEqual", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "email", params = "emailLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "email", params = "emailEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "email", params = "emailNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "telefone", params = "telefoneLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "telefone", params = "telefoneEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "telefone", params = "telefoneNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "gp.descricao", params="grupoProdutoLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "gp.descricao", params="grupoProdutoEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "gp.descricao", params="grupoProdutoNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class)
     })
     interface FornecedorSpec<Fornecedor> extends NotDeletedEntity<Fornecedor> {
     }

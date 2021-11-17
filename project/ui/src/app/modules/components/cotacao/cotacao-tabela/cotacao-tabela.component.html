@@ -40,22 +40,42 @@
                     </div>
                     <div class="row justify-content-between mt-1">
                         <div class="col-sm-auto">
-                            <label class="form-label me-2">Comprador: </label>
-                            <span class="row-detail-item">{{ row.usuario.nome }}</span>
+                            <label class="form-label me-2">Grupo produto: </label>
+                            <span class="row-detail-item">{{ row.grupoProduto.descricao }}</span>
                         </div>
                         <div class="col-sm-auto">
-                            <label class="form-label me-2">Prazo: </label>
+                            <label class="form-label me-2">Prazo solicitado: </label>
                             <span class="row-detail-item">{{ row.prazo | date: 'dd/MM/yyyy' }}</span>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
-                        <!-- <div class="col-sm-auto">
-                            <label class="form-label me-2">Centro de custo: </label>
-                            <span class="row-detail-item">{{ row.centroCusto.descricao }}</span>
-                        </div> -->
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Comprador: </label>
+                            <span class="row-detail-item">{{ row.usuario.nome }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Prazo fornecedor: </label>
+                            <span class="row-detail-item">{{ getCotacaoSelecionada(row).prazoFornecedor | date: 'dd/MM/yyyy' }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Fornecedor selecionado: </label>
+                            <span class="row-detail-item">{{ row.fornecedorSelecionado.nomeFantasia }}</span>
+                        </div>
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Status: </label>
                             <span class="row-detail-item">{{ row.status }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Cnpj: </label>
+                            <span class="row-detail-item">{{ row.fornecedorSelecionado.cnpj }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Total: </label>
+                            <span class="row-detail-item"><span class="me-1">R$</span>{{ getCotacaoSelecionada(row).total }}</span>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
@@ -64,27 +84,12 @@
                             <span class="row-detail-item">{{ row.observacoes }}</span>
                         </div>
                     </div>
-                    <!-- <h3 class="mt-4">Produtos</h3>
-                    <div class="row mt-2 tb">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="ps-3">#</th>
-                                    <th scope="col">Produto</th>
-                                    <th scope="col" class="text-end">Quantidade</th>
-                                    <th scope="col" class="text-center">Un.</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="align-items-center">
-                                    <th scope="row" class="ps-3">1</th>
-                                    <td>PS5</td>
-                                    <td class="text-end">2</td>
-                                    <td class="text-center">un</td>
-                                </tr>
-                            </tbody>
-                        </table> -->
-                    <!-- </div> -->
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-2">Fornecedores cotados: </label>
+                            <span class="row-detail-item d-block" *ngFor="let cot of row.cotacoes">{{ cot.fornecedor.nomeFantasia }}</span>
+                        </div>
+                    </div>
                 </div>
             </ng-template>
         </ngx-datatable-row-detail>
@@ -104,6 +109,15 @@
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <span>{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Grupo Produto" prop="grupoProduto" >
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span>{{ value.descricao }}</span>
             </ng-template>
         </ngx-datatable-column>
 
@@ -133,7 +147,7 @@
             <ng-template let-row="row" let-value="row['fornecedorSelecionado']" ngx-datatable-cell-template>
                 <div class="d-flex justify-content-between">
                     <span class="mobile-hidden">
-                        {{ value.nomeFantasia }}
+                        {{ value?.nomeFantasia }}
                     </span>
                 </div>
             </ng-template>
@@ -145,7 +159,7 @@
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="d-flex">
-                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value.split('_') }}</div>
                     <div class="ms-auto d-flex align-items-center">
                         <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
                             <i class="bi bi-three-dots-vertical"></i>

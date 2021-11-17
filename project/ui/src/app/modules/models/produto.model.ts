@@ -5,7 +5,7 @@ import { ListaUnidadeMedida } from "@models/lista-unidade-medida.model";
 
 export class Produto extends BaseEntity {
     descricao: string;
-    unMedida: UnMedidaEnum;
+    unMedida: UnMedidaEnum | string;
     grupoProduto: GrupoProduto;
 
     constructor(data?: Partial<Produto>) {

@@ -1,0 +1,147 @@
+<app-title [title]="'Usuário'">
+    <div class="row no-pm">
+        <div class="col col-sm-auto">
+            <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
+                Exportar CSV
+            </app-button>
+        </div>
+        <div class="col col-sm-auto ms-1">
+            <app-button [btnClass]="'btn-primary py-2'" (click)="onNovo()">
+                Novo usuário
+            </app-button>
+        </div>
+    </div>
+</app-title>
+
+<app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
+
+<div class="mb-5 mt-2 mt-md-0">
+    <ngx-datatable class="material expandable" 
+        #myTable
+        [rows]="rows"
+        [rowClass]="getRowClass"
+        [columnMode]="ColumnMode.force"
+        [headerHeight]="50" 
+        [footerHeight]="50" 
+        rowHeight="auto" 
+        [externalPaging]="true"
+        [count]="page.totalElements"
+        [offset]="page.page" 
+        [limit]="page.size" 
+        [externalSorting]="true"
+        [loadingIndicator]="loading"
+        [messages]="messages"
+        [reorderable]="false"
+        (page)="carregarTabela($event)" 
+        (sort)="ordenar($event)">
+
+        <!-- Row Detail Template -->
+        <ngx-datatable-row-detail #myMobileDetailRow>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div>
+                    <h3>Informações</h3>
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-1">Nome: </label>
+                            <span class="row-detail-item">{{ row.nome }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-1">Setor: </label>
+                            <span class="row-detail-item">{{ row.setor.descricao }}</span>
+                        </div>
+                    </div> 
+                    <div class="row justify-content-between mt-1">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-1">Email: </label>
+                            <span class="row-detail-item">{{ row.email }}</span>
+                        </div>
+                        <div class="col-sm-auto">
+                            <label class="form-label me-1">Status: </label>
+                            <span class="row-detail-item">{{ row.status }}</span>
+                        </div>
+                    </div> 
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-1">Função: </label>
+                            <span class="row-detail-item">{{ row.funcao.descricao }}</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between mt-2">
+                        <div class="col-sm-auto">
+                            <label class="form-label me-1">Permissões: </label>
+                            <span class="row-detail-item d-block my-1" *ngFor="let permissao of row.funcao.permissoes">{{ permissao.descricao }}</span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!-- Column Templates -->
+        <ngx-datatable-column [width]="5" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                <a [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded"
+                    title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="Nome" prop="nome" headerClass="header-mobile-expand">
+            <ng-template let-column="column" let-sort="sortFn"  ngx-datatable-header-template> 
+                <span (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ value }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Email"  [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Setor"  [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{ value.descricao }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Função" prop="funcao" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{ value.descricao }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" [sortable]="getWindowSize()" headerClass="header-mobile-hidden status">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template> 
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="d-flex">
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" (click)="onAlterar(row)">
+                                    <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
+                            <li><a class="dropdown-item" (click)="onExcluir(row)">
+                                    <i class="bi bi-trash me-2"></i>
+                                    <span class="text-danger">Excluir</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>

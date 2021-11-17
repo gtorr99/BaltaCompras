@@ -4,8 +4,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
 
 import { LoginComponent } from '@modules/login/login.component';
+import { NovaSenhaComponent } from './nova-senha/nova-senha.component';
+import { RecuperarSenhaComponent } from './recuperar-senha/recuperar-senha.component';
 
 const routes: Routes = [
+    {
+        path: 'recuperar-senha',
+        component: RecuperarSenhaComponent
+    },
+    {
+        path: 'cadastrar-nova-senha',
+        component: NovaSenhaComponent
+    },
     {
         path: '',
         component: LoginComponent

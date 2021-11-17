@@ -1,0 +1,150 @@
+<div class="modal-header">
+    <h5 class="modal-title">{{titulo}}</h5>
+    <button type="button" class="btn-close" (click)="onCancelar($event)"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="usuarioForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation" novalidate>
+        <div formGroupName="dados">
+            <div class="row" >
+                <div class="col">
+                    <label for="nome" class="form-label">
+                        Nome <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="nome" class="form-control " formControlName="nome" required>
+                    <small class="valid-feedback"
+                        *ngIf="usuarioForm.get('nome')?.valid && usuarioForm.get('nome')?.touched; else nomeInvalido">
+                        Nome ok!
+                    </small>
+                    <ng-template #nomeInvalido>
+                        <small class="invalid-feedback">
+                            Por favor, insira o nome do usuário
+                        </small>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="email" class="form-label">
+                        Email <span class="text-danger">*</span>
+                    </label>
+                    <input type="email" id="email" class="form-control" formControlName="email" required>
+                    <small class="valid-feedback"
+                        *ngIf="usuarioForm.get('email')?.valid && usuarioForm.get('email')?.touched; else emailInvalido">
+                        Email ok!
+                    </small>
+                    <ng-template #emailInvalido>
+                        <small class="invalid-feedback">
+                            Por favor, insira um email válido
+                        </small>
+                    </ng-template>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="senha" class="form-label">
+                            Senha temporária<span class="text-danger">*</span>
+                        </label>
+                        <input type="password" id="senha" class="form-control" 
+                            formControlName="senha"
+                            required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="confirmarSenha" class="form-label">
+                            Confirmar senha<span class="text-danger">*</span>
+                        </label>
+                        <input type="password" id="confirmarSenha" class="form-control" 
+                            formControlName="confirmarSenha"
+                            required>
+                    </div>
+                </div>
+        </div>
+        
+        <!-- Setor -->
+        <div class="row mt-4">
+            <h3>Setor</h3>
+            <div formGroupName="grupoSetor">
+                <div class="row">
+                    <div class="col">
+                        <label for="setor" class="form-label">
+                            Setor <span class="text-danger">*</span>
+                        </label>
+                        <ng-select [items]="listaSetor" bindLabel="descricao" bindValue="id" [multiple]="false" [searchable]="true"
+                            [closeOnSelect]="true" [hideSelected]="true" placeholder="Selecionar ou adicionar setor"
+                            formControlName="setor" required>
+                        </ng-select>
+                        <small
+                            *ngIf="!usuarioForm.get('grupoSetor.setor')?.valid && usuarioForm.get('grupoSetor.setor')?.touched">
+                            Por favor, selecionar ou adicionar um setor
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="setor" class="form-label">
+                            Centros de custo
+                        </label>
+                        <ng-select [items]="listaCentroCusto" bindLabel="descricao" bindValue="id" [multiple]="true" [searchable]="true"
+                            [closeOnSelect]="true" [hideSelected]="true"
+                            formControlName="centroCusto">
+                        </ng-select>
+                        <small class="text-gray">
+                            Adicione ou remova centros de custo do setor
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Funções -->
+        <div class="row mt-4">
+            <h3>Função</h3>
+            <div formGroupName="grupoFuncao">
+                <div class="row">
+                    <div class="col">
+                        <label for="setor" class="form-label">
+                            Função <span class="text-danger">*</span>
+                        </label>
+                        <ng-select [items]="listaFuncao" bindLabel="descricao" bindValue="id" [multiple]="false" [searchable]="true"
+                            [closeOnSelect]="true" [hideSelected]="true" placeholder="Selecionar função"
+                            formControlName="funcao" required>
+                        </ng-select>
+                        <small
+                            *ngIf="!usuarioForm.get('grupoFuncao.funcao')?.valid && usuarioForm.get('grupoFuncao.funcao')?.touched">
+                            Por favor, selecionar ou adicionar uma função
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="setor" class="form-label">
+                            Permissões <span class="text-danger">*</span>
+                        </label>
+                        <ng-select [items]="listaPermissao" bindLabel="descricao" bindValue="id" [multiple]="false" [searchable]="true"
+                            [closeOnSelect]="true" [hideSelected]="true" placeholder="Selecionar permissões"
+                            formControlName="permissoes" required>
+                        </ng-select>
+                        <small
+                            *ngIf="!usuarioForm.get('grupoFuncao.permissoes')?.valid && usuarioForm.get('grupoFuncao.permissoes')?.touched">
+                            Por favor, selecionar uma permissão
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer row justify-content-end mt-4 pb-5">
+    <div class="col-auto me-auto">
+        <app-button [btnClass]="'btn-tertiary-primary ps-0'" type="button" (click)="onRestaurar($event)">Restaurar
+        </app-button>
+    </div>
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-outline-danger me-2'" type="button" (click)="onCancelar($event)">Cancelar
+        </app-button>
+    </div>
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-primary'" type="submit">Salvar</app-button>
+    </div>
+</div>

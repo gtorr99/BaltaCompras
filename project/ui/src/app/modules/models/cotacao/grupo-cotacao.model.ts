@@ -10,7 +10,7 @@ export class GrupoCotacao extends BaseEntity {
     prazo: Date;
     observacoes?: string;
     usuario: Usuario;
-    status: StatusEnum;
+    status: StatusEnum | string;
     fornecedorSelecionado?: Fornecedor;
     grupoProduto: GrupoProduto;
     cotacoes?: Cotacao[];

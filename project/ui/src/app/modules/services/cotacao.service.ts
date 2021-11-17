@@ -8,17 +8,17 @@ import { GrupoCotacao } from '@models/cotacao/grupo-cotacao.model';
 @Injectable({ providedIn: 'root' })
 export class CotacaoService extends BaseService<GrupoCotacao> {
     constructor(protected httpClient: HttpClient) { 
-        super(httpClient, 'cotacao');
+        super(httpClient, 'grupo-cotacao');
     }
 
     grupoCotacaoSelecionado: GrupoCotacao = new GrupoCotacao();
 
     cancelar(id: number): Observable<boolean> {
-        return this.httpClient.put<boolean>(`http://localhost:8080/cotacao/cancelar/${id}`, null);
+        return this.httpClient.put<boolean>(`http://localhost:8080/grupo-cotacao/cancelar/${id}`, null);
     }
 
     gerarCotacoes(): Observable<any> {
-        return this.httpClient.get<any>(`http://localhost:8080/cotacao/gerar-cotacoes`);
+        return this.httpClient.get<any>(`http://localhost:8080/grupo-cotacao/gerar-cotacoes`);
     }
 
     listarCotacoesDoGrupo(id: number): Observable<Cotacao[]> {

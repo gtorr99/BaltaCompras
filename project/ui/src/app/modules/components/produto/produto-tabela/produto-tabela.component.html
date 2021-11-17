@@ -1,0 +1,81 @@
+<app-title [title]="'Gerenciar produtos'">
+    <div class="row justify-content-end">
+        <div class="col-auto p-0">
+            <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
+                Exportar CSV
+            </app-button>
+        </div>
+        <div class="col-auto ms-1 p-0">
+            <app-button [btnClass]="'btn-primary py-2'" (click)="onNovoProduto()">
+                Novo produto
+            </app-button>
+        </div>
+    </div>
+</app-title>
+
+<app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
+
+<div class="mb-5">
+    <ngx-datatable class="material expandable" 
+        #myTable [rows]="rows" [rowClass]="getRowClass"
+        [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
+        [count]="page.totalElements" [offset]="page.page" [limit]="page.size" [externalSorting]="true"
+        [loadingIndicator]="loading" [messages]="messages" [reorderable]="false"
+        (page)="carregarTabela($event)" (sort)="ordenar($event)">
+
+        <ngx-datatable-column name="Código" prop="id" >
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span>{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Descrição" prop="descricao" [sortable]="getWindowSize()"
+            headerClass="header-mobile-hidden">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Grupo Produto" prop="grupoProduto" >
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span>{{ value.descricao }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Un. Medida" [sortable]="getWindowSize()">
+            <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="d-flex">
+                    <div>
+                        <span>{{ value }}</span>
+                    </div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" (click)="onEditar(row)">
+                                    <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
+                            <li><a class="dropdown-item" (click)="onExcluir(row)">
+                                    <i class="bi bi-trash me-2 text-danger"></i>
+                                    <span class="text-danger">Excluir</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>

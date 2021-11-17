@@ -66,7 +66,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Status: </label>
-                            <span class="row-detail-item">{{ row.status }}</span>
+                            <span class="row-detail-item">{{ row.status.replace('_', ' ') }}</span>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
@@ -153,7 +153,7 @@
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="d-flex">
-                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value }}</div>
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value.replace('_', ' ') }}</div>
                     <div class="ms-auto d-flex align-items-center">
                         <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
                             <i class="bi bi-three-dots-vertical"></i>

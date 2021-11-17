@@ -49,8 +49,9 @@
                             outsideDays="hidden" 
                             (click)="dp.toggle()" 
                             (dateSelect)="onDateSelect($event, filtro)"
-                            [value]="getData(filtro)"
+                            [(ngModel)]="filtrosAdicionados[i].valor"
                             readonly>
+                            <!-- [value]="getData(filtro)" -->
                         <i class="bi bi-calendar pb-1" (click)="dp.toggle()" 
                             (dateSelect)="onDateSelect($event, filtro)"></i>
                     </div>

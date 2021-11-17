@@ -118,6 +118,7 @@ div.datatable-row-detail {
     padding: 15px 20px !important;
 }
 
+/* Table */
 table {
     background-color: white;
     border-radius: var(--radius);
@@ -154,7 +155,7 @@ tbody tr:last-child {
     font: var(--font-bold-14);
     padding: 8px 16px !important;
     min-width: 120px;
-    max-width: 120px;
+    max-width: fit-content;
     border-radius: var(--radius);
     border: none;
     text-align: center;

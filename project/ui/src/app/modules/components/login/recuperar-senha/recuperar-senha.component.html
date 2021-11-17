@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <h2>Recuperar senha</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div id="loginForm" class="col">
+            <div class="row mx-2">
+                <div class="col">
+                    <label for="loginEmail" class="form-label">Informe o email de recuperação</label>
+                    <input id="loginEmail" class="form-control" type="email">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-auto mt-3">
+                    <app-button [btnClass]="'btn-dark'" (click)="onLogin()">Enviar email</app-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

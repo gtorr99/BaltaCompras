@@ -7,7 +7,7 @@ export class Usuario extends BaseEntity {
     nome: string;
     email: string;
     hashSenha: string;
-    status: StatusEnum;
+    status: StatusEnum | string;
     setor: Setor;
     funcao: Funcao;
 

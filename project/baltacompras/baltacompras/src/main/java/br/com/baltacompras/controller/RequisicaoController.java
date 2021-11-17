@@ -45,6 +45,9 @@ public class RequisicaoController {
     @Autowired
     private RequisicaoProdutoRepository repositorioReqProd;
 
+    @Autowired
+    private Email email;
+
 //    @Autowired
 //    private RequisicaoCustomRepository customRepo;
 

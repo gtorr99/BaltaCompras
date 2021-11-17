@@ -6,7 +6,7 @@ INSERT INTO setor(id, descricao) VALUES(3, 'ti');
 -- centros de custo
 INSERT INTO centro_custo(id, descricao, valor_gasto, valor_limite, id_setor) VALUES(1, 'controle de compras', 10000, 20000, 1);
 
-INSERT INTO centro_custo(id, descricao, valor_gasto, valor_limite, id_setor) VALUES(2, 'controle de entradas e saídas', 10000, 15000, 2);
+INSERT INTO centro_custo(id, descricao, valor_gasto, valor_limite, id_setor) VALUES(2, 'Controle de entradas e saidas', 10000, 15000, 2);
 
 INSERT INTO centro_custo(id, descricao, valor_gasto, valor_limite, id_setor) VALUES(3, 'big data', 5000, 10000, 3);
 
@@ -64,33 +64,33 @@ INSERT INTO funcao_permissao(id_funcao, id_permissao) VALUES(5, 9);
 -- usuarios
 INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(1, 'joel nathan', 'joel_nathan@fatec.com', '00xff-hex', 0, 3, 1);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(2, 'caue da viola', 'caue_viola@fatec.com', '00xff-hex', 6, 3, 1);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(2, 'Caue Sampaio', 'caue_viola@fatec.com', '00xff-hex', 6, 3, 1);
 
 INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(3, 'gabriel towers', 'gabriel_towers@fatec.com', '00xff-hex', 6, 3, 1);
 
 INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(4, 'vitor valoroso', 'vitor_valoroso@fatec.com', '00xff-hex', 6, 1, 2);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(5, 'jorge ivelson', 'jorge_ivelson@fatec.com', '00xff-hex', 6, 2, 3);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(5, 'Jorge Ivel', 'jorge_ivelson@fatec.com', '00xff-hex', 6, 2, 3);
 
 INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(6, 'boss do ivelson', 'boss_ivelson@fatec.com', '00xff-hex', 6, 2, 4);
 
 INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(7, 'boss do valoroso', 'boss_valoroso@fatec.com', '00xff-hex', 6, 1, 5);
 
 -- grupo produto
-INSERT INTO grupo_produto(id, descricao) VALUES(1, 'eletronicos');
-INSERT INTO grupo_produto(id, descricao) VALUES(2, 'material de limpeza');
+INSERT INTO grupo_produto(id, descricao) VALUES(1, 'Eletronicos');
+INSERT INTO grupo_produto(id, descricao) VALUES(2, 'Material de limpeza');
 
 -- produtos
-INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(1, 'ps5', 0, 1);
-INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(2, 'ssd intel 1tb', 0, 1);
-INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(3, 'água sanitária', 1, 2);
-INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(4, 'sabao em pó', 3, 2);
+INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(1, 'Teclado DELL KB216', 0, 1);
+INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(2, 'SSD Kingston - 256GB', 0, 1);
+INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(3, 'Agua sanitaria', 1, 2);
+INSERT INTO produto(id, descricao, un_medida, id_grupo_produto) VALUES(4, 'Alcool gel', 1, 2);
 
 -- requisicões
-INSERT INTO requisicao(id, data, prazo, observacoes, status, id_usuario, id_centro_custo) VALUES(1, (SELECT now()), (SELECT now()), 'precisamos de um ps5 urgente na producao!', 1, 5, 2);
+INSERT INTO requisicao(id, data, prazo, observacoes, status, id_usuario, id_centro_custo) VALUES(1, (SELECT now()), (SELECT now()), '', 1, 5, 2);
 
 
-INSERT INTO requisicao(id, data, prazo, observacoes, status, id_usuario, id_centro_custo) VALUES(2, (SELECT now()), (SELECT now()), 'partiu uns ssds topzeira', 0, 2, 4);
+INSERT INTO requisicao(id, data, prazo, observacoes, status, id_usuario, id_centro_custo) VALUES(2, (SELECT now()), (SELECT now()), '', 0, 2, 4);
 
 
 -- requisicao produto
@@ -106,11 +106,11 @@ INSERT INTO requisicao_produto(id_requisicao, id_produto, quantidade) VALUES(2, 
 INSERT INTO aprovacao_requisicao(id_requisicao, id_usuario, data, status) VALUES(1, 6, (SELECT now()), 0);
 
 -- fornecedores
-INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(1, '00.000.000/0000-00', 'sp-sony', 'sony inc.', 'sony', 6, 'sony_ps5@gmail.com', '(00) 00000-0000', '18000-000', 'rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
+INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(1, '00.396.850/0001-50', 'sp-sony', 'Sony Inc.', 'sony', 6, 'sony_ps5@gmail.com', '(00) 00000-0000', '18000-000', 'rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
-INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(2, '11.111.111/1111-11', 'sp-amz', 'amazon', 'amazon', 6, 'amazon5@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
+INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(2,'15.454.650/0001-84', 'sp-amz', 'Amazon Inc', 'amazon', 6, 'amazon5@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
-INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(3, '22.222.222/2222-22', 'sp-ext', 'extra hipermercado', 'extra', 6, 'extra@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
+INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(3, '51.072.275/0001-71', 'sp-ext', 'Extra Hipermercado', 'extra', 6, 'extra@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
 INSERT INTO fornecedor(id, cnpj, inscricao_estadual, razao_social, nome_fantasia, status, email, telefone, cep, rua, numero, complemento, bairro, cidade, estado) VALUES(4, '33.333.333/3333-33', 'sp-rdl', 'rede limpa', 'rede limpa', 6, 'rede_limpa@gmail.com', '(00) 00000-0000', '18000-000','rua dos alfeneiros', 4, 'em frente à azkaban', 'godrics hollow', 'sorocaba', 'sp');
 
@@ -198,3 +198,118 @@ INSERT INTO ordem_compra_foordem_compra_forma_pgtormapgto(id_ordem_compra, id_fo
 -- aprovacao ordem compra
 INSERT INTO aprovacao_ordem_compra(id_ordem_compra, id_usuario, data, status) VALUES(1, 7, (SELECT now()), 0);
 INSERT INTO aprovacao_ordem_compra(id_ordem_compra, id_usuario, data, status) VALUES(2, 7, (SELECT now()), 1);
+
+
+
+-- Grupo de produtos
+INSERT INTO GrupoProduto(id_grupo_produto, descricao) VALUES(3, 'Estoque de produção');
+
+-- Usuários
+UPDATE Usuario
+SET nome = 'Jhonatan Leite'
+	,email = 'jhonatan.leite@baltacompras.com.br'
+WHERE id_usuario = 1;
+
+UPDATE Usuario
+SET nome = 'Cauê Sampaio'
+	,email = 'caue.sampaio@baltacompras.com.br'
+WHERE id_usuario = 2;
+
+UPDATE Usuario
+SET nome = 'Gabriel Torres'
+	,email = 'gabriel.torres@baltacompras.com.br'
+WHERE id_usuario = 3;
+
+UPDATE Usuario
+SET nome = 'Vitor Oliveira'
+	,email = 'vitor.oliveira@ivel.com.br'
+WHERE id_usuario = 4;
+
+UPDATE Usuario
+SET nome = 'Jorge Ivel'
+	,email = 'jorge@ivel.com.br'
+WHERE id_usuario = 5
+
+UPDATE Usuario
+SET nome = 'Rodrigo Ivel'
+	,email = 'rodrigo@ivel.com.br'
+WHERE id_usuario = 6
+
+UPDATE Usuario
+SET nome = 'Eric Barros'
+	,email = 'eric.barros@ivel.com.br'
+WHERE id_usuario = 7
+
+-- Fornecedores
+UPDATE fornecedor
+SET cnpj = '00.396.850/0001-50'
+	,inscricao_estadual = '131.272.040.705'
+	,razao_social = 'Sony Inc.'
+	,nome_fantasia = 'Sony'
+	,email = 'support@sony.com'
+	,telefone = '(12) 2960-6654'
+	,cep = '05069-010'
+	,rua = 'Rua Werner Von Siemens'
+	,numero = 111
+	,complemento = ''
+	,bairro = 'Lapa'
+	,cidade = 'São Paulo'
+	,estado = 'SP'
+WHERE id = 1;
+
+UPDATE Fornecedor
+SET cnpj = '15.454.650/0001-84'
+	,inscricao_estadual = '890.806.665.474'
+	,razao_social = 'Amazon Inc'
+	,nome_fantasia = 'Amazon'
+	,email = 'support@amazon.com'
+	,telefone = '0800-038-0541'
+	,cep = '98170'
+	,rua = 'Terry Ave N'
+	,numero = 410
+	,complemento = ''
+	,bairro = 'Great Neighborhood'
+	,cidade = 'Seattle'
+	,estado = 'WA'
+WHERE id_fornecedor = 2
+
+UPDATE Fornecedor
+SET cnpj = '51.072.275/0001-71'
+	,inscricao_estadual = '437.546.376.654'
+	,razao_social = 'Companhia Brasileira de Distribuição Via Varejo S.A.'
+	,nome_fantasia = 'Extra Hipermercado'
+	,email = 'support@extra.com.br'
+	,telefone = '4003-3383'
+	,cep = '08220-000'
+	,rua = 'Av. Brigadeiro Luis Antonio'
+	,numero = 2013
+	,complemento = ''
+	,bairro = 'Jardim Paulista'
+	,cidade = 'São Paulo'
+	,estado = 'SP'
+WHERE id_fornecedor = 3
+
+UPDATE Fornecedor
+SET cnpj = '86.317.412/0001-75'
+	,inscricao_estadual = '620.874.233.458'
+	,razao_social = 'Rede Limpa Produtos de Limpeaza LTDA'
+	,nome_fantasia = 'Rede Limpa'
+	,email = 'vendas.limpa@redelimpa.com.br'
+	,telefone = '(15) 99735-8565'
+	,cep = '17804-569'
+	,rua = 'Av. Éden do Cajuru'
+	,numero = 2021
+	,complemento = ''
+	,bairro = 'Campo Grande'
+	,cidade = 'Sorocaba'
+	,estado = 'SP'
+WHERE id_fornecedor = 4
+
+-- Requisições de Compra
+UPDATE Requisicao
+SET observacoes = ''
+WHERE id_requisicao = 1
+
+UPDATE Requisicao
+SET observacoes = ''
+WHERE id_requisicao = 2

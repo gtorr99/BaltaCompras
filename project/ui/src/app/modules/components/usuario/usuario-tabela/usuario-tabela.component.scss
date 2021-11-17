@@ -1,0 +1,187 @@
+.no-pm * {
+  padding: 0;
+  margin: 0;
+}
+
+.no-icon::after {
+    display: none;
+}
+
+.bi.bi-three-dots-vertical {
+    padding: 4px;
+    border: 2px solid transparent;
+}
+
+.bi.bi-three-dots-vertical:active {
+    border: 2px solid var(--gray);
+    border-radius: var(--radius);
+}
+
+.context-menu {
+    cursor: pointer;
+    color: var(--gray-400);
+}
+
+.context-menu:hover {
+    color: var(--gray-400);
+}
+
+ul.dropdown-menu, .dropdown-divider {
+    margin: 0;
+    padding: 0;
+    z-index: 2000;
+}
+
+a {
+    text-decoration: none;
+    color: var(--black);
+}
+
+a.dropdown-item {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+a.dropdown-item:hover:first-child {
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+}
+
+a.dropdown-item:hover:last-child {
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
+
+span {
+    font: var(--font-regular-15);
+}
+
+.table-row {
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.ngx-datatable {
+    border-radius: 4px;
+}
+
+.ngx-datatable .datatable-body .datatable-body-row > div {
+   align-items: center;
+}
+
+div.datatable-body-cell-label {
+    font: var(--font-regular-14) !important;
+}
+
+datatable-header-cell.datatable-header-cell span {
+    font: var(--font-bold-15) !important;
+    color: var(--black) !important;
+}
+
+datatable-header-cell.datatable-header-cell.header-mobile-hidden.resizeable.sortable.status  div.datatable-body-cell-label {
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+.ngx-datatable.material .datatable-footer {border-top: none}
+
+.datatable-icon-right, .datatable-icon-down, .bi.bi-three-dots-vertical {
+    cursor: pointer;
+    color: var(--gray);
+}
+
+.datatable-icon-right:hover, .datatable-icon-down:hover, .bi.bi-three-dots-vertical:hover  {
+    color: var(--black);
+}
+
+
+/* Row detail */
+.form-label {
+    font: var(--font-bold-14);
+    display: inline;
+}
+
+.row-detail-item {
+    font: var(--font-regular-14);
+}
+
+div.datatable-row-detail {
+    height: auto !important;
+    padding: 15px 20px !important;
+}
+
+
+
+
+
+
+
+
+
+
+/* Status */
+.status-tag {
+    font: var(--font-bold-14);
+    padding: 8px 16px !important;
+    min-width: 120px;
+    max-width: 120px;
+    border-radius: var(--radius);
+    border: none;
+    text-align: center;
+}
+
+.success {
+    color: var(--green-400);
+    background-color: var(--green-100);
+}
+
+.danger {
+    color: var(--red-400);
+    background-color: var(--red-100);
+}
+
+.warning {
+    color: var(--yellow-400);
+    background-color: var(--yellow-100);
+}
+
+.orange {
+    color: var(--orange-400);
+    background-color: var(--orange-100);
+}
+
+.primary {
+    color: var(--blue-400);
+    background-color: var(--blue-100);
+}
+
+.default {
+    color: var(--gray-400);
+    background-color: var(--gray-100);
+}
+
+@media screen and (max-width: 800px) {
+    .desktop-hidden {
+        display: initial;
+    }
+    .mobile-hidden {
+        display: none;
+    }
+    datatable-header-cell.datatable-header-cell.resizeable.header-mobile-hidden {
+        width: 0 !important;
+    }
+    datatable-header-cell.datatable-header-cell.resizeable.header-mobile-expand {
+        width: 100% !important;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .desktop-hidden {
+        display: none;
+    }
+    .mobile-hidden {
+        display: initial;
+    }
+    div.datatable-row-detail {
+        padding: 15px 60px !important;
+    }
+}

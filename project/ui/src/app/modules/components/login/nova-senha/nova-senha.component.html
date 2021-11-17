@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <h2>Alterar senha</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div id="loginForm">
+            <div class="mb-3">
+                <label for="loginEmail" class="form-label">Nova senha</label>
+                <input id="loginEmail" class="form-control" type="email">
+            </div>
+            <div class="mb-3">
+                <label for="loginSenha" class="form-label">Confirmar senha</label>
+                <input id="loginSenha" class="form-control" type="password">
+            </div>
+            <div class="mt-4">
+                <div class="d-flex justify-content-center">
+                    <app-button [btnClass]="'btn-dark px-5'" (click)="onSalvar()">Salvar</app-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

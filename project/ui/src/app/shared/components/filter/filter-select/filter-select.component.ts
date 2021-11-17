@@ -21,12 +21,17 @@ export class FilterSelectComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (!this.filtrosAdicionados.length) {
+      this.filtrosAdicionados.push(new Filtro({
+        atributo: this.atributos[0]
+      }));
+    }
     this.tiposParametro = [
       {
         tipo: TipoFiltro.STRING,
         parametros: [
           { nome: "Contém", parametro: "LikeIgnoreCase" },
-          { nome: "Igual a", parametro: "Equals" },
+          { nome: "Igual a", parametro: "EqualIgnoreCase" },
           { nome: "Diferente de", parametro: "NotEqualIgnoreCase" }
         ]
       },
@@ -34,7 +39,7 @@ export class FilterSelectComponent implements OnInit {
         tipo: TipoFiltro.NUMBER,
         parametros: [
           { nome: "Contém", parametro: "Like" },
-          { nome: "Igual a", parametro: "Equals" },
+          { nome: "Igual a", parametro: "EqualIgnoreCase" },
           { nome: "Diferente de", parametro: "NotEqual" },
           { nome: "Maior que", parametro: "GreaterThan" },
           { nome: "Maior ou igual a", parametro: "GreaterThanOrEqual" },
@@ -47,13 +52,13 @@ export class FilterSelectComponent implements OnInit {
         parametros: [
           { nome: "Começa em", parametro: "Inicio" },
           { nome: "Termina em", parametro: "Fim" },
-          { nome: "Igual a", parametro: "Equals" }
+          { nome: "Igual a", parametro: "EqualIgnoreCase" }
         ]
       },
       {
         tipo: TipoFiltro.STATUS,
         parametros: [
-          { nome: "Igual a", parametro: "Equals" },
+          { nome: "Igual a", parametro: "EqualIgnoreCase" },
           { nome: "Diferente de", parametro: "NotEqual" }
         ]
       }
@@ -105,8 +110,10 @@ export class FilterSelectComponent implements OnInit {
   }
 
   getData(filtro: Filtro) {
+    console.log(filtro);
+    
     if (filtro.valor) {
-      return this.converterDateParaNgbDateStruct(new Date(Date.parse(filtro.valor)));
+      return this.converterDateParaNgbDateStruct(new Date(filtro.valor));
     }
     return '';
   }

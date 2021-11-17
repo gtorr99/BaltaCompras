@@ -21,8 +21,7 @@ import { RouterModule } from '@angular/router';
         ReactiveFormsModule,
         NgSelectModule,
         NgxDatatableModule,
-        NgxMaskModule.forRoot(),
-        RouterModule
+        NgxMaskModule.forRoot()
     ]
 })
 export class RequisicaoModule {}

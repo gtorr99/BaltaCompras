@@ -7,7 +7,7 @@
         <ul id="menu">
             <a class="menu-item" 
                 *ngFor="let menuItem of menuItemList; let i = index"  
-                [routerLink]="menuItem.value" routerLinkActive="active">
+                [routerLink]="[menuItem.value]" routerLinkActive="active">
                     <i class="bi menu-item-icon" [ngClass]="menuItem.icon"></i>
                     {{ menuItem.name }}
             </a>
@@ -19,7 +19,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li *ngFor="let item of menuItemDropdown.itens">
-                        <a class="dropdown-item" href="#" (click)="open(item.value)">
+                        <a class="dropdown-item" [routerLink]="[item.value]">
                             {{ item.name }}
                         </a>
                     </li>
@@ -30,7 +30,7 @@
     <div class="sidebar-footer">
         <a id="configs" href="#" class="menu-item">
             <i class="bi bi-gear-fill menu-item-icon"></i>
-            Configurações
+            Administração
         </a>
     </div>
 </div>
@@ -39,7 +39,7 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <i id="menuIcon" class="bi bi-list mb-4 mb-lg-0" (click)="onOpenSideBar()"></i>
-        <a class="logo me-auto mb-4 mb-lg-0" routerLink="/home">BaltaCompras</a>
+        <a class="logo me-auto mb-4 mb-lg-0" routerLink="/login">BaltaCompras</a>
         <div class="row mt-lg-4">
             <div class="col">
                 <i class="bi bi-bell-fill me-3 position-relative">

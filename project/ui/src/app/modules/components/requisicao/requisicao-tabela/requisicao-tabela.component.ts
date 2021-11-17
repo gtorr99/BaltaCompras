@@ -85,6 +85,8 @@ export class RequisicaoTabelaComponent implements OnInit {
 
   carregarTabela(pageEvent: any = null) {
     this.setQuery();
+    console.log(this.query);
+    
     this.requisicaoService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<Requisicao>) => {
       this.atualizarTabela(response);
     });

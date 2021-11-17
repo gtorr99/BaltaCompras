@@ -8,4 +8,6 @@ export class ProdutoService extends BaseService<Produto> {
     constructor(protected httpClient: HttpClient) { 
         super(httpClient, 'produto');
     }
+
+    produtoSelecionado: Produto = new Produto();
 }

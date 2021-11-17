@@ -1,0 +1,76 @@
+<app-title [title]="'Editar perfil'"></app-title>
+
+<div class="box">
+    <form [formGroup]="usuarioForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation"
+        novalidate>
+    <div class="row justify-content-between">
+
+        <!-- Nome/Email -->
+        <div class="col-5">
+            <h3>Informações gerais</h3>
+            <div class="row">
+                <div class="col">
+                    <label for="nome" class="form-label">
+                        Nome <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="nome" class="form-control " formControlName="nome" required>
+                    <small class="valid-feedback"
+                        *ngIf="usuarioForm.get('nome')?.valid && usuarioForm.get('nome')?.touched; else nomeInvalido">
+                        Nome ok!
+                    </small>
+                    <ng-template #nomeInvalido>
+                        <small class="invalid-feedback">
+                            Por favor, insira o nome do usuário
+                        </small>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="email" class="form-label">
+                        Email <span class="text-danger">*</span>
+                    </label>
+                    <input type="email" id="email" class="form-control" formControlName="email" required>
+                    <small class="valid-feedback"
+                        *ngIf="usuarioForm.get('email')?.valid && usuarioForm.get('email')?.touched; else emailInvalido">
+                        Email ok!
+                    </small>
+                    <ng-template #emailInvalido>
+                        <small class="invalid-feedback">
+                            Por favor, insira um email válido
+                        </small>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="col-5">
+            <h3>Alterar senha</h3>
+            <div class="row">
+                <div class="col">
+                    <label for="senha" class="form-label">
+                        Nova senha<span class="text-danger">*</span>
+                    </label>
+                    <input type="password" id="senha" class="form-control" formControlName="senha" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="confirmarSenha" class="form-label">
+                        Confirmar senha<span class="text-danger">*</span>
+                    </label>
+                    <input type="password" id="confirmarSenha" class="form-control" formControlName="confirmarSenha" required>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+<div class="row justify-content-end">
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-outline-danger me-2'" type="button" (click)="onCancelar($event)">Cancelar
+        </app-button>
+    </div>
+    <div class="col-auto">
+        <app-button [btnClass]="'btn-primary'" type="submit">Salvar</app-button>
+    </div>
+</div>

@@ -36,7 +36,8 @@ export class CotacaoComponent implements OnInit {
   listaFornecedores: Fornecedor[] = [];
   // listaProdutos: Produto[] = [];
   listaProdutos: number[] = [1,2,3,4,5];
-  prazo = new Date();
+  prazo = 'DD/MM/AAAA';
+  // prazo = new Date();
 
   /* Filtro */
   query: string = '';
@@ -88,6 +89,10 @@ export class CotacaoComponent implements OnInit {
   filtrar(filtro: string) {
     this.query = filtro;
     this.carregarProdutos();
+  }
+
+  onAdicionarFornecedor() {
+    this.listaFornecedores.push(new Fornecedor());
   }
 
   onTransformarValor() {

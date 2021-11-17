@@ -1,6 +1,7 @@
 package br.com.baltacompras.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import br.com.baltacompras.model.GrupoCotacao;
@@ -8,7 +9,7 @@ import br.com.baltacompras.model.ProdutoAgrupado;
 
 import java.util.List;
 
-public interface GrupoCotacaoRepository extends JpaRepository<GrupoCotacao, Integer>{
+public interface GrupoCotacaoRepository extends JpaRepository<GrupoCotacao, Integer>, JpaSpecificationExecutor<GrupoCotacao> {
         @Query("select new br.com.baltacompras.model.ProdutoAgrupado(p.grupoProduto.id, rp.produto.id, CAST(sum(rp.quantidade) as float), min(r.prazo)) " +
             "from Requisicao r " +
             "join RequisicaoProduto rp on r.id = rp.requisicao.id " +
