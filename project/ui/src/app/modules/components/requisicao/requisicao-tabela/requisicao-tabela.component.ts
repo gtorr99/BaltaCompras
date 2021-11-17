@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
-import { Requisicao } from '@models/index';
+import { Requisicao, Produto } from '@models/index';
 import { RequisicaoService } from '@services/requisicao.service';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
-import { StatusEnum } from '@models/enum';
+import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
 
 @Component({
@@ -85,8 +85,6 @@ export class RequisicaoTabelaComponent implements OnInit {
 
   carregarTabela(pageEvent: any = null) {
     this.setQuery();
-    console.log(this.query);
-    
     this.requisicaoService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<Requisicao>) => {
       this.atualizarTabela(response);
     });
@@ -131,11 +129,15 @@ export class RequisicaoTabelaComponent implements OnInit {
     this.modalRef.componentInstance.message = "Ao prosseguir, a requisição será cancelada. Você tem certeza que deseja prosseguir?";
     this.modalRef.closed.subscribe(response => {
       if (response) {
-        this.requisicaoService.cancelar(requisicao.id).subscribe(() => {
-          this.toastrService.success("Requisição cancelada!");
-          this.carregarTabela();
-        });
+        this.onCancelar(requisicao.id);
       }
+    });
+  }
+
+  onCancelar(id: number) {
+    this.requisicaoService.cancelar(id).subscribe(() => {
+      this.toastrService.success("Requisição cancelada!");
+      this.requisicaoService.listarPaginado().subscribe(resp => this.atualizarTabela(resp));
     });
   }
 
@@ -155,6 +157,10 @@ export class RequisicaoTabelaComponent implements OnInit {
 
   onDownload() {
 
+  }
+
+  getUnMedida(produto: Produto): string {
+    return UnMedidaEnum[produto.unMedida];
   }
 
   setStatusTag(status: any): string {

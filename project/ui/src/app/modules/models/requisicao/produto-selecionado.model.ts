@@ -1,3 +1,4 @@
+import { Produto } from "@models/produto.model";
 import { RequisicaoProduto } from "./requisicao-produto.model";
 
 export class ProdutoSelecionado {
@@ -6,10 +7,13 @@ export class ProdutoSelecionado {
     inputVermelhoSeQuantidadeZero: boolean;
     medidaSelecionada?: string;
 
-    constructor(produto: RequisicaoProduto) {
-        this.requisicaoProduto = produto;
-        this.isChecked = false;
+    constructor(data?: Partial<ProdutoSelecionado>) {
+        if (data?.requisicaoProduto) {
+            data.requisicaoProduto.produto = new Produto(data?.requisicaoProduto.produto);
+            this.requisicaoProduto = data.requisicaoProduto;
+            this.medidaSelecionada = this.requisicaoProduto.produto.getListaMedidas()[0];
+        }
+        this.isChecked = data?.isChecked ?? false;
         this.inputVermelhoSeQuantidadeZero = false;
-        this.medidaSelecionada = this.requisicaoProduto.produto.getListaMedidas()[0];
     }
 }

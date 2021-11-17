@@ -210,7 +210,7 @@ export class UsuarioTabelaComponent implements OnInit {
           setor: new Setor({
             id: 1,
             descricao: 'Compras',
-            centroCusto: [
+            centrosCusto: [
               new CentroCusto({
               id: 1,
               descricao: "Controle de Compras"
@@ -248,7 +248,7 @@ export class UsuarioTabelaComponent implements OnInit {
           setor: new Setor({
             id: 1,
             descricao: 'Compras',
-            centroCusto: [
+            centrosCusto: [
               new CentroCusto({
               id: 1,
               descricao: "Controle de Compras"
@@ -286,7 +286,7 @@ export class UsuarioTabelaComponent implements OnInit {
           setor: new Setor({
             id: 1,
             descricao: 'Compras',
-            centroCusto: [
+            centrosCusto: [
               new CentroCusto({
               id: 1,
               descricao: "Controle de Compras"

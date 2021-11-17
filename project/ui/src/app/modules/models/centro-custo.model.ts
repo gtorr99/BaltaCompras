@@ -5,10 +5,11 @@ export class CentroCusto extends BaseEntity {
     descricao: string;
     valorGasto?: number;
     valorLimite?: number;
-    setor: Setor;
+    setor?: Setor;
     
     constructor(data?: Partial<CentroCusto>) {
         super();
         Object.assign(this, data);
+        this.setor = new Setor(data?.setor);
     }
 }

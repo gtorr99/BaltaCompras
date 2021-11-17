@@ -1,6 +1,5 @@
 package br.com.baltacompras.controller;
 
-import br.com.baltacompras.model.RequisicaoProduto;
 import br.com.baltacompras.model.enums.Status;
 
 import br.com.baltacompras.repository.RequisicaoProdutoRepository;
@@ -22,6 +21,9 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import net.kaczmarzyk.spring.data.jpa.domain.Between;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
+
+import java.util.concurrent.atomic.AtomicReference;
+
 @RestController
 @RequestMapping("/requisicao")
 public class RequisicaoController {
@@ -59,28 +61,42 @@ public class RequisicaoController {
     @PostMapping("/salvar")
     public void salvar(@RequestBody Requisicao requisicao) {
         requisicao.setStatus(Status.ABERTO);
+        Requisicao req = repositorio.save(requisicao);
+        requisicao.getProdutos().forEach(p -> { p.getId().setIdRequisicao(req.getId()); p.setRequisicao(req);});
+        req.setProdutos(requisicao.getProdutos());
         repositorioReqProd.saveAll(requisicao.getProdutos());
-        repositorio.save(requisicao);
     }
 
     @PutMapping("/alterar")
     public ResponseEntity<?>  alterar(@RequestBody Requisicao requisicao) {
-        if (requisicao.getId() > 0) {
-            repositorio.save(requisicao);
+        if (requisicao.getId() > 0 && requisicao.getStatus() == Status.ABERTO) {
+
+            Requisicao req = repositorio.getById(requisicao.getId());
+            repositorioReqProd.deleteAll(req.getProdutos());
+
+            requisicao.getProdutos().forEach(p -> { p.getId().setIdRequisicao(req.getId()); p.setRequisicao(req);});
+
+            req.setProdutos(requisicao.getProdutos());
+            req.setPrazo(requisicao.getPrazo());
+            req.setObservacoes(requisicao.getObservacoes());
+            req.setCentroCusto(requisicao.getCentroCusto());
+
+            repositorioReqProd.saveAll(req.getProdutos());
+            repositorio.save(req);
             return ResponseEntity.status(HttpStatus.OK).body("Requisição atualizada com sucesso!");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requisição não encontrada");
     }
 
-    @PutMapping("/cancelar")
-    public ResponseEntity<?> cancelar(@PathVariable Integer id) {
+    @PutMapping("/cancelar/{id}")
+    public Boolean cancelar(@PathVariable Integer id) {
         Requisicao requisicao = repositorio.getById(id);
-        if (requisicao.getId() > 0) {
+        if (requisicao.getId() > 0 && requisicao.getStatus() == Status.ABERTO) {
             requisicao.setStatus(Status.CANCELADO);
             repositorio.save(requisicao);
-            return ResponseEntity.status(HttpStatus.OK).body("Requisição cancelada!");
+            return true;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requisição não encontrada");
+        return false;
     }
 
     @DeleteMapping("/excluir/{id}")

@@ -87,11 +87,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="align-items-center">
-                                    <th scope="row" class="ps-3">1</th>
-                                    <td>PS5</td>
-                                    <td class="text-end">2</td>
-                                    <td class="text-center">un</td>
+                                <tr class="align-items-center" *ngFor="let reqProd of row.produtos">
+                                    <th scope="row" class="ps-3">{{ reqProd.produto.id }}</th>
+                                    <td>{{ reqProd.produto.descricao }}</td>
+                                    <td class="text-end">{{ reqProd.quantidade }}</td>
+                                    <td class="text-center">{{ getUnMedida(reqProd.produto) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -159,12 +159,14 @@
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" (click)="onEditarRequisicao(row)">
-                                    <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
-                            <li><a class="dropdown-item" (click)="onCancelarRequisicao(row)">
+                            <li><app-button [btnClass]="'dropdown-item'" (action)="onEditarRequisicao(row)"
+                                [isDisabled]="row.status != 'ABERTO'">
+                                    <i class="bi bi-pencil-square me-2"></i>Editar</app-button></li>
+                            <li><app-button [btnClass]="'dropdown-item'" (action)="onCancelarRequisicao(row)"
+                                [isDisabled]="row.status != 'ABERTO'">
                                     <i class="bi bi-x-lg me-2 text-danger"></i>
                                     <span class="text-danger">Cancelar</span>
-                                </a>
+                                </app-button>
                             </li>
                         </ul>
                     </div>

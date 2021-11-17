@@ -9,7 +9,7 @@ export class Requisicao extends BaseEntity {
     data: Date;
     prazo: Date;
     observacoes: string;
-    status: StatusEnum;
+    status: StatusEnum | string;
     usuario: Usuario;
     centroCusto: CentroCusto;
     produtos: RequisicaoProduto[];
@@ -17,12 +17,5 @@ export class Requisicao extends BaseEntity {
     constructor(data?: Partial<Requisicao>) {
         super();
         Object.assign(this, data);
-        this.centroCusto = new CentroCusto(data?.centroCusto);
-        this.usuario = new Usuario(data?.usuario);
-        if (this.produtos) {
-            this.produtos = [...this.produtos.map(p => new RequisicaoProduto(p))];
-        } else {
-            this.produtos = [new RequisicaoProduto()];
-        }
     }
 }

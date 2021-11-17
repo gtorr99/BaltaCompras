@@ -62,7 +62,7 @@ export class UsuarioComponent implements OnInit {
       }),
       grupoSetor: this.formBuilder.group({
         setor: [this.usuario?.setor ?? '', [...this.commonValidators]],
-        centroCusto: [this.usuario?.setor?.centroCusto ?? '', [...this.commonValidators]],
+        centroCusto: [this.usuario?.setor?.centrosCusto ?? '', [...this.commonValidators]],
       }),
       grupoFuncao: this.formBuilder.group({
         funcao: [this.usuario?.funcao ?? '', [...this.commonValidators]],

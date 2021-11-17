@@ -70,11 +70,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="align-items-center">
-                                    <th scope="row" class="ps-3">1</th>
-                                    <td>PS5</td>
-                                    <td class="text-end">2</td>
-                                    <td class="text-center">un</td>
+                                <tr class="align-items-center" *ngFor="let reqProd of row.produtos">
+                                    <th scope="row" class="ps-3">{{ reqProd.produto.id }}</th>
+                                    <td>{{ reqProd.produto.descricao }}</td>
+                                    <td class="text-end">{{ reqProd.quantidade }}</td>
+                                    <td class="text-center">{{ getUnMedida(reqProd.produto) }}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -3,8 +3,12 @@ import { UnMedidaEnum } from "./enum/un-medida.enum";
 export class ListaUnidadeMedida {
     getLista(unMedida: UnMedidaEnum | string): string[] {
         switch(unMedida) {
+            case 'un':
+            case UnMedidaEnum.un:
+                return ["un"];
             case UnMedidaEnum.L:
             case 'L':
+            case 1:
                 return ["L", "ml"];
             case UnMedidaEnum.g:
             case 'g':
@@ -12,8 +16,7 @@ export class ListaUnidadeMedida {
             case UnMedidaEnum.m:
             case 'm':
                 return ["m", "cm", "mm"];
-            case 'un':
-                return ["un"];
+            
             default:
                 return [];
         }

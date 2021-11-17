@@ -1,16 +1,15 @@
-import { BaseEntity } from "@models/base-entity.model";
+import { GrupoCotacaoProduto } from "@models/cotacao/grupo-cotacao-produto.model";
 import { UnMedidaEnum } from "@models/enum";
 import { Produto } from "@models/produto.model";
 
-export class RequisicaoProduto extends BaseEntity {
+export class RequisicaoProduto {
+    id: { idRequisicao: number, idProduto: number };
     produto: Produto;
     quantidade: number;
-    grupoCotacaoProduto?: number;
+    grupoCotacaoProduto?: GrupoCotacaoProduto;
 
     constructor(data?: Partial<RequisicaoProduto>) {
-        super();
         Object.assign(this, data);
-        this.produto = new Produto(data?.produto);
     }
 
     converterQuantidadeParaUnMedidaPadrao(un: string) {

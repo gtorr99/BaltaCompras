@@ -7,9 +7,9 @@ public class ProdutoAgrupado {
     private Integer idGrupoProduto;
     private Integer idProduto;
     private float quantidadeTotal;
-    private LocalDate prazo;
+    private Date prazo;
 
-    public ProdutoAgrupado(Integer idGrupoProduto, Integer idProduto, float quantidadeTotal, LocalDate prazo) {
+    public ProdutoAgrupado(Integer idGrupoProduto, Integer idProduto, float quantidadeTotal, Date prazo) {
         this.idGrupoProduto = idGrupoProduto;
         this.idProduto= idProduto;
         this.quantidadeTotal = quantidadeTotal;
@@ -25,7 +25,7 @@ public class ProdutoAgrupado {
     public float getQuantidadeTotal() {
         return quantidadeTotal;
     }
-    public LocalDate getPrazo() {
+    public Date getPrazo() {
         return prazo;
     }
 }

@@ -21,7 +21,7 @@ public class SetorController {
     @Autowired
     private SetorRepository repositorio;
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<Setor> listar(){
         return repositorio.findAll();
     }

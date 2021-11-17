@@ -59,5 +59,8 @@ public class RequisicaoProduto {
         this.grupoCotacaoProduto = grupoCotacaoProduto;
     }
 
+    public void setRequisicao(Requisicao req) {
+        this.requisicao = req;
+    }
     
 }

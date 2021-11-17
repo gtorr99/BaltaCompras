@@ -9,32 +9,32 @@ import java.util.Objects;
 public class RequisicaoProdutoId implements Serializable {
 
     @Column(name = "id_requisicao")
-    Long idRequisicao;
+    Integer idRequisicao;
 
     @Column(name = "id_produto")
-    Long idProduto;
+    Integer idProduto;
 
     public RequisicaoProdutoId() {
     }
 
-    public RequisicaoProdutoId(Long idRequisicao, Long idProduto) {
+    public RequisicaoProdutoId(Integer idRequisicao, Integer idProduto) {
         this.idRequisicao = idRequisicao;
         this.idProduto = idProduto;
     }
 
-    public Long getIdRequisicao() {
+    public Integer getIdRequisicao() {
         return idRequisicao;
     }
 
-    public void setIdRequisicao(Long idRequisicao) {
+    public void setIdRequisicao(Integer idRequisicao) {
         this.idRequisicao = idRequisicao;
     }
 
-    public Long getIdProduto() {
+    public Integer getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(Long idProduto) {
+    public void setIdProduto(Integer idProduto) {
         this.idProduto = idProduto;
     }
 

@@ -17,7 +17,7 @@ public class Requisicao {
     @Column(nullable = false)
     private Date data;
     @Column(nullable = false)
-    private LocalDate prazo;
+    private Date prazo;
     @Column(nullable = false)
     private Status status;
     private String observacoes;
@@ -71,12 +71,15 @@ public class Requisicao {
     public Set<RequisicaoProduto> getProdutos() {
         return produtos;
     }
+    public void setProdutos(Set<RequisicaoProduto> produtos) {
+        this.produtos = produtos;
+    }
 
-    public LocalDate getPrazo() {
+    public Date getPrazo() {
         return prazo;
     }
 
-    public void setPrazo(LocalDate prazo) {
+    public void setPrazo(Date prazo) {
         this.prazo = prazo;
     }
 

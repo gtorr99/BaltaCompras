@@ -8,5 +8,6 @@ export class Funcao extends BaseEntity {
     constructor(data?: Partial<Funcao>) {
         super();
         Object.assign(this, data);
+        this.permissoes = [...data?.permissoes.map(p => new Permissao(p))];
     }
 }

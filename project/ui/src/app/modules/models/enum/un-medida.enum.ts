@@ -1,5 +1,5 @@
 export enum UnMedidaEnum {
-    un = 0,
+    un,
     L,
     m,
     g

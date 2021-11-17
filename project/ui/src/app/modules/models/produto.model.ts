@@ -11,7 +11,6 @@ export class Produto extends BaseEntity {
     constructor(data?: Partial<Produto>) {
         super();
         Object.assign(this, data);
-        this.grupoProduto = new GrupoProduto(data?.grupoProduto);
     }
 
     getListaMedidas?(): string[] {

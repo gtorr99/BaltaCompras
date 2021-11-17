@@ -18,7 +18,7 @@ public class GrupoCotacao {
     @Column(nullable = false)
     private Date data;
     @Column(name = "prazo_solicitado")
-    private LocalDate prazoSolicitado;
+    private Date prazoSolicitado;
 
     private Status status;
 
@@ -35,7 +35,7 @@ public class GrupoCotacao {
 
     public GrupoCotacao() {}
 
-    public GrupoCotacao(LocalDate prazoSolicitado, GrupoProduto grupoProduto) {
+    public GrupoCotacao(Date prazoSolicitado, GrupoProduto grupoProduto) {
         this.data = new Date();
         this.prazoSolicitado = prazoSolicitado;
         this.grupoProduto = grupoProduto;
@@ -54,10 +54,10 @@ public class GrupoCotacao {
     public void setData(Date data) {
         this.data = data;
     }
-    public LocalDate getPrazoSolicitado() {
+    public Date getPrazoSolicitado() {
         return prazoSolicitado;
     }
-    public void setPrazoSolicitado(LocalDate prazoSolicitado) {
+    public void setPrazoSolicitado(Date prazoSolicitado) {
         this.prazoSolicitado = prazoSolicitado;
     }
     public String getObservacoes() {

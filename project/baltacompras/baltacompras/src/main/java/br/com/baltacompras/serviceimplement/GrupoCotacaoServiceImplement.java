@@ -35,7 +35,7 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
      public List<GrupoCotacao> gerarCotacoes() {
          List<ProdutoAgrupado> produtosAgrupados = repository.getRequisicoesAgrupadas();
 
-         Map<GrupoProduto, LocalDate> grupoProdutoEPrazoMap = new HashMap<>();
+         Map<GrupoProduto, Date> grupoProdutoEPrazoMap = new HashMap<>();
          produtosAgrupados.forEach(pa ->
              grupoProdutoEPrazoMap.put(grupoProdutoRepository.getById(pa.getId_grupo_produto()), pa.getPrazo())
          );
