@@ -10,16 +10,16 @@
 
 <app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
 
-<div class="mb-5">
+<!-- <div class="mb-5">
     <ngx-datatable class="material expandable" 
         #myTable [rows]="rows" [rowClass]="getRowClass"
         [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
         [count]="page.totalElements" [offset]="page.page" [limit]="page.size" [externalSorting]="true"
         [loadingIndicator]="loading" [messages]="messages" [reorderable]="false"
-        (page)="carregarTabela($event)" (sort)="ordenar($event)">
+        (page)="carregarTabela($event)" (sort)="ordenar($event)"> -->
 
         <!-- Row Detail Template -->
-        <ngx-datatable-row-detail #myMobileDetailRow>
+        <!-- <ngx-datatable-row-detail #myMobileDetailRow>
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                 <div>
                     <h3>Informações</h3>
@@ -136,10 +136,10 @@
                 </div>
                 </div>
             </ng-template>
-        </ngx-datatable-row-detail>
+        </ngx-datatable-row-detail> -->
         
         <!-- Column Templates -->
-        <ngx-datatable-column [width]="5" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+        <!-- <ngx-datatable-column [width]="5" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
                 <a [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
                     (click)="toggleExpandRow(row)">
@@ -225,4 +225,4 @@
             </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
-</div>
+</div> -->

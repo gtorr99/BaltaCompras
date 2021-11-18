@@ -74,10 +74,9 @@ export class FornecedorComponent implements OnInit {
       gruposProduto: ['', this.commonValidators]
     });
 
-    // this.grupoProdutoList = this.grupoProdutoService.listar();
     this.grupoProdutoService.listar().subscribe(gpl => {
       this.grupoProdutoList = [...gpl];
-      this.fornecedorForm.get('gruposProduto').patchValue(this.fornecedor.gruposProduto?.map(gp => gp.descricao));
+      this.fornecedorForm.get('gruposProduto').patchValue(this.fornecedor.gruposProduto?.map(gp => gp.id));
     });
    
     this.loadEstados();

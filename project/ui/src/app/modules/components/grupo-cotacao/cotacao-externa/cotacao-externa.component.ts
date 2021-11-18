@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CotacaoService } from '@services/cotacao.service';
+import { GrupoCotacaoService } from '@services/grupo-cotacao.service';
 import { ProdutoService } from '@services/produto.service';
 import { NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
@@ -48,7 +48,7 @@ export class CotacaoExternaComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private cotacaoService: CotacaoService,
+    private grupoCotacaoService: GrupoCotacaoService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private currencyPipe: CurrencyPipe,
@@ -99,7 +99,7 @@ export class CotacaoExternaComponent implements OnInit {
         event.stopPropagation();
         this.toastrService.error("Todos os campos obrigatórios devem ser preenchidos");
       } else {
-        this.cotacaoService.alterar(null).subscribe(() => {
+        this.grupoCotacaoService.alterar(null).subscribe(() => {
           this.toastrService.success("Cotação enviada com successo!");
         });
       }

@@ -12,17 +12,13 @@ const routes: Routes = [
         path: 'login',
         loadChildren: () => import('@modules/login/login.module').then(m => m.LoginModule)
     },
-    // {
-    //     path: 'home',
-    //     loadChildren: () => import('@modules/home/home.module').then(m => m.HomeModule)
-    // },
     {
         path: 'requisicao',
         loadChildren: () => import('@modules/requisicao/requisicao.module').then(m => m.RequisicaoModule)
     },
     {
-        path: 'cotacao',
-        loadChildren: () => import('@modules/cotacao/cotacao.module').then(m => m.CotacaoModule)
+        path: 'grupo-cotacao',
+        loadChildren: () => import('@modules/grupo-cotacao/grupo-cotacao.module').then(m => m.GrupoCotacaoModule)
     },
     {
         path: 'ordem-compra',

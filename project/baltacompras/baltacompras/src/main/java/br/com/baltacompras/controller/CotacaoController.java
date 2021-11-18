@@ -5,6 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import br.com.baltacompras.model.GrupoCotacao;
+import br.com.baltacompras.model.GrupoCotacaoProdutoCotacao;
+import br.com.baltacompras.model.enums.Status;
+import br.com.baltacompras.repository.GrupoCotacaoProdutoCotacaoRepository;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +32,55 @@ import br.com.baltacompras.repository.CotacaoRepository;
 @RestController
 @RequestMapping("/cotacao")
 public class CotacaoController {
+
+    @Join(path = "grupoCotacao", alias = "gc")
+    @And({
+            @Spec(path = "gc.id", params = "grupoCotacao", spec = Equal.class),
+            @Spec(path = "selecionada", params = "selecionada", spec = Equal.class),
+    })
+    interface CotacaoSpec<Cotacao> extends NotDeletedEntity<Cotacao> {
+    }
+
     @Autowired
     private CotacaoRepository repositorio;
+
+    @Autowired
+    private GrupoCotacaoProdutoCotacaoRepository repositorioGCPC;
 
     @Autowired
     private CotacaoCustomRepository customRepo;
 
     @GetMapping("/listar")
-    public List<Cotacao> listar(){
-        return repositorio.findAll();
+    public List<Cotacao> listar(CotacaoSpec<Cotacao> spec){
+        return repositorio.findAll(spec);
+    }
+
+    @PostMapping("/salvar")
+    public void salvar(@RequestBody Cotacao cotacao){
+        cotacao.setStatus(Status.ABERTO);
+        cotacao.setGrupoCotacao(cotacao.getGrupoCotacao());
+        Cotacao cot = repositorio.save(cotacao);
+        cotacao.getProdutos().forEach(p -> { p.getId().setIdCotacao(cot.getId()); p.setCotacao(cot);});
+
+        cot.setProdutos(cotacao.getProdutos());
+        repositorioGCPC.saveAll(cotacao.getProdutos());
+    }
+
+    @PutMapping("/alterar")
+    public void alterar(@RequestBody Cotacao cotacao){
+        if(cotacao.getId()>0){
+            Cotacao cot = repositorio.getById(cotacao.getId());
+            cotacao.getProdutos().forEach(p -> { p.getId().setIdCotacao(cot.getId()); p.setCotacao(cot);});
+
+            cot.setFormasPgto(cotacao.getFormasPgto());
+            cot.setDesconto(cotacao.getDesconto());
+            cot.setStatus(Status.EM_PROCESSAMENTO);
+            cot.setFornecedor(cotacao.getFornecedor());
+            cot.setProdutos(cotacao.getProdutos());
+
+            repositorioGCPC.saveAll(cotacao.getProdutos());
+            repositorio.save(cotacao);
+        }
     }
 
     @GetMapping("/filtrar")
@@ -57,18 +107,6 @@ public class CotacaoController {
         }
 
         return customRepo.filtrar(id, dateInicio, dateFim, selecionada, transportadora, meioTransporte, status, observacoes);
-    }
-    
-    @PostMapping
-    public void salvar(@RequestBody Cotacao cotacao){
-        repositorio.save(cotacao);
-    }
-
-    @PutMapping
-    public void alterar(@RequestBody Cotacao cotacao){
-        if(cotacao.getId()>0){
-            repositorio.save(cotacao);
-        }
     }
 
     @DeleteMapping

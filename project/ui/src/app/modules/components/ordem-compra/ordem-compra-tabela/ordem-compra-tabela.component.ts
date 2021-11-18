@@ -102,7 +102,6 @@ export class OrdemCompraTabelaComponent implements OnInit {
     this.page.page = 0;
     this.carregarTabela(0);
 
-    this.loadFake();
   }
 
   carregarTabela(pageEvent: any = null) {
@@ -199,78 +198,5 @@ export class OrdemCompraTabelaComponent implements OnInit {
     params.push(this.sortQuery);
     this.query = params.join('&');
     console.log(this.query);
-  }
-
-  loadFake() {
-    this.page = {
-      page: 0,
-      size: 10,
-      totalElements: 2,
-      totalPages: 1,
-      content: [
-        new OrdemCompra({
-          id: 1,
-          data: new Date(Date.parse('10/11/2021')),
-          status: StatusEnum[StatusEnum.ABERTO],
-          observacoes: '',
-          usuario: new Usuario({
-            nome: "Jorge Ivel"
-          }),
-          grupoProduto: new GrupoProduto({
-            descricao: 'Material de limpeza'
-          })
-        }),
-        new OrdemCompra({
-          id: 2,
-          data: new Date(Date.parse('10/11/2021')),
-          status: StatusEnum[StatusEnum.CONCLUIDO],
-          observacoes: '',
-          usuario: new Usuario({
-            nome: "Caue Sampaio"
-          }),
-          grupoProduto: new GrupoProduto({
-            descricao: 'Eletrônicos'
-          }),
-          cotacao: new Cotacao({
-              id: 1,
-              prazoFornecedor: new Date(),
-              desconto: 200.00,
-              frete: 0.00,
-              transportadora: 'Amazon Transportadora',
-              meioTransporte: 'Drone',
-              formasPgto: ['À vista', '10x s/ juros'],
-              status: StatusEnum.CONCLUIDO,
-              observacoes: '',
-              selecionada: true,
-              fornecedor: new Fornecedor({
-                nomeFantasia: 'Amazon Inc',
-                cnpj: '15.454.650/0001-84'
-              }),
-              total: 500.00,
-              produtos: [
-                {
-                  id: 1,
-                  descricao: 'SSD Kingston - 256GB',
-                  quantidade: 3,
-                  unMedida: 'un',
-                  precoUnitario: 200.00,
-                  aliqIpi: 0.5,
-                  subtotal: 600.00
-                },
-                {
-                  id: 2,
-                  descricao: 'Teclado DELL KB216',
-                  quantidade: 1,
-                  unMedida: 'un',
-                  precoUnitario: 100.00,
-                  aliqIpi: 0.2,
-                  subtotal: 100.00
-                }
-              ]
-            })
-        })
-      ]
-    }
-    this.rows = [...this.page.content];
   }
 }

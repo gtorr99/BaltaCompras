@@ -43,7 +43,7 @@ export class MenuComponent implements OnInit {
       },
       {
         name: "Cotação",
-        value: "/cotacao",
+        value: "/grupo-cotacao",
         icon: "bi-cash-coin"
       },
       {

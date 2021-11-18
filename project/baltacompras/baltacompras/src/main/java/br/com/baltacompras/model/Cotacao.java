@@ -1,16 +1,12 @@
 package br.com.baltacompras.model;
 
 import java.sql.Date;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Type;
 
 import br.com.baltacompras.model.enums.Status;
@@ -30,10 +26,14 @@ public class Cotacao {
     private String transportadora;
     @Column(name = "meio_transporte")
     private String meioTransporte;
+    @Column(name = "forma_pgto")
+    private String formasPgto;
     @Column(nullable = false)
     private Status status;
     @Type(type = "text")
     private String observacoes;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
     @JoinColumn(name = "id_grupo_cotacao")
     private GrupoCotacao grupoCotacao;
@@ -41,6 +41,9 @@ public class Cotacao {
     @ManyToOne
     @JoinColumn(name = "id_fornecedor")
     private Fornecedor fornecedor;
+
+    @OneToMany(mappedBy = "cotacao")
+    private Set<GrupoCotacaoProdutoCotacao> produtos;
 
     public GrupoCotacao getGrupoCotacao() {
         return grupoCotacao;
@@ -109,5 +112,21 @@ public class Cotacao {
     }
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
+    }
+
+    public String getFormasPgto() {
+        return formasPgto;
+    }
+
+    public void setFormasPgto(String formasPgto) {
+        this.formasPgto = formasPgto;
+    }
+
+    public Set<GrupoCotacaoProdutoCotacao> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(Set<GrupoCotacaoProdutoCotacao> produtos) {
+        this.produtos = produtos;
     }
 }

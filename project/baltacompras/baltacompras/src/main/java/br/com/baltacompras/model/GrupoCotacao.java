@@ -2,6 +2,7 @@ package br.com.baltacompras.model;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -23,9 +24,17 @@ public class GrupoCotacao {
     private Status status;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    (fetch = FetchType.EAGER)
     @JoinColumn(name = "id_grupo_produto", referencedColumnName = "id")
     private GrupoProduto grupoProduto;
+
+    @OneToMany(mappedBy = "grupoCotacao")
+    private Set<Cotacao> cotacoes;
+
+
+    @OneToMany(mappedBy = "grupoCotacao")
+    private Set<GrupoCotacaoProduto> grupoCotacaoProdutos;
 
     @Type(type = "text")
     private String observacoes;
@@ -39,6 +48,7 @@ public class GrupoCotacao {
         this.data = new Date();
         this.prazoSolicitado = prazoSolicitado;
         this.grupoProduto = grupoProduto;
+        this.status = Status.ABERTO;
         // ToDo - Setar usuário logado
     }
 
@@ -77,4 +87,32 @@ public class GrupoCotacao {
         return grupoProduto;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setGrupoProduto(GrupoProduto grupoProduto) {
+        this.grupoProduto = grupoProduto;
+    }
+
+    public Set<Cotacao> getCotacoes() {
+        return cotacoes;
+    }
+
+    public void setCotacoes(Set<Cotacao> cotacoes) {
+        this.cotacoes = cotacoes;
+    }
+
+    public Set<GrupoCotacaoProduto> getGrupoCotacaoProdutos() {
+        return grupoCotacaoProdutos;
+    }
+
+    public void setGrupoCotacaoProdutos(Set<GrupoCotacaoProduto> grupoCotacaoProdutos) {
+        this.grupoCotacaoProdutos = grupoCotacaoProdutos;
+    }
 }
+

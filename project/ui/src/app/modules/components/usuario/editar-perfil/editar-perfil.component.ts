@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CotacaoService } from '@services/cotacao.service';
-import { ProdutoService } from '@services/produto.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -10,15 +8,12 @@ import { Router } from '@angular/router';
 import { 
   Usuario
 } from '@models/index';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-editar-perfil',
   templateUrl: './editar-perfil.component.html',
-  styleUrls: ['./editar-perfil.component.scss'],
-  providers: [
-    CurrencyPipe
-  ]
+  styleUrls: ['./editar-perfil.component.scss']
 })
 export class EditarPerfilComponent implements OnInit {
 

@@ -31,6 +31,7 @@ public class RequisicaoProduto {
     @Column(nullable = false)
     private float quantidade;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_grupo_cotacao_produto", referencedColumnName = "id")
     private GrupoCotacaoProduto grupoCotacaoProduto;

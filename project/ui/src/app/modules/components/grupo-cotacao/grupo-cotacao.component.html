@@ -1,7 +1,7 @@
 <app-title [title]="'Gerenciar cotação'">
     <div class="row justify-content-end p-0">
         <div class="col-auto p-0">
-            <app-button [btnClass]="'btn-primary'" (click)="onAdicionarFornecedor()">
+            <app-button [btnClass]="'btn-primary'" (click)="onAdicionarCotacao()">
                 Adicionar forncedor
             </app-button>
         </div>
@@ -22,8 +22,7 @@
                                 <h4>Prazo solicitado: </h4>
                             </div>
                             <div class="col">
-                                <!-- <h4 class="header-info">{{ prazo | date: 'dd/MM/yyyy' }}</h4> -->
-                                <h4 class="header-info">{{ prazo  }}</h4>
+                                <h4 class="header-info">{{ grupoCotacao.prazoSolicitado | date: 'dd/MM/yyyy' }}</h4>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -31,7 +30,15 @@
                                 <h4>Código:</h4>
                             </div>
                             <div class="col-auto">
-                                <h4 class="header-info">0000</h4>
+                                <h4 class="header-info">{{ grupoCotacao.id }}</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-auto me-1">
+                                <h4>Grupo produto:</h4>
+                            </div>
+                            <div class="col-auto">
+                                <h4 class="header-info">{{ grupoCotacao.grupoProduto?.descricao }}</h4>
                             </div>
                         </div>
                     </div>
@@ -52,25 +59,25 @@
 
                 <!-- Produtos lista -->
                 <div class="row py-1 mt-1 produto-row" 
-                *ngFor="let produto of listaProdutos" >
+                *ngFor="let mapProduto of getProdutos()" >
                     <div class="col">
                         <div class="row">
                             <div class="col align-items-center">
-                                <span class="span-value">Produto</span>
+                                <span class="span-value">{{ mapProduto.produto.descricao }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col me-4">
                         <div class="row justify-content-end">
                             <div class="col-auto align-items-center">
-                                <span class="span-value ms-auto">1000</span>
+                                <span class="span-value ms-auto">{{ mapProduto.quantidadeTotal }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-1">
                         <div class="row">
                             <div class="col">
-                                <span class="span-value">g</span>
+                                <span class="span-value">{{ getUnMedida(mapProduto.produto.unMedida) }}</span>
                             </div>
                         </div>
                     </div>
@@ -79,40 +86,47 @@
                 <div class="row mt-4">
                     <label class="form-label">Fornecedor escolhido</label>
                     <ng-select 
-                        [items]="listaFornecedores" 
+                        [items]="listaFornecedoresEmCotacao" 
                         bindLabel="nomeFantasia" 
-                        bindValue="id" [multiple]="false"
+                        bindValue="id" 
+                        [multiple]="false"
                         [searchable]="true" 
                         [closeOnSelect]="true" 
-                        placeholder="Selecionar fornecedor" required>
-                        <!-- (change)="onSelecionarFornecedor()" -->
+                        placeholder="Selecionar fornecedor" 
+                        formControlName="fornecedorSelecionado"
+                        required>
                     </ng-select>
                 </div>
                 <!-- Observações -->
                 <div class="row mt-3">
                     <label for="observacoesTextArea" class="form-label">Observações</label>
-                    <textarea class="form-control px-2" id="observacoesTextArea" style="height: 150px;"></textarea>
-                    <!-- formControlName="observacoes" -->
+                    <textarea class="form-control px-2" id="observacoesTextArea" style="height: 150px;" formControlName="observacoes"></textarea>
                 </div>
             </div> 
 
-            
-            <!-- Fornecedores -->
-            <div class="col-4 ps-3" *ngFor="let fornecedor of listaFornecedores"  (mouseover)="show = true" (mouseout)="show = false"> 
+            <!-- Cotações -->
+            <div class="col-4 ps-3" *ngFor="let cotacao of grupoCotacao.cotacoes"> 
                 <div class="header pb-2">
                     <div class="row">
-                        <!-- <i class="bi bi-x" [ngClass]="{'visually-hidden': !show}"></i> -->
                         <div class="col">
-                            <ng-select [items]="listaFornecedores" bindLabel="nomeFantasia" bindValue="id" [multiple]="false"
-                                [searchable]="true" [closeOnSelect]="true" placeholder="Selecionar fornecedor" required>
-                                <!-- (change)="onSelecionarFornecedor()" -->
+                            <ng-select [items]="listaFornecedores" 
+                                bindLabel="nomeFantasia" 
+                                bindValue="id" 
+                                [multiple]="false"
+                                [searchable]="true" 
+                                [closeOnSelect]="true" 
+                                placeholder="Selecionar fornecedor"
+                                [(ngModel)]="cotacao?.fornecedor.id" 
+                                [ngModelOptions]="{standalone: true}"
+                                (change)="onSelecionarFornecedor()"
+                                required>
                             </ng-select>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
                         <div class="col-auto">
                             <span class="span-label me-1">Cnpj:</span>
-                            <span class="span-value">00.000.000/0001-00</span>
+                            <span class="span-value">{{ cotacao.fornecedor.cnpj }}</span>
                         </div>
                         <div class="col-auto">
                             <app-button [btnClass]="'btn-tertiary-primary'">
@@ -133,21 +147,23 @@
                         <span class="span-label flex-col">Subtotal</span>
                     </div>
                 </div>
-                <div class="row w-100" *ngFor="let produto of listaProdutos">
+                <div class="row w-100" *ngFor="let produtoCotado of cotacao.produtos; let i = index;">
                     <div class="col py-1 pe-1">
                         <input type="text" 
-                            class="form-control" 
-                            [(ngModel)]="valor" 
+                            id="i"
+                            class="form-control text-center" 
+                            [(ngModel)]="produtoCotado.precoUnitario"
                             [ngModelOptions]="{standalone: true}"
-                            (click)="setValor()" 
-                            (focusout)="onTransformarValor()" 
-                            [mask]="inputing ? '0*,00': ''"
-                            [dropSpecialCharacters]="false">
+                            (click)="converterValorParaStringFloat(produtoCotado)" 
+                            (focusout)="converterValorParaStringMoeda(produtoCotado)" 
+                            [mask]="produtoCotado.inputing ? '0*,00': ''"
+                            [dropSpecialCharacters]="false"
+                            required>
                     </div>
                     <div class="col p-1">
                         <input type="text" 
                             class="form-control text-center" 
-                            [(ngModel)]="aliqIpi" 
+                            [(ngModel)]="produtoCotado.aliquotaIpi" 
                             [ngModelOptions]="{standalone: true}"
                             mask="separator.2"
                             thousandSeparator="."
@@ -156,17 +172,9 @@
                     </div>
                     <div class="col py-1 ps-1">
                         <input type="text" 
-                            class="form-control" 
-                            readonly
-                            >
-                    </div>
-                </div>
-                <div class="row mt-3 justify-content-between">
-                    <div class="col-auto">
-                        <span class="span-label">Desconto</span>
-                    </div>
-                    <div class="col-auto">
-                        <span class="span-value">R$ 0,00</span>
+                            class="form-control text-end"
+                            [value]="getProdutoSubTotal(produtoCotado)"
+                            readonly>
                     </div>
                 </div>
                 <div class="row my-1 justify-content-between">
@@ -174,7 +182,18 @@
                         <span class="span-label">Frete</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value">R$ 0,00</span>
+                        <span class="span-value">{{ transformarValor(cotacao.frete) }}</span>
+                    </div>
+                </div>
+                <div class="row mt-3 justify-content-between">
+                    <div class="col-auto">
+                        <span class="span-label">Desconto</span>
+                    </div>
+                    <div class="col-auto">
+                        <span class="span-value">
+                            <span class="me-1">-</span>
+                            {{ transformarValor(cotacao.desconto) }}
+                        </span>
                     </div>
                 </div>
                 <hr>
@@ -183,7 +202,7 @@
                         <span class="span-label">Total</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-label">R$ 0,00</span>
+                        <span class="span-label">{{ calcularTotalCotacao(cotacao) }}</span>
                     </div>
                 </div>
                 <div class="row mt-3 justify-content-between">
@@ -191,7 +210,7 @@
                         <span class="span-label">Transportadora</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value"></span>
+                        <span class="span-value">{{ cotacao.transportadora }}</span>
                     </div>
                 </div>
                 <div class="row mt-1 justify-content-between">
@@ -199,7 +218,7 @@
                         <span class="span-label">Meio de transporte</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value"></span>
+                        <span class="span-value">{{ cotacao.meioTransporte }}</span>
                     </div>
                 </div>
                 <div class="row mt-1 mb-3 justify-content-between">
@@ -207,7 +226,7 @@
                         <span class="span-label">Prazo fornecedor</span>
                     </div>
                     <div class="col-auto">
-                        <span class="span-value"></span>
+                        <span class="span-value">{{ cotacao.prazo | date: 'dd/MM/yyyy' }}</span>
                     </div>
                 </div>
                 <div class="row mt-1 mb-3 justify-content-between">
@@ -215,8 +234,7 @@
                         <span class="span-label">Formas pgto</span>
                     </div>
                     <div class="col-auto text-end">
-                        <!-- <span class="span-value d-block mt-1">À vista</span>
-                        <span class="span-value d-block mt-1">12x sem juros (s/ desconto)</span> -->
+                        <span class="span-value d-block mt-1" *ngFor="let formaPgto of cotacao.formasPgto?.split(',')">{{ formaPgto }}</span>
                     </div>
                 </div>
             </div>

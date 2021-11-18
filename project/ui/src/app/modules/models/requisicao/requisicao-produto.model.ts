@@ -1,4 +1,4 @@
-import { GrupoCotacaoProduto } from "@models/cotacao/grupo-cotacao-produto.model";
+import { GrupoCotacaoProduto } from "@models/grupo-cotacao/grupo-cotacao-produto.model";
 import { UnMedidaEnum } from "@models/enum";
 import { Produto } from "@models/produto.model";
 

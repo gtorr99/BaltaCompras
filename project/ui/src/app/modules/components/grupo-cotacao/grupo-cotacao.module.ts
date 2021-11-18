@@ -8,17 +8,17 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { RouterModule } from '@angular/router';
-import { CotacaoComponent } from './cotacao.component';
-import { CotacaoTabelaComponent } from './cotacao-tabela/cotacao-tabela.component';
-import { CotacaoRoutingModule } from './cotacao-routing.module';
+import { GrupoCotacaoComponent } from './grupo-cotacao.component';
+import { GrupoCotacaoTabelaComponent } from './grupo-cotacao-tabela/grupo-cotacao-tabela.component';
+import { GrupoCotacaoRoutingModule } from './grupo-cotacao-routing.module';
 import { CotacaoExternaComponent } from './cotacao-externa/cotacao-externa.component';
 
 @NgModule({
-    declarations: [ CotacaoComponent, CotacaoTabelaComponent, CotacaoExternaComponent ],
+    declarations: [ GrupoCotacaoComponent, GrupoCotacaoTabelaComponent, CotacaoExternaComponent ],
     imports: [
         CommonModule,
         SharedModule,
-        CotacaoRoutingModule,
+        GrupoCotacaoRoutingModule,
         FormsModule,
         ReactiveFormsModule,
         NgSelectModule,
@@ -27,4 +27,4 @@ import { CotacaoExternaComponent } from './cotacao-externa/cotacao-externa.compo
         RouterModule
     ]
 })
-export class CotacaoModule {}
+export class GrupoCotacaoModule {}

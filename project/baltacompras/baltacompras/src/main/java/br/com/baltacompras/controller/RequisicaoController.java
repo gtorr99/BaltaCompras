@@ -104,7 +104,7 @@ public class RequisicaoController {
         try {
             Requisicao requisicao = repositorio.getById(id);
             requisicao.setStatus(Status.DELETADO);
-            repositorio.delete(requisicao);
+            repositorio.save(requisicao);
             return true;
         } catch (Exception ex) {
             return false;

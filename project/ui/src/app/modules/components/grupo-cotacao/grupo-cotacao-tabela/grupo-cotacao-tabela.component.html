@@ -16,9 +16,9 @@
 <app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
 
 <div class="mb-5">
-    <ngx-datatable class="material expandable" 
+    <ngx-datatable class="material expandable"  [columnMode]="ColumnMode.force"
         #myTable [rows]="rows" [rowClass]="getRowClass"
-        [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
+         [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
         [count]="page.totalElements" [offset]="page.page" [limit]="page.size" [externalSorting]="true"
         [loadingIndicator]="loading" [messages]="messages" [reorderable]="false"
         (page)="carregarTabela($event)" (sort)="ordenar($event)">
@@ -45,23 +45,23 @@
                         </div>
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Prazo solicitado: </label>
-                            <span class="row-detail-item">{{ row.prazo | date: 'dd/MM/yyyy' }}</span>
+                            <span class="row-detail-item">{{ row.prazoSolicitado | date: 'dd/MM/yyyy' }}</span>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Comprador: </label>
-                            <span class="row-detail-item">{{ row.usuario.nome }}</span>
+                            <span class="row-detail-item">{{ row.usuario?.nome }}</span>
                         </div>
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Prazo fornecedor: </label>
-                            <span class="row-detail-item">{{ getCotacaoSelecionada(row).prazoFornecedor | date: 'dd/MM/yyyy' }}</span>
+                            <span class="row-detail-item">{{ getCotacaoSelecionada(row)?.prazo | date: 'dd/MM/yyyy' }}</span>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Fornecedor selecionado: </label>
-                            <span class="row-detail-item">{{ row.fornecedorSelecionado.nomeFantasia }}</span>
+                            <span class="row-detail-item">{{ getCotacaoSelecionada(row)?.fornecedor.nomeFantasia }}</span>
                         </div>
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Status: </label>
@@ -71,11 +71,11 @@
                     <div class="row justify-content-between mt-1">
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Cnpj: </label>
-                            <span class="row-detail-item">{{ row.fornecedorSelecionado.cnpj }}</span>
+                            <span class="row-detail-item">{{ getCotacaoSelecionada(row)?.fornecedor.cnpj }}</span>
                         </div>
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Total: </label>
-                            <span class="row-detail-item"><span class="me-1">R$</span>{{ getCotacaoSelecionada(row).total }}</span>
+                            <span class="row-detail-item"><span class="me-1">R$</span>{{ calcularTotalCotacaoSelecionada(row) }}</span>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
@@ -121,7 +121,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Prazo" prop="prazo" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+        <ngx-datatable-column name="Prazo" prop="prazoSolicitado" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
@@ -135,7 +135,7 @@
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="row['usuario']" ngx-datatable-cell-template>
-                <span class="mobile-hidden">{{ value.nome }}</span>
+                <span class="mobile-hidden">{{ value?.nome }}</span>
             </ng-template>
         </ngx-datatable-column>
 
@@ -144,10 +144,10 @@
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
-            <ng-template let-row="row" let-value="row['fornecedorSelecionado']" ngx-datatable-cell-template>
+            <ng-template let-row="row" let-value="row['cotacoes']" ngx-datatable-cell-template>
                 <div class="d-flex justify-content-between">
                     <span class="mobile-hidden">
-                        {{ value?.nomeFantasia }}
+                        {{ getCotacaoSelecionada(row)?.fornecedor?.nomeFantasia }}
                     </span>
                 </div>
             </ng-template>
@@ -159,16 +159,20 @@
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="d-flex">
-                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value.split('_') }}</div>
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value.replace('_', ' ') }}</div>
                     <div class="ms-auto d-flex align-items-center">
                         <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" (click)="onEditar(row)">
-                                    <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
-                            <li><a class="dropdown-item" (click)="onCancelar(row)">
-                                    <i class="bi bi-x-lg me-2"></i>Cancelar</a></li>
+                            <li><app-button [btnClass]="'dropdown-item'" (action)="onEditar(row)" [isDisabled]="row.status != 'ABERTO' && row.status != 'CANCELADO'">
+                                    <i class="bi bi-pencil-square me-2"></i>
+                                    {{ row.status == 'CANCELADO' ? 'Detalhes' : 'Editar'}}
+                                </app-button></li>
+                            <li><app-button [btnClass]="'dropdown-item'" (action)="onCancelar(row)" [isDisabled]="row.status != 'ABERTO'">
+                                    <i class="bi bi-x-lg me-2 text-danger"></i>
+                                    <span class="text-danger">Cancelar</span>
+                                </app-button></li>
                         </ul>
                     </div>
                 </div>

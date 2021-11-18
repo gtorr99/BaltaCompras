@@ -131,6 +131,7 @@ CREATE TABLE grupo_cotacao (
     ,id_grupo_produto INT NOT NULL
     ,observacoes TEXT
     ,id_usuario INT
+    ,status INT
     ,CONSTRAINT pk__grupo_cotacao PRIMARY KEY AUTO_INCREMENT (id)
 );
 
@@ -149,6 +150,7 @@ CREATE TABLE cotacao (
     ,selecionada BOOL
     ,transportadora VARCHAR(255)
     ,meio_transporte VARCHAR(255)
+    ,forma_pgto VARCHAR(255)
     ,status INT NOT NULL
     ,observacoes TEXT
     ,id_fornecedor INT NOT NULL
@@ -161,6 +163,7 @@ CREATE TABLE grupo_cotacao_produto_cotacao (
     ,id_grupo_cotacao_produto INT
     ,aliquota_ipi REAL(10, 2)
     ,preco_unitario REAL(10, 2)
+    ,disponivel BOOL
     ,CONSTRAINT pk__grupo_cotacao_produto_cotacao PRIMARY KEY AUTO_INCREMENT (id_cotacao, id_grupo_cotacao_produto)
 );
 
