@@ -5,19 +5,23 @@ import { NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   Produto,
   Cotacao,
   GrupoCotacao,
-  Fornecedor
+  Fornecedor,
+  RequisicaoProduto
 } from '@models/index';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FornecedorService } from '@services/fornecedor.service';
 import { UnMedidaEnum } from '@models/enum';
 import { Email } from '@models/email.model';
 import { EmailComponent } from '@shared/components/email/email.component';
+import { Subscription } from 'rxjs';
+import { GrupoCotacaoProduto } from '@models/grupo-cotacao/grupo-cotacao-produto.model';
+import { GrupoCotacaoProdutoCotacao } from '@models/grupo-cotacao/grupo-cotacao-produto-cotacao.model';
 
 @Component({
   selector: 'app-cotacao-externa',
@@ -31,20 +35,20 @@ export class CotacaoExternaComponent implements OnInit {
 
   titulo: string;
   cotacaoExternaForm: FormGroup;
-  // listaProdutos: Produto[] = [];
-  listaProdutos: number[] = [1, 2, 3, 4, 5];
-  prazo = new Date();
+  cotacao: Cotacao = new Cotacao();
+  grupoCotacao: GrupoCotacao = new GrupoCotacao();
   hoje: NgbDateStruct = this.converterDateParaNgbDateStruct(new Date());
+
+  mapProdutos: Map<number, { produto: Produto, quantidadeTotal: number }> = new Map();
 
   /* Filtro */
   query: string = '';
-
-  valor: any;
-  inputing: boolean = false;
-  aliqIpi: any;
   email: Email;
+  prazo = new Date();
+  disponibilidadeLista = [{ nome: 'Disponível', id: true}, {nome: 'Indisponível', id: false}];
 
   private modalRef: NgbModalRef;
+  private routeSub: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,69 +56,86 @@ export class CotacaoExternaComponent implements OnInit {
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private currencyPipe: CurrencyPipe,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    let id = null;
+    this.routeSub = this.route.params.subscribe(params => {
+      id = params['id'];
+      if (id == null) {
+        this.router.navigate(['**']);
+      }
+      this.grupoCotacaoService.getCotacaoById(id).subscribe(cot => {
+        this.cotacao = new Cotacao(cot[0]);
+        console.log(this.cotacao);
+        if (!this.cotacao.produtos) {
+          this.router.navigate(['**']);
+        } else {
+          this.titulo = "Bem vindo, " + this.cotacao.fornecedor.nomeFantasia + "!";
+          this.cotacao.produtos.forEach(p => {
+            p = new GrupoCotacaoProdutoCotacao(p);
+            p.inputing = false;
+            p.precoUnitario = this.converterValorParaStringFloat(p);
+            this.converterValorParaStringMoeda(p);
+
+            p.grupoCotacaoProduto = new GrupoCotacaoProduto(p.grupoCotacaoProduto);
+            p.grupoCotacaoProduto.requisicaoProduto.forEach(rp => rp = new RequisicaoProduto(rp));
+
+            p.grupoCotacaoProduto.requisicaoProduto.forEach(reqProd => {
+              this.mapProdutos.set(reqProd.produto.id, { produto: new Produto(reqProd.produto), quantidadeTotal: p.grupoCotacaoProduto.quantidadeTotal });
+            });
+          });
+        }
+      });
+    });
+
     this.cotacaoExternaForm = this.formBuilder.group({
       prazoFornecedor: ['', Validators.required],
       observacoes: ['', Validators.maxLength(65.000)]
     });
-    this.carregarProdutos();
   }
 
-  carregarProdutos() {
+  getProdutos() {
+    return Array.from(this.mapProdutos.values());
   }
 
-  filtrar(filtro: string) {
-    this.query = filtro;
-    this.carregarProdutos();
-  }
-
-  onTransformarValor() {
-    this.inputing = false;
-    let v = this.valor.toString();
-    v = v.replace(',', '.');
-    this.valor = parseFloat(v);
-    this.valor = this.currencyPipe.transform(this.valor, 'BRL', 'R$', '1.2-2', 'pt');
-  }
-
-  setValor() {
-    this.inputing = true;
-    if (this.valor) {
-      let v = this.valor.toString();
+  converterValorParaStringFloat(gcpc: GrupoCotacaoProdutoCotacao): string {
+    gcpc.inputing = true;
+    if (gcpc.precoUnitario) {
+      let v = gcpc.precoUnitario.toString();
       v = v.replace('R$', '');
       v = v.replace(' ', '');
       v = v.replace('.', '');
-      this.valor = v;
+      gcpc.precoUnitario = v;
+      return gcpc.precoUnitario.toString();
     }
+    return '';
+  }
+
+  converterValorParaStringMoeda(gcpc: GrupoCotacaoProdutoCotacao) {
+    gcpc.inputing = false;
+    let v = gcpc.precoUnitario.toString();
+    v = v.replace(',', '.');
+    v = v.replace(' ', '');
+    gcpc.precoUnitario = parseFloat(v);
+    gcpc.precoUnitario = this.currencyPipe.transform(gcpc.precoUnitario, 'BRL', 'R$', '1.2-2', 'pt');
+  }
+
+  transformarValor(valor: number | string): string {
+    return this.currencyPipe.transform(valor, 'BRL', 'R$', '1.2-2', 'pt');
   }
 
   onSalvar(event: any) {
-    if (event.type == "submit") {
-      this.cotacaoExternaForm.markAllAsTouched();
-
-      if (!this.cotacaoExternaForm.valid) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.toastrService.error("Todos os campos obrigatórios devem ser preenchidos");
-      } else {
-        this.grupoCotacaoService.alterar(null).subscribe(() => {
-          this.toastrService.success("Cotação enviada com successo!");
-        });
-      }
-    }
-  }
-
-  onCancelar(event: any) {
-    event.preventDefault();
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar edição";
-    this.modalRef.componentInstance.message = "Todas as alterações serão perdidas. Você tem certeza que deseja cancelar?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.router.navigate(['/cotacao']);
-      }
+    this.cotacao.produtos.forEach(p => {
+      p.precoUnitario = this.converterValorParaStringFloat(p);
+      p.precoUnitario = parseFloat(p.precoUnitario.toString());
+    });
+    this.cotacao.observacoes = this.cotacaoExternaForm.get('observacoes').value;
+    this.cotacao.prazo = this.converterNgbDateStructParaDate(this.cotacaoExternaForm.get('prazoFornecedor').value);
+    this.grupoCotacaoService.alterarCotacao(this.cotacao).subscribe(() => {
+      this.toastrService.success("Cotação enviada com sucesso!");
     });
   }
 
@@ -125,8 +146,32 @@ export class CotacaoExternaComponent implements OnInit {
     this.modalRef.closed.subscribe(response => {
       if (response) {
         this.cotacaoExternaForm.reset();
+        this.cotacao.produtos.forEach(p => {
+            p.aliquotaIpi = 0;
+            p.precoUnitario = 0;
+            p.disponivel = true;
+          });
       }
     });
+  }
+
+  calcularTotalCotacao(cot: Cotacao): string {
+    let total = 0;
+    cot.produtos?.forEach(p => {
+      total += parseFloat(this.converterValorParaStringFloat(p)) * p.grupoCotacaoProduto.quantidadeTotal;
+    });
+    total += cot.frete;
+    total -= cot.desconto;
+    return this.transformarValor(total);
+  }
+
+  getProdutoSubTotal(produtoCotado: GrupoCotacaoProdutoCotacao): string {
+    this.converterValorParaStringFloat(produtoCotado);
+    return this.transformarValor(parseFloat(this.converterValorParaStringFloat(produtoCotado)) * produtoCotado.grupoCotacaoProduto.quantidadeTotal);
+  }
+
+  getUnMedida(unMedida: UnMedidaEnum | string) {
+    return UnMedidaEnum[unMedida];
   }
 
   verificarTamanhoTela(): boolean {

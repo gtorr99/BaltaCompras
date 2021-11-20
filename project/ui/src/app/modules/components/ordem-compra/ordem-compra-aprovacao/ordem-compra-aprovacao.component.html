@@ -1,25 +1,24 @@
 <app-title [title]="'Aprovar Ordem de Compra'">
-    <div class="row justify-content-end">
+    <!-- <div class="row justify-content-end">
         <div class="col-auto p-0">
             <app-button [btnClass]="'btn-outline-primary'" (click)="onDownload()">
                 Exportar CSV
             </app-button>
         </div>
-    </div>
+    </div> -->
 </app-title>
 
 <app-filter [atributos]="atributosPesquisa" [filtroAvancado]="true" (search)="filtrar($event)"></app-filter>
 
-<!-- <div class="mb-5">
-    <ngx-datatable class="material expandable" 
-        #myTable [rows]="rows" [rowClass]="getRowClass"
+<div class="mb-5">
+    <ngx-datatable class="material expandable" #myTable [rows]="rows" [rowClass]="getRowClass"
         [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [externalPaging]="true"
         [count]="page.totalElements" [offset]="page.page" [limit]="page.size" [externalSorting]="true"
-        [loadingIndicator]="loading" [messages]="messages" [reorderable]="false"
-        (page)="carregarTabela($event)" (sort)="ordenar($event)"> -->
+        [loadingIndicator]="loading" [messages]="messages" [reorderable]="false" (page)="carregarTabela($event)"
+        (sort)="ordenar($event)">
 
         <!-- Row Detail Template -->
-        <!-- <ngx-datatable-row-detail #myMobileDetailRow>
+        <ngx-datatable-row-detail #myMobileDetailRow>
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                 <div>
                     <h3>Informações</h3>
@@ -36,11 +35,11 @@
                     <div class="row justify-content-between mt-1">
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Grupo produto: </label>
-                            <span class="row-detail-item">{{ row.grupoProduto.descricao }}</span>
+                            <span class="row-detail-item">{{ getGrupoProduto(row) }}</span>
                         </div>
                         <div class="col-sm-auto">
                             <label class="form-label me-2">Prazo: </label>
-                            <span class="row-detail-item">{{ row.cotacao.prazoFornecedor | date: 'dd/MM/yyyy' }}</span>
+                            <span class="row-detail-item">{{ row.cotacao.prazo | date: 'dd/MM/yyyy' }}</span>
                         </div>
                     </div>
                     <div class="row justify-content-between mt-1">
@@ -79,6 +78,16 @@
                             <span class="row-detail-item">{{ row.status }}</span>
                         </div>
                     </div>
+                    <div class="row mt-1 mb-3 justify-content-between">
+                        <div class="col-auto">
+                            <span class="form-label">Formas pgto</span>
+                        </div>
+                        <div class="col-auto text-end">
+                            <span class="row-detail-item d-block mt-1"
+                                *ngFor="let formaPgto of row?.formasPgto?.split(',')">{{ formaPgto
+                                }}</span>
+                        </div>
+                    </div>
                 </div>
                 <h3 class="mt-4">Produtos</h3>
                 <div class="row mt-2 tb">
@@ -95,59 +104,63 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="align-items-center" *ngFor="let prod of row.cotacao.produtos">
+                            <tr class="align-items-center" *ngFor="let prod of getProdutos()">
                                 <th scope="row" class="ps-3">{{ prod.id }}</th>
                                 <td>{{ prod.descricao }}</td>
-                                <td class="text-end">{{ prod.quantidade }}</td>
+                                <td class="text-end">{{ prod.quantidadeTotal }}</td>
                                 <td class="text-center">{{ prod.unMedida }}</td>
                                 <td class="text-end"><span class="me-1">R$</span>{{ prod.precoUnitario }},00</td>
-                                <td class="text-center">{{ prod.aliqIpi }}<span class="ms-1">%</span></td>
+                                <td class="text-center">{{ prod.aliquotaIpi }}<span class="ms-1">%</span></td>
                                 <td class="text-end pe-3"><span class="me-1">R$</span>{{ prod.subtotal }},00</td>
                             </tr>
                         </tbody>
                     </table>
-                <div class="row w-100 mt-1 justify-content-end">
-                    <div class="col-12">
-                        <div class="row w-100 mb-1 ms-5 justify-content-end">
-                            <div class="col-auto  p-0">
-                                <label class="form-label me-2 d-block mb-1">Frete: </label>
+                    <div class="row w-100 mt-1 justify-content-end">
+                        <div class="col-12">
+                            <div class="row w-100 mb-1 ms-5 justify-content-end">
+                                <div class="col-auto  p-0">
+                                    <label class="form-label me-2 d-block mb-1">Frete: </label>
+                                </div>
+                                <div class="col-2  p-0">
+                                    <span class="row-detail-item d-block mb-2"><span class="me-1">R$</span>{{
+                                        row.cotacao.frete }},00</span>
+                                </div>
                             </div>
-                            <div class="col-2  p-0">
-                                <span class="row-detail-item d-block mb-2"><span class="me-1">R$</span>{{ row.cotacao.frete }},00</span>
+                            <div class="row w-100 mb-1 ms-5 justify-content-end">
+                                <div class="col-auto  p-0">
+                                    <label class="form-label me-2 d-block">Desconto: </label>
+                                </div>
+                                <div class="col-2  p-0">
+                                    <span class="row-detail-item d-block"><span>R$ -</span>{{ row.cotacao.desconto
+                                        }},00</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row w-100 mb-1 ms-5 justify-content-end">
-                            <div class="col-auto  p-0">
-                                <label class="form-label me-2 d-block">Desconto: </label>
-                            </div>
-                            <div class="col-2  p-0">
-                                <span class="row-detail-item d-block"><span>R$ -</span>{{ row.cotacao.desconto }},00</span>
-                            </div>
-                        </div>
-                        <div class="row w-100 mb-1 ms-5 justify-content-end">
-                            <div class="col-auto p-0">
-                                <label class="form-label me-2 d-block">Total: </label>
-                            </div>
-                            <div class="col-2 p-0">
-                                <label class="form-label d-block"><span class="form-label me-1">R$</span>{{ row.cotacao.total }},00</label>
+                            <div class="row w-100 mb-1 ms-5 justify-content-end">
+                                <div class="col-auto p-0">
+                                    <label class="form-label me-2 d-block">Total: </label>
+                                </div>
+                                <div class="col-2 p-0">
+                                    <label class="form-label d-block"><span class="form-label me-1">R$</span>{{
+                                        calcularTotalCotacao(row.cotacao) }},00</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                </div>
             </ng-template>
-        </ngx-datatable-row-detail> -->
-        
+        </ngx-datatable-row-detail>
+
         <!-- Column Templates -->
-        <!-- <ngx-datatable-column [width]="5" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+        <ngx-datatable-column [width]="5" [resizeable]="false" [sortable]="false" [draggable]="false"
+            [canAutoResize]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                <a [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
-                    (click)="toggleExpandRow(row)">
+                <a [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded"
+                    title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
                 </a>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nº Ordem" prop="id" >
+        <ngx-datatable-column name="Nº Ordem" prop="id">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span (click)="sort()">{{ column.name }}</span>
             </ng-template>
@@ -156,25 +169,26 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grupo Produto" prop="grupoProduto" >
+        <ngx-datatable-column name="Grupo Produto" prop="grupoProduto">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <span>{{ value.descricao }}</span>
+                <span>{{ getGrupoProduto(row) }}</span>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Prazo" prop="prazoFornecedor" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+        <ngx-datatable-column name="Prazo" prop="prazo" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
             <ng-template let-row="row" let-value="row['cotacao']" ngx-datatable-cell-template>
-                <span class="mobile-hidden">{{ value?.prazoFornecedor | date: 'dd/MM/yyyy' }}</span>
+                <span class="mobile-hidden">{{ value?.prazo | date: 'dd/MM/yyyy' }}</span>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Comprador" prop="usuario" [sortable]="getWindowSize()" headerClass="header-mobile-hidden">
+        <ngx-datatable-column name="Comprador" prop="usuario" [sortable]="getWindowSize()"
+            headerClass="header-mobile-hidden">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span class="mobile-hidden" (click)="sort()">{{ column.name }}</span>
             </ng-template>
@@ -203,7 +217,8 @@
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="d-flex">
-                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value.split('_') }}</div>
+                    <div class="status-tag mobile-hidden" [ngClass]="setStatusTag(value)">{{ value.replace('_', ' ') }}
+                    </div>
                     <div class="ms-auto d-flex align-items-center">
                         <a class="dropdown-toggle no-icon context-menu" data-bs-toggle="dropdown">
                             <i class="bi bi-three-dots-vertical"></i>
@@ -225,4 +240,4 @@
             </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
-</div> -->
+</div>

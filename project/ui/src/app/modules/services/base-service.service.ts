@@ -35,7 +35,7 @@ export abstract class BaseService<T extends BaseEntity> {
         return this.httpClient.delete<boolean>(`${baseUrl}/${this.resourceUrl}/excluir/${id}`);
     }
 
-    enviarEmail(email: Email, id: number = null): Observable<any> {
-        return this.httpClient.put(`${baseUrl}/${this.resourceUrl}/enviar-email/${id}`, email);
+    enviarEmail(link: string, destinatarios: string, mensagem: string, assunto: string): Observable<any> {
+        return this.httpClient.post<any>(`${baseUrl}/${this.resourceUrl}/email-para-fornecedor?link=${link}&destinatarios=${destinatarios}&mensagem=${mensagem}&assunto=${assunto}`, null);
     }
 }

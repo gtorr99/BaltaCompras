@@ -1,26 +1,25 @@
 package br.com.baltacompras.controller;
 
+import java.sql.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.baltacompras.model.enums.Status;
+import br.com.baltacompras.serviceimplement.Email;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.baltacompras.model.OrdemCompra;
 import br.com.baltacompras.repository.OrdemCompraCustomRepository;
 import br.com.baltacompras.repository.OrdemCompraRepository;
 
 @RestController
-@RequestMapping("/ordemcompra")
+@RequestMapping("/ordem-compra")
 public class OrdemCompraController {
     @Autowired
     private OrdemCompraRepository repositorio;
@@ -28,9 +27,23 @@ public class OrdemCompraController {
     @Autowired
     private OrdemCompraCustomRepository customRepo;
 
+    @Autowired
+    private Email email;
+
     @GetMapping("/listar")
     public List<OrdemCompra> listar() {
         return repositorio.findAll();
+    }
+
+     @GetMapping("/listar-paginado")
+    public Page<OrdemCompra> listarPaginado(Pageable page) {
+        return repositorio.findAll(page);
+    }
+
+    @PostMapping("/salvar")
+    public void salvar(@RequestBody OrdemCompra ordemCompra){
+        ordemCompra.setStatus(Status.ABERTO);
+        OrdemCompra oc = repositorio.save(ordemCompra);
     }
 
     @GetMapping("/filtrar")
@@ -55,20 +68,39 @@ public class OrdemCompraController {
         return customRepo.filtrar(id, dateInicio, dateFim, tipoCompra, status, observacoes);
     }
 
-    @PostMapping
-    public void salvar(@RequestBody OrdemCompra ordemCompra) {
+    @PutMapping("/cancelar/{id}")
+    public Boolean cancelar(@PathVariable Integer id) {
+        OrdemCompra ordemCompra = repositorio.getById(id);
+        if (ordemCompra.getId() > 0 && ordemCompra.getStatus() == Status.ABERTO) {
+            ordemCompra.setStatus(Status.CANCELADO);
+            repositorio.save(ordemCompra);
+            return true;
+        }
+        return false;
+    }
+
+    @PutMapping("/aprovar/{id}")
+    public void aprovar(@PathVariable Integer id) throws Exception {
+        OrdemCompra ordemCompra = repositorio.getById(id);
+        ordemCompra.setStatus(Status.APROVADO);
+        ordemCompra.getCotacao().getGrupoCotacao().setStatus(Status.CONCLUIDO);
+        repositorio.save(ordemCompra);
+        String[] destinatarios = { "gabriel.guimaraes6@fatec.sp.gov.br" };
+        emailFornecedor(destinatarios, id);
+    }
+
+    @PutMapping("/reprovar/{id}")
+    public void reprovar(@PathVariable Integer id) {
+        OrdemCompra ordemCompra = repositorio.getById(id);
+        ordemCompra.setStatus(Status.REPROVADO);
+        ordemCompra.getCotacao().getGrupoCotacao().setStatus(Status.REPROVADO);
         repositorio.save(ordemCompra);
     }
 
-    @PutMapping
-    public void alterar(@RequestBody OrdemCompra ordemCompra) {
-        if (ordemCompra.getId() > 0) {
-            repositorio.save(ordemCompra);
-        }
-    }
-
-    @DeleteMapping
-    public void excluir(@RequestBody OrdemCompra ordemCompra) {
-        repositorio.delete(ordemCompra);
+    public void emailFornecedor(String[] destinatarios, Integer id) throws Exception{
+        String mensagem = "<h4>Ordem de compra - " + id + " aprovada!</h4>";
+        String assunto = "Ordem de compra aprovada";
+        String arquivo = null;
+        email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
     }
 }

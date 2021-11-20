@@ -12,7 +12,7 @@ const routes: Routes = [
         component: GrupoCotacaoComponent
     },
     {
-        path: 'cotacao-fornecedor',
+        path: 'cotacao-fornecedor/:id',
         component: CotacaoExternaComponent
     },
     {

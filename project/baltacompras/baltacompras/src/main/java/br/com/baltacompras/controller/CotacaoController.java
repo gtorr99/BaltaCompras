@@ -37,6 +37,7 @@ public class CotacaoController {
     @And({
             @Spec(path = "gc.id", params = "grupoCotacao", spec = Equal.class),
             @Spec(path = "selecionada", params = "selecionada", spec = Equal.class),
+            @Spec(path = "id", params = "id", spec = Equal.class),
     })
     interface CotacaoSpec<Cotacao> extends NotDeletedEntity<Cotacao> {
     }
@@ -70,15 +71,15 @@ public class CotacaoController {
     public void alterar(@RequestBody Cotacao cotacao){
         if(cotacao.getId()>0){
             Cotacao cot = repositorio.getById(cotacao.getId());
-            cotacao.getProdutos().forEach(p -> { p.getId().setIdCotacao(cot.getId()); p.setCotacao(cot);});
 
             cot.setFormasPgto(cotacao.getFormasPgto());
             cot.setDesconto(cotacao.getDesconto());
             cot.setStatus(Status.EM_PROCESSAMENTO);
             cot.setFornecedor(cotacao.getFornecedor());
             cot.setProdutos(cotacao.getProdutos());
+            cotacao.setGrupoCotacao(cot.getGrupoCotacao());
 
-            repositorioGCPC.saveAll(cotacao.getProdutos());
+            repositorioGCPC.saveAll(cot.getProdutos());
             repositorio.save(cotacao);
         }
     }

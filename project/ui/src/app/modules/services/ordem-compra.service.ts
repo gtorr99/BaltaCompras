@@ -11,7 +11,7 @@ export class OrdemCompraService extends BaseService<OrdemCompra> {
     }
 
     cancelar(id: number): Observable<boolean> {
-        return this.httpClient.put<boolean>(`http://localhost:8080/cotacao/cancelar/${id}`, null);
+        return this.httpClient.put<boolean>(`http://localhost:8080/ordem-compra/cancelar/${id}`, null);
     }
 
     aprovar(id: number): Observable<any> {

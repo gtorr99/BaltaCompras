@@ -1,14 +1,14 @@
 <app-title [title]="'Gerenciar cotação'">
     <div class="row justify-content-end p-0">
         <div class="col-auto p-0">
-            <app-button [btnClass]="'btn-primary'" (click)="onAdicionarCotacao()">
+            <app-button [btnClass]="'btn-primary'" (action)="onAdicionarCotacao()" [isDisabled]="!isNew">
                 Adicionar forncedor
             </app-button>
         </div>
     </div>
 </app-title>
 
-<form [formGroup]="grupoCotacaoForm" (ngSubmit)="onSalvar($event)" (keydown)="onSalvar($event)" class="needs-validation" novalidate>
+<form [formGroup]="grupoCotacaoForm" class="needs-validation" novalidate>
 
     <div class="container h-scroll">
         <div class="row h-scroll-row">
@@ -86,7 +86,7 @@
                 <div class="row mt-4">
                     <label class="form-label">Fornecedor escolhido</label>
                     <ng-select 
-                        [items]="listaFornecedoresEmCotacao" 
+                        [items]="listaFornecedores" 
                         bindLabel="nomeFantasia" 
                         bindValue="id" 
                         [multiple]="false"
@@ -172,7 +172,7 @@
                     </div>
                     <div class="col py-1 ps-1">
                         <input type="text" 
-                            class="form-control text-end"
+                            class="form-control text-center"
                             [value]="getProdutoSubTotal(produtoCotado)"
                             readonly>
                     </div>
@@ -250,15 +250,18 @@
         </div>
         <div class="col-auto">
             <app-button [btnClass]="'btn-outline-danger me-1 me-md-2'"
-                (click)="onCancelar($event)">
+                (action)="onCancelar($event)">
                 Cancelar
             </app-button>
         </div>
         <div class="col-auto">
-            <app-button [btnClass]="'btn-outline-primary me-1 me-md-2'" (click)="onEnviarEmail()">Enviar email</app-button>
+            <app-button [btnClass]="'btn-outline-primary me-1 me-md-2'" (action)="onEnviarEmail()">Enviar email</app-button>
         </div>
         <div class="col-auto">
-            <app-button [btnClass]="'btn-primary'" type="submit">Nova ordem de compra</app-button>
+            <app-button [btnClass]="'btn-primary me-1 me-md-2'" (action)="onSalvar($event)">Salvar</app-button>
+        </div>
+        <div class="col-auto">
+            <app-button [btnClass]="'btn-primary'" (action)="gerarOrdem()">Nova ordem de compra</app-button>
         </div>
     </div>
 </form>

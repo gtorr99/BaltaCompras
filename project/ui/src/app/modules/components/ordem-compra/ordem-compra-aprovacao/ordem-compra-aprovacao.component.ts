@@ -9,6 +9,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
+import { GrupoCotacaoProdutoCotacao } from '@models/grupo-cotacao/grupo-cotacao-produto-cotacao.model';
 
 @Component({
   selector: 'app-ordem-compra-aprovacao',
@@ -23,7 +24,9 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
   query: string = '';
   filterQuery: string = '';
   sortQuery: string = '';
-  defaultStatus: string = '';
+  defaultStatus: string = 'status=ABERTO';
+
+  mapProdutos: Map<number, ProdutoOrdem> = new Map();
 
   // Tabela
   @ViewChild('myTable') table: any;
@@ -107,7 +110,7 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
   carregarTabela(pageEvent: any = null) {
     this.setQuery();
     this.ordemCompraService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<OrdemCompra>) => {
-      // this.atualizarTabela(response);
+      this.atualizarTabela(response);
     });
   }
 
@@ -115,6 +118,21 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
     this.page = response;
     this.rows = [...response.content];
     this.loading = false;
+    this.rows.forEach(oc => {
+      oc.cotacao.produtos.forEach(p => {
+        p.grupoCotacaoProduto.requisicaoProduto.forEach(reqProd => {
+          this.mapProdutos.set(reqProd.produto.id, new ProdutoOrdem({
+            id: p.grupoCotacaoProduto.id,
+            aliquotaIpi: parseFloat(p.aliquotaIpi.toString()),
+            descricao: reqProd.produto.descricao,
+            unMedida: this.getUnMedida(reqProd.produto.unMedida),
+            quantidadeTotal: p.grupoCotacaoProduto.quantidadeTotal,
+            precoUnitario: parseFloat(p.precoUnitario.toString()),
+            subtotal: this.getProdutoSubTotal(p)
+          }))
+        })
+      })
+    });
   }
 
   ordenar(event: any) {
@@ -136,12 +154,12 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
 
   onCancelar(ordemCompra: OrdemCompra) {
     this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar cotação";
-    this.modalRef.componentInstance.message = "Ao prosseguir, a cotação será cancelada. Você tem certeza que deseja prosseguir?";
+    this.modalRef.componentInstance.title = "Cancelar ordem de compra";
+    this.modalRef.componentInstance.message = "Ao prosseguir, a ordem de compra será cancelada. Você tem certeza que deseja prosseguir?";
     this.modalRef.closed.subscribe(response => {
       if (response) {
         this.ordemCompraService.cancelar(ordemCompra.id).subscribe(() => {
-          this.toastrService.success("Cotação cancelada!");
+          this.toastrService.success("Ordem cancelada!");
           this.carregarTabela();
         });
       }
@@ -166,20 +184,32 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
 
   }
 
-  onAprovar(oc: OrdemCompra) {
-    this.ordemCompraService.aprovar(oc.id).subscribe(() => this.carregarTabela());
+  getProdutos() {
+    return Array.from(this.mapProdutos.values());
   }
 
-  onReprovar(oc: OrdemCompra) {
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar ordem de compra";
-    this.modalRef.componentInstance.message = "Ao prosseguir, a requisição será cancelada. Você tem certeza que deseja prosseguir?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.ordemCompraService.reprovar(oc.id).subscribe(() => this.carregarTabela());
-      }
-    });
+  getGrupoProduto(ordemCompra: OrdemCompra): string {
+    return ordemCompra.cotacao.produtos[0].grupoCotacaoProduto.requisicaoProduto[0].produto.grupoProduto.descricao;
   }
+
+  calcularTotalCotacao(cot: Cotacao): number {
+    let total = 0;
+    cot.produtos?.forEach(p => {
+      total += parseFloat(p.precoUnitario.toString()) * p.grupoCotacaoProduto.quantidadeTotal;
+    });
+    total += cot.frete;
+    total -= cot.desconto;
+    return total;
+  }
+
+  getProdutoSubTotal(produtoCotado: GrupoCotacaoProdutoCotacao): number {
+    return parseFloat(produtoCotado.precoUnitario.toString()) * produtoCotado.grupoCotacaoProduto.quantidadeTotal;
+  }
+
+  getUnMedida(unMedida: UnMedidaEnum | string) {
+    return UnMedidaEnum[unMedida];
+  }
+
 
   setStatusTag(status: any): string {
     this.statusColor = 'default'
@@ -213,5 +243,40 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
     params.push(this.sortQuery);
     this.query = params.join('&');
     console.log(this.query);
+  }
+
+  onAprovar(oc: OrdemCompra) {
+    this.ordemCompraService.aprovar(oc.id).subscribe(() =>{
+      this.carregarTabela();
+      this.toastrService.success("Ordem aprovada!");
+    });
+  }
+
+  onReprovar(oc: OrdemCompra) {
+    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+    this.modalRef.componentInstance.title = "Reprovar ordem de compra";
+    this.modalRef.componentInstance.message = "Ao prosseguir, a ordem será reprovada. Você tem certeza que deseja prosseguir?";
+    this.modalRef.closed.subscribe(response => {
+      if (response) {
+        this.ordemCompraService.reprovar(oc.id).subscribe(() => {
+          this.carregarTabela();
+          this.toastrService.success("Ordem reprovada!"); this.carregarTabela()
+        });
+      }
+    });
+  }
+}
+
+class ProdutoOrdem {
+  id: number;
+  descricao: string;
+  unMedida: string;
+  precoUnitario: number;
+  aliquotaIpi: number;
+  quantidadeTotal: number;
+  subtotal: number;
+
+  constructor(data?: Partial<ProdutoOrdem>) {
+    Object.assign(this, data);
   }
 }

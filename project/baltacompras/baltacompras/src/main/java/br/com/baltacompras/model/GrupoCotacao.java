@@ -44,12 +44,12 @@ public class GrupoCotacao {
 
     public GrupoCotacao() {}
 
-    public GrupoCotacao(Date prazoSolicitado, GrupoProduto grupoProduto) {
+    public GrupoCotacao(Date prazoSolicitado, GrupoProduto grupoProduto, Usuario usuario) {
         this.data = new Date();
         this.prazoSolicitado = prazoSolicitado;
         this.grupoProduto = grupoProduto;
         this.status = Status.ABERTO;
-        // ToDo - Setar usuário logado
+        this.usuario = usuario;
     }
 
     public Integer getId() {

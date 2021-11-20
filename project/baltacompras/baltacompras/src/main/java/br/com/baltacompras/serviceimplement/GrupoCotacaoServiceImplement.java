@@ -2,14 +2,11 @@ package br.com.baltacompras.serviceimplement;
 
 import br.com.baltacompras.model.*;
 import br.com.baltacompras.model.enums.Status;
-import br.com.baltacompras.repository.GrupoCotacaoProdutoRepository;
-import br.com.baltacompras.repository.GrupoCotacaoRepository;
+import br.com.baltacompras.repository.*;
 
 import java.time.LocalDate;
 import java.util.*;
 
-import br.com.baltacompras.repository.GrupoProdutoRepository;
-import br.com.baltacompras.repository.RequisicaoProdutoRepository;
 import br.com.baltacompras.service.GrupoCotacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +27,13 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
     @Autowired
     GrupoProdutoRepository grupoProdutoRepository;
 
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
     @Override
     @Transactional
      public List<GrupoCotacao> gerarCotacoes() {
+        Usuario usuario = usuarioRepository.getById(1);
          List<ProdutoAgrupado> produtosAgrupados = repository.getRequisicoesAgrupadas();
 
          Map<GrupoProduto, Date> grupoProdutoEPrazoMap = new HashMap<>();
@@ -42,7 +43,7 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
 
          Map<Integer, GrupoCotacao> grupoCotacaoMap = new HashMap<>();
          grupoProdutoEPrazoMap.forEach((gp, prazo) ->
-                 grupoCotacaoMap.put(gp.getId(), repository.save(new GrupoCotacao(prazo, gp)
+                 grupoCotacaoMap.put(gp.getId(), repository.save(new GrupoCotacao(prazo, gp, usuario)
          )));
 
          List<RequisicaoProduto> requisicaoProdutos = requisicaoProdutoRepository.findAllByRequisicaoStatus(Status.APROVADO);

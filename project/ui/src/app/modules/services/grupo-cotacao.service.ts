@@ -21,15 +21,19 @@ export class GrupoCotacaoService extends BaseService<GrupoCotacao> {
         return this.httpClient.get<any>(`http://localhost:8080/grupo-cotacao/gerar-cotacoes`);
     }
 
-    listarCotacoesDoGrupo(id: number): Observable<Cotacao[]> {
-        return this.httpClient.get<Cotacao[]>(`http://localhost:8080/cotacao/grupo-cotacao/${id}/listar-cotacoes`);
-    }
-
     alterarCotacao(cotacao: Cotacao): Observable<any> {
         return this.httpClient.put<any>(`http://localhost:8080/cotacao/alterar`, cotacao);
     }
 
     salvarCotacao(cotacao: Cotacao): Observable<any> {
         return this.httpClient.post<any>(`http://localhost:8080/cotacao/salvar`, cotacao);
+    }
+
+    getCotacao(grupoCotacaoId: number, selecionada: boolean = false): Observable<Cotacao[]> {
+        return this.httpClient.get<Cotacao[]>(`http://localhost:8080/cotacao/listar?grupoCotacao=${grupoCotacaoId}&selecionada=${selecionada}`);
+    }
+
+    getCotacaoById(id: number): Observable<Cotacao[]> {
+        return this.httpClient.get<Cotacao[]>(`http://localhost:8080/cotacao/listar?id=${id}`);
     }
 }

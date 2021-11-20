@@ -12,7 +12,9 @@ import {
   Cotacao,
   GrupoCotacao,
   Fornecedor,
-  RequisicaoProduto
+  RequisicaoProduto,
+  OrdemCompra,
+  Usuario
 } from '@models/index';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FornecedorService } from '@services/fornecedor.service';
@@ -21,6 +23,7 @@ import { Email } from '@models/email.model';
 import { EmailComponent } from '@shared/components/email/email.component';
 import { GrupoCotacaoProdutoCotacao } from '@models/grupo-cotacao/grupo-cotacao-produto-cotacao.model';
 import { GrupoCotacaoProduto } from '@models/grupo-cotacao/grupo-cotacao-produto.model';
+import { OrdemCompraService } from '@services/ordem-compra.service';
 
 @Component({
   selector: 'app-grupo-cotacao',
@@ -39,6 +42,7 @@ export class GrupoCotacaoComponent implements OnInit {
   listaFornecedoresEmCotacao: Fornecedor[] = [];
 
   mapProdutos: Map<number, { produto: Produto, quantidadeTotal: number }> = new Map();
+  isNew: boolean = true;
 
   /* Filtro */
   query: string = '';
@@ -49,6 +53,7 @@ export class GrupoCotacaoComponent implements OnInit {
   constructor(
     private grupoCotacaoService: GrupoCotacaoService,
     private fornecedorService: FornecedorService,
+    private ordemCompraService: OrdemCompraService,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private modalService: NgbModal,
@@ -62,14 +67,21 @@ export class GrupoCotacaoComponent implements OnInit {
       this.router.navigate(['/grupo-cotacao']);
     } else {
       this.grupoCotacao = new GrupoCotacao(this.grupoCotacaoService.grupoCotacaoSelecionado);
+      
+      for (let cot of this.grupoCotacao?.cotacoes) {
+        if (cot.fornecedor.nomeFantasia != undefined || cot.fornecedor.nomeFantasia != null) {
+          this.isNew = false;
+          break;
+        }
+      }
 
       let fornecedorSelecionado = null;
       if (this.grupoCotacao?.cotacoes?.find(c => c.selecionada)?.fornecedor.nomeFantasia) {
-        fornecedorSelecionado = this.grupoCotacao?.cotacoes?.find(c => c.selecionada)?.fornecedor.nomeFantasia;
+        fornecedorSelecionado = this.grupoCotacao?.cotacoes?.find(c => c.selecionada)?.fornecedor.id;
       }
 
       this.grupoCotacaoForm = this.formBuilder.group({
-        fornecedorSelecionado: [fornecedorSelecionado, Validators.required],
+        fornecedorSelecionado: [fornecedorSelecionado],
         observacoes: [this.grupoCotacao?.observacoes ?? '', Validators.maxLength(65.000)]
       });
 
@@ -210,21 +222,16 @@ export class GrupoCotacaoComponent implements OnInit {
     return this.currencyPipe.transform(valor, 'BRL', 'R$', '1.2-2', 'pt');
   }
 
-  onSalvar(event: any) {
-    if (event.type == "submit") {
-      this.grupoCotacaoForm.markAllAsTouched();
-
-    if (!this.grupoCotacaoForm.valid) {
-      event.preventDefault();
-      event.stopPropagation();
-      this.toastrService.error("Todos os campos obrigatórios devem ser preenchidos");
-    } else {
-      this.grupoCotacao.cotacoes.forEach(c => {
-        c.produtos.forEach(p => {
+  onSalvar(event?: any) {
+    this.grupoCotacao.cotacoes.forEach(c => {
+      c.produtos.forEach(p => {
+        if (this.isNew) {
           p.id = { idCotacao: 1, idGrupoCotacaoProduto: this.grupoCotacao.id };
-          p.precoUnitario = this.converterValorParaStringFloat(p);
-          p.precoUnitario = parseFloat(p.precoUnitario.toString());
-        });
+        }
+        p.precoUnitario = this.converterValorParaStringFloat(p);
+        p.precoUnitario = parseFloat(p.precoUnitario.toString());
+      });
+      if (this.isNew) {
         c.grupoCotacao = new GrupoCotacao({
           id: this.grupoCotacao.id,
           data: this.grupoCotacao.data,
@@ -235,23 +242,89 @@ export class GrupoCotacaoComponent implements OnInit {
           observacoes: this.grupoCotacaoForm.get('observacoes').value,
           usuario: this.grupoCotacao.usuario
         });
-        c.observacoes = this.grupoCotacaoForm.get('observacoes').value;
-        c.selecionada = this.grupoCotacaoForm.get('fornecedorSelecionado').value == c.fornecedor.id;
-        c.prazo = new Date();
-        // c.fornecedor = this.listaFornecedores.find(f => f.id == this.grupoCotacaoForm.get('fornecedorSelecionado').value);
-        console.log(c);
-        
-        this.grupoCotacaoService.salvarCotacao(c).subscribe(() => {
-          this.toastrService.success("Cotações atualizadas!");
-        });
-      });
-        this.router.navigate(['/grupo-cotacao']);
       }
-    }
+      c.observacoes = this.grupoCotacaoForm.get('observacoes').value;
+      c.selecionada = this.grupoCotacaoForm.get('fornecedorSelecionado').value == c.fornecedor.id;
+      c.prazo = new Date();
+      
+      if (this.isNew) {
+        this.grupoCotacaoService.salvarCotacao(c).subscribe(() => {
+          this.toastrService.success("Cotações salvas com sucesso!");
+        });
+      } else {
+        this.grupoCotacaoService.alterarCotacao(c).subscribe(() => {
+          this.toastrService.success("Cotações atualizadas com sucesso!");
+        });
+      }
+      
+    });
+      this.router.navigate(['/grupo-cotacao']);
+  }
+
+  gerarOrdem() {
+    if (this.grupoCotacaoForm.get('fornecedorSelecionado').value != null) {
+    this.grupoCotacao.cotacoes.forEach(c => {
+      c.produtos.forEach(p => {
+        if (this.isNew) {
+          p.id = { idCotacao: c.id ?? 1, idGrupoCotacaoProduto: this.grupoCotacao.id };
+        }
+        p.precoUnitario = this.converterValorParaStringFloat(p);
+        p.precoUnitario = parseFloat(p.precoUnitario.toString());
+      });
+      if (this.isNew) {
+        c.grupoCotacao = new GrupoCotacao({
+          id: this.grupoCotacao.id,
+          data: this.grupoCotacao.data,
+          prazoSolicitado: this.grupoCotacao.prazoSolicitado,
+          status: this.grupoCotacao.status,
+          grupoProduto: new GrupoProduto(this.grupoCotacao.grupoProduto),
+          grupoCotacaoProdutos: [...this.grupoCotacao.grupoCotacaoProdutos],
+          observacoes: this.grupoCotacaoForm.get('observacoes').value,
+          usuario: this.grupoCotacao.usuario
+        });
+      }
+      c.observacoes = this.grupoCotacaoForm.get('observacoes').value;
+      c.selecionada = this.grupoCotacaoForm.get('fornecedorSelecionado').value == c.fornecedor.id;
+      c.prazo = new Date();
+
+      if (this.isNew) {
+        this.grupoCotacaoService.salvarCotacao(c).subscribe(() => {
+          if (c.selecionada) {
+            this.salvarOrdem();
+          }
+        });
+      } else {
+        this.grupoCotacaoService.alterarCotacao(c).subscribe(() => {
+          if (c.selecionada) {
+            this.salvarOrdem();
+          }
+        });
+      }
+    });
+    } else {
+        this.toastrService.warning("Por favor selecione o fornecedor para a ordem");
+        return;
+      }
+  }
+
+  salvarOrdem() {
+    this.grupoCotacaoService.getCotacao(this.grupoCotacao.id).subscribe(cot => {
+      let novaOrdemCompra = new OrdemCompra({
+        data: new Date(),
+        tipoCompra: 0,
+        observacoes: 'Teste nova ordem',
+        usuario: new Usuario({ id: 1 }),
+        cotacao: new Cotacao(cot[0])
+      });
+      this.ordemCompraService.salvar(novaOrdemCompra).subscribe(() => {
+        this.toastrService.success("Nova ordem de compra gerada!");
+      });
+      this.router.navigate(['/ordem-compra']);
+    });
   }
 
   onCancelar(event: any) {
-    event.preventDefault();
+    // event.preventDefault();
     this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
     this.modalRef.componentInstance.title = "Cancelar edição";
     this.modalRef.componentInstance.message = "Todas as alterações serão perdidas. Você tem certeza que deseja cancelar?";
@@ -282,13 +355,21 @@ export class GrupoCotacaoComponent implements OnInit {
   }
 
   onEnviarEmail() {
+    // this.onSalvar();
     this.construirEmail();
     this.modalRef = this.modalService.open(EmailComponent, { size: 'md' });
     this.modalRef.componentInstance.email = this.email;
     this.modalRef.closed.subscribe((email: Email) => {
       if (email) {
         this.email = email;
-        this.toastrService.success("Email enviado!");
+        this.grupoCotacaoService.getCotacao(this.grupoCotacao.id).subscribe(cot => 
+          cot.forEach(c => {
+            let url = `http://localhost:4200/grupo-cotacao/cotacao-fornecedor/${c.id}`;
+            this.grupoCotacaoService.enviarEmail(url, "gabriel.guimaraes6@fatec.sp.gov.br", this.email.text, this.email.subject).subscribe(() => {
+              this.toastrService.success("Email enviado!");
+            });
+          })
+        )
       }
     });
   }
