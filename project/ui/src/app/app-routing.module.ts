@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AcessoNegadoComponent } from '@shared/components';
 import { PageNotFoundComponent } from '@shared/components/page-not-found/page-not-found.component'
 
 const routes: Routes = [
@@ -35,6 +36,10 @@ const routes: Routes = [
     {
         path: 'administracao/usuario',
         loadChildren: () => import('@modules/usuario/usuario.module').then(m => m.UsuarioModule)
+    },
+    {
+        path: 'acesso-negado',
+        component: AcessoNegadoComponent
     },
     {
         path: '**',

@@ -6,6 +6,7 @@ import { PageNotFoundComponent } from "./page-not-found/page-not-found.component
 import { TitleComponent } from "./title/title.component";
 import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
 import { EmailComponent } from './email/email.component';
+import { AcessoNegadoComponent } from './acesso-negado/acesso-negado.component';
 
 
 export const components: any[] = [
@@ -16,7 +17,8 @@ export const components: any[] = [
     PageNotFoundComponent,
     TitleComponent,
     DateRangePickerComponent,
-    EmailComponent
+    EmailComponent,
+    AcessoNegadoComponent
 ]
 
 export * from './menu/menu.component';
@@ -28,3 +30,4 @@ export * from './page-not-found/page-not-found.component';
 export * from "./title/title.component";
 export * from "./date-range-picker/date-range-picker.component";
 export * from "./email/email.component";
+export * from "./acesso-negado/acesso-negado.component";
