@@ -6,7 +6,7 @@
             </app-button>
         </div>
         <div class="col-auto ms-1 p-0">
-            <app-button [btnClass]="'btn-primary py-2'" (click)="onGerarCotacoes()">
+            <app-button [btnClass]="'btn-primary py-2'" (click)="onGerarCotacoes()" [isDisabled]="!verificarPermissaoEditar()">
                 Gerar cotações
             </app-button>
         </div>
@@ -165,11 +165,11 @@
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><app-button [btnClass]="'dropdown-item'" (action)="onEditar(row)" [isDisabled]="row.status != 'ABERTO' && row.status != 'CANCELADO'">
+                            <li><app-button [btnClass]="'dropdown-item'" (action)="onEditar(row)" [isDisabled]="row.status != 'ABERTO' && (row.status != 'CANCELADO' && !verificarPermissaoEditarCancelar(row.usuario))">
                                     <i class="bi bi-pencil-square me-2"></i>
                                     {{ row.status == 'CANCELADO' ? 'Detalhes' : 'Editar'}}
                                 </app-button></li>
-                            <li><app-button [btnClass]="'dropdown-item'" (action)="onCancelar(row)" [isDisabled]="row.status != 'ABERTO'">
+                            <li><app-button [btnClass]="'dropdown-item'" (action)="onCancelar(row)" [isDisabled]="row.status != 'ABERTO' || !verificarPermissaoEditarCancelar(row.usuario)">
                                     <i class="bi bi-x-lg me-2 text-danger"></i>
                                     <span class="text-danger">Cancelar</span>
                                 </app-button></li>

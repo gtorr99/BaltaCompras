@@ -1,6 +1,6 @@
 package br.com.baltacompras.model;
 
-import br.com.baltacompras.model.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Set;
 
@@ -19,11 +19,10 @@ public class Setor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String descricao;
-    @OneToMany
-    @JoinColumn(name="id_setor", referencedColumnName = "id")
-    private Set<CentroCusto> centrosCusto;
 
-    private Status status;
+    @JsonIgnore
+    @OneToMany(mappedBy = "setor")
+    private Set<CentroCusto> centrosCusto;
 
     public Integer getId() {
         return id;
@@ -42,13 +41,5 @@ public class Setor {
     }
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }

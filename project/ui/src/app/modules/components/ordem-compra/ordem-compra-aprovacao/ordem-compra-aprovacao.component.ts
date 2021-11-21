@@ -10,6 +10,7 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
 import { GrupoCotacaoProdutoCotacao } from '@models/grupo-cotacao/grupo-cotacao-produto-cotacao.model';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-ordem-compra-aprovacao',
@@ -48,12 +49,25 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
 
   constructor(
     private ordemCompraService: OrdemCompraService,
+    private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Aprovar ordem")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Nº Ordem",
@@ -104,7 +118,6 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
 
     this.page.page = 0;
     this.carregarTabela(0);
-
   }
 
   carregarTabela(pageEvent: any = null) {

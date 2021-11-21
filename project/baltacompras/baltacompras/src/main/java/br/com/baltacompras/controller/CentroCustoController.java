@@ -2,14 +2,14 @@ package br.com.baltacompras.controller;
 
 import java.util.List;
 
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.JoinFetch;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.baltacompras.model.CentroCusto;
 import br.com.baltacompras.repository.CentroCustoRepository;
@@ -17,28 +17,37 @@ import br.com.baltacompras.repository.CentroCustoRepository;
 @RestController
 @RequestMapping("/centro-custo")
 public class CentroCustoController {
+
+    @Join(path = "setor", alias = "s")
+    @Spec(path = "s.id", params = "setorId", spec = Equal.class)
+    interface ModelSpec extends Specification<CentroCusto> {
+    }
+
     @Autowired
     private CentroCustoRepository repositorio;
 
     @GetMapping("/listar")
-    public List<CentroCusto> listar(){
-        return repositorio.findAll();
+    public List<CentroCusto> listar(ModelSpec spec) {
+        return repositorio.findAll(spec);
     }
-    
+
+    @Transactional
     @PostMapping("/salvar")
-    public void salvar(@RequestBody CentroCusto centroCusto){
+    public void salvar(@RequestBody CentroCusto centroCusto) {
         repositorio.save(centroCusto);
     }
 
-     @PutMapping("/alterar")
-    public void alterar(@RequestBody CentroCusto centroCusto){
-        if(centroCusto.getId()>0){
+    @Transactional
+    @PutMapping("/alterar")
+    public void alterar(@RequestBody CentroCusto centroCusto) {
+        if (centroCusto.getId() > 0) {
             repositorio.save(centroCusto);
         }
     }
 
+    @Transactional
     @DeleteMapping("/excluir/{id}")
-    public void excluir(@RequestBody CentroCusto centroCusto){
+    public void excluir(@RequestBody CentroCusto centroCusto) {
         repositorio.delete(centroCusto);
     }
 }

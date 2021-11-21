@@ -9,6 +9,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { StatusEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components/filter/filter-select/filter.model';
+import { UsuarioService } from '@services/usuario.service';
+import { Usuario } from '@models/usuario.model';
 
 @Component({
   selector: 'app-fornecedor-tabela',
@@ -44,12 +46,25 @@ export class FornecedorTabelaComponent implements OnInit {
 
   constructor(
     private fornecedorService: FornecedorService,
+    private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Ler fornecedor")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Nome",
@@ -82,11 +97,11 @@ export class FornecedorTabelaComponent implements OnInit {
         tipo: TipoFiltro.STRING
       }
     ];
-    
+
     this.page.page = 0;
     this.carregarTabela(0);
   }
-
+  
   carregarTabela(pageEvent: any = null) {
     this.setQuery();
     this.fornecedorService.listarPaginado(this.query, pageEvent?.offset ?? 0).subscribe((response: Page<Fornecedor>) => {
@@ -118,27 +133,37 @@ export class FornecedorTabelaComponent implements OnInit {
   }
 
   onEditarFornecedor(fornecedor: Fornecedor = null) {
-    this.fornecedorService.fornecedorSelecionado = fornecedor ?? new Fornecedor(); 
-    this.router.navigate(['/fornecedor/registrar']);
+    if (this.usuarioService.verificarPermissao("Editar fornecedor")) {
+      this.fornecedorService.fornecedorSelecionado = fornecedor ?? new Fornecedor(); 
+      this.router.navigate(['/fornecedor/registrar']);
+    }
   }
 
   onRegistrarFornecedor() {
-    this.fornecedorService.fornecedorSelecionado = new Fornecedor();
-    this.router.navigate(['/fornecedor/registrar']);
+    if (this.usuarioService.verificarPermissao("Editar requisição")) {
+      this.fornecedorService.fornecedorSelecionado = new Fornecedor();
+      this.router.navigate(['/fornecedor/registrar']);
+    }
   }
 
   onExcluirFornecedor(fornecedor: Fornecedor) {
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Excluir fornecedor";
-    this.modalRef.componentInstance.message = "Ao prosseguir, o fornecedor será excluído. Você tem certeza que deseja prosseguir?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.fornecedorService.excluir(fornecedor.id).subscribe(() => {
-          this.toastrService.success("Fornecedor excluído!");
-          this.carregarTabela();
-        });
-      }
-    });
+    if (this.usuarioService.verificarPermissao("Editar requisição")) {
+      this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+      this.modalRef.componentInstance.title = "Excluir fornecedor";
+      this.modalRef.componentInstance.message = "Ao prosseguir, o fornecedor será excluído. Você tem certeza que deseja prosseguir?";
+      this.modalRef.closed.subscribe(response => {
+        if (response) {
+          this.fornecedorService.excluir(fornecedor.id).subscribe(() => {
+            this.toastrService.success("Fornecedor excluído!");
+            this.carregarTabela();
+          });
+        }
+      });
+    }
+  }
+
+  verificarPermissaoEditar(): boolean {
+    return this.usuarioService.verificarPermissao("Editar requisição");
   }
 
   getListaProdutos(forn: Fornecedor): string {

@@ -8,6 +8,7 @@ import { FornecedorService } from 'app/modules/services/fornecedor.service';
 import { CEP } from '@models/cep.model';
 import { Router } from '@angular/router';
 import { GrupoProdutoService } from '@services/grupo-produto.service';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-fornecedor',
@@ -45,11 +46,24 @@ export class FornecedorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private fornecedorService: FornecedorService,
+    private usuarioService: UsuarioService,
     private grupoProdutoService: GrupoProdutoService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Editar fornecedor")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.fornecedor = this.fornecedorService.fornecedorSelecionado;
     this.fornecedorForm = this.formBuilder.group({
       info: this.formBuilder.group({
@@ -78,7 +92,7 @@ export class FornecedorComponent implements OnInit {
       this.grupoProdutoList = [...gpl];
       this.fornecedorForm.get('gruposProduto').patchValue(this.fornecedor.gruposProduto?.map(gp => gp.id));
     });
-   
+
     this.loadEstados();
   }
 

@@ -9,6 +9,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-requisicao-aprovacao',
@@ -45,12 +46,25 @@ export class RequisicaoAprovacaoComponent implements OnInit {
 
   constructor(
     private requisicaoService: RequisicaoService,
+    private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Aprovar requisição")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Nº Requisição",

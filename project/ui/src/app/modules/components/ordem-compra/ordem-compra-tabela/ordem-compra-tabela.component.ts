@@ -10,6 +10,7 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
 import { GrupoCotacaoProdutoCotacao } from '@models/grupo-cotacao/grupo-cotacao-produto-cotacao.model';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-ordem-compra-tabela',
@@ -48,12 +49,25 @@ export class OrdemCompraTabelaComponent implements OnInit {
 
   constructor(
     private ordemCompraService: OrdemCompraService,
+    private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Ler ordem")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Nº Ordem",
@@ -104,7 +118,6 @@ export class OrdemCompraTabelaComponent implements OnInit {
 
     this.page.page = 0;
     this.carregarTabela(0);
-
   }
 
   carregarTabela(pageEvent: any = null) {
@@ -152,17 +165,23 @@ export class OrdemCompraTabelaComponent implements OnInit {
   }
 
   onCancelar(ordemCompra: OrdemCompra) {
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar ordem de compra";
-    this.modalRef.componentInstance.message = "Ao prosseguir, a ordem de compra será cancelada. Você tem certeza que deseja prosseguir?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.ordemCompraService.cancelar(ordemCompra.id).subscribe(() => {
-          this.toastrService.success("Ordem cancelada!");
-          this.carregarTabela();
-        });
-      }
-    });
+    if (this.verificarPermissaoEditarCancelar(ordemCompra.usuario)) {
+      this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+      this.modalRef.componentInstance.title = "Cancelar ordem de compra";
+      this.modalRef.componentInstance.message = "Ao prosseguir, a ordem de compra será cancelada. Você tem certeza que deseja prosseguir?";
+      this.modalRef.closed.subscribe(response => {
+        if (response) {
+          this.ordemCompraService.cancelar(ordemCompra.id).subscribe(() => {
+            this.toastrService.success("Ordem cancelada!");
+            this.carregarTabela();
+          });
+        }
+      });
+    }
+  }
+
+  verificarPermissaoEditarCancelar(usuario: Usuario): boolean {
+    return this.usuarioService.getUsuarioLogado().id == usuario.id;
   }
 
   toggleExpandRow(row) {

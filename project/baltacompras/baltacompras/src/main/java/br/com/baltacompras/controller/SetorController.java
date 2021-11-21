@@ -3,6 +3,7 @@ package br.com.baltacompras.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,20 +26,23 @@ public class SetorController {
     public List<Setor> listar(){
         return repositorio.findAll();
     }
-    
-    @PostMapping
+
+    @Transactional
+    @PostMapping("/salvar")
     public void salvar(@RequestBody Setor setor){
         repositorio.save(setor);
     }
 
-    @PutMapping
+    @Transactional
+    @PutMapping("/alterar")
     public void alterar(@RequestBody Setor setor){
         if(setor.getId()>0){
             repositorio.save(setor);
         }
     }
 
-    @DeleteMapping
+    @Transactional
+    @DeleteMapping("/excluir/{id}")
     public void excluir(@RequestBody Setor setor){
         repositorio.delete(setor);
     }

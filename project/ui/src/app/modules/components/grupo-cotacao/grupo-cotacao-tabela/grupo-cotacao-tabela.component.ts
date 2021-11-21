@@ -10,6 +10,7 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
 import { CurrencyPipe } from '@angular/common';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-grupo-cotacao-tabela',
@@ -49,6 +50,7 @@ export class GrupoCotacaoTabelaComponent implements OnInit {
 
   constructor(
     private grupoCotacaoService: GrupoCotacaoService,
+    private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private currencyPipe: CurrencyPipe,
@@ -56,6 +58,18 @@ export class GrupoCotacaoTabelaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Ler cotação")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Nº Grupo cotação",
@@ -119,29 +133,41 @@ export class GrupoCotacaoTabelaComponent implements OnInit {
   }
 
   onEditar(grupoCotacao: GrupoCotacao = null) {
-    this.grupoCotacaoService.grupoCotacaoSelecionado = grupoCotacao;
-    this.router.navigate(['/grupo-cotacao/cotacao']);
+    if (this.verificarPermissaoEditar()) {
+      this.grupoCotacaoService.grupoCotacaoSelecionado = grupoCotacao;
+      this.router.navigate(['/grupo-cotacao/cotacao']);
+    }
   }
 
   onGerarCotacoes() {
     this.grupoCotacaoService.gerarCotacoes().subscribe(() => {
       this.carregarTabela();
-      this.toastrService.success("Cotações gerados com sucesso!");
+      this.toastrService.success("Cotações geradas com sucesso!");
     });
   }
 
   onCancelar(grupoCotacao: GrupoCotacao) {
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar grupo cotação";
-    this.modalRef.componentInstance.message = "Ao prosseguir, o grupo e suas cotações serão cancelados. Você tem certeza que deseja prosseguir?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.grupoCotacaoService.cancelar(grupoCotacao.id).subscribe(() => {
-          this.toastrService.success("Cotações canceladas!");
-          this.carregarTabela();
-        });
-      }
-    });
+    if (this.verificarPermissaoEditarCancelar(grupoCotacao.usuario)) {
+      this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+      this.modalRef.componentInstance.title = "Cancelar grupo cotação";
+      this.modalRef.componentInstance.message = "Ao prosseguir, o grupo e suas cotações serão cancelados. Você tem certeza que deseja prosseguir?";
+      this.modalRef.closed.subscribe(response => {
+        if (response) {
+          this.grupoCotacaoService.cancelar(grupoCotacao.id).subscribe(() => {
+            this.toastrService.success("Cotações canceladas!");
+            this.carregarTabela();
+          });
+        }
+      });
+    }
+  }
+
+  verificarPermissaoEditarCancelar(usuario: Usuario): boolean {
+    return this.usuarioService.getUsuarioLogado().id == usuario.id;
+  }
+
+  verificarPermissaoEditar(): boolean {
+    return this.usuarioService.verificarPermissao("Editar cotação");
   }
 
   toggleExpandRow(row) {

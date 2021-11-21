@@ -6,7 +6,7 @@
             </app-button>
         </div>
         <div class="col col-sm-auto ms-1">
-            <app-button [btnClass]="'btn-primary py-2'" (click)="onNovaRequisicao()">
+            <app-button [btnClass]="'btn-primary py-2'" (click)="onNovaRequisicao()" [isDisabled]="!verificarPermissaoEditar()">
                 Nova requisição
             </app-button>
         </div>
@@ -160,10 +160,10 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><app-button [btnClass]="'dropdown-item'" (action)="onEditarRequisicao(row)"
-                                [isDisabled]="row.status != 'ABERTO'">
+                                [isDisabled]="row.status != 'ABERTO' || !verificarPermissaoEditarCancelar(row.usuario)">
                                     <i class="bi bi-pencil-square me-2"></i>Editar</app-button></li>
                             <li><app-button [btnClass]="'dropdown-item'" (action)="onCancelarRequisicao(row)"
-                                [isDisabled]="row.status != 'ABERTO'">
+                                [isDisabled]="row.status != 'ABERTO' || !verificarPermissaoEditarCancelar(row.usuario)">
                                     <i class="bi bi-x-lg me-2 text-danger"></i>
                                     <span class="text-danger">Cancelar</span>
                                 </app-button>

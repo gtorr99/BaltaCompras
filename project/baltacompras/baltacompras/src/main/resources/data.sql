@@ -13,18 +13,21 @@ INSERT INTO centro_custo(id, descricao, valor_gasto, valor_limite, id_setor) VAL
 INSERT INTO centro_custo(id, descricao, valor_gasto, valor_limite, id_setor) VALUES(4, 'Help desk', 0, 1000, 3);
 
 -- permissões
-INSERT INTO permissao(id, descricao) VALUES(1, 'administrador');
+INSERT INTO permissao(id, descricao) VALUES(1, 'Administrador');
 
-INSERT INTO permissao(id, descricao) VALUES(2, 'editar requisicao');
-INSERT INTO permissao(id, descricao) VALUES(3, 'ler requisicao');
-INSERT INTO permissao(id, descricao) VALUES(4, 'aprovar requisicao');
+INSERT INTO permissao(id, descricao) VALUES(2, 'Editar requisição');
+INSERT INTO permissao(id, descricao) VALUES(3, 'Ler requisição');
+INSERT INTO permissao(id, descricao) VALUES(4, 'Aprovar requisição');
 
-INSERT INTO permissao(id, descricao) VALUES(5, 'editar cotacao');
-INSERT INTO permissao(id, descricao) VALUES(6, 'ler cotacao');
+INSERT INTO permissao(id, descricao) VALUES(5, 'Editar cotação');
+INSERT INTO permissao(id, descricao) VALUES(6, 'Ler cotação');
 
-INSERT INTO permissao(id, descricao) VALUES(7, 'editar ordem');
-INSERT INTO permissao(id, descricao) VALUES(8, 'ler ordem');
-INSERT INTO permissao(id, descricao) VALUES(9, 'aprovar ordem');
+INSERT INTO permissao(id, descricao) VALUES(7, 'Editar ordem');
+INSERT INTO permissao(id, descricao) VALUES(8, 'Ler ordem');
+INSERT INTO permissao(id, descricao) VALUES(9, 'Aprovar ordem');
+
+INSERT INTO permissao(id, descricao) VALUES(10, 'Editar fornecedor');
+INSERT INTO permissao(id, descricao) VALUES(1, 'Ler fornecedor');
 
 
 -- funcões
@@ -62,19 +65,19 @@ INSERT INTO funcao_permissao(id_funcao, id_permissao) VALUES(5, 8);
 INSERT INTO funcao_permissao(id_funcao, id_permissao) VALUES(5, 9);
 
 -- usuarios
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(1, 'Jhonatan Leite', 'jhonatan.leite@baltacompras.com.br', '00xff-hex', 0, 3, 1);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(1, 'Jhonatan Leite', 'jhonatan.leite@baltacompras.com.br', '79aafe839b67b8038ea6a878441ff9a0', 0, 3, 1);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(2, 'Caue Sampaio', 'caue.sampaio@baltacompras.com.br', '00xff-hex', 6, 3, 1);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(2, 'Caue Sampaio', 'caue.sampaio@baltacompras.com.br', '79aafe839b67b8038ea6a878441ff9a0', 6, 3, 1);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(3, 'Gabriel Torres', 'gabriel_towers@fatec.com', '00xff-hex', 6, 3, 1);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(3, 'Gabriel Torres', 'gabriel_towers@fatec.com', '79aafe839b67b8038ea6a878441ff9a0', 6, 3, 1);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(4, 'Vitor Oliveira', 'vitor.oliveira@ivel.com.br', '00xff-hex', 6, 1, 2);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(4, 'Vitor Oliveira', 'vitor.oliveira@ivel.com.br', '27d2f8ff2575c1d459e188aa48e6083a', 6, 1, 2);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(5, 'Jorge Ivel', 'jorge_ivelson@fatec.com', '00xff-hex', 6, 2, 3);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(5, 'Jorge Ivel', 'jorge_ivelson@fatec.com', '8af75f2075350876d9f45a4190517ad2', 6, 2, 3);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(6, 'Rodrigo Ivel', 'rodrigo@ivel.com.br', '00xff-hex', 6, 2, 4);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(6, 'Rodrigo Ivel', 'rodrigo@ivel.com.br', '8aa3e8112922553cf5858d4a01562784', 6, 2, 4);
 
-INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(7, 'Eric Barros', 'eric.barros@ivel.com.br', '00xff-hex', 6, 1, 5);
+INSERT INTO usuario(id, nome, email, hash_senha, status, id_setor, id_funcao) VALUES(7, 'Eric Barros', 'eric.barros@ivel.com.br', '8aa3e8112922553cf5858d4a01562784', 6, 1, 5);
 
 -- grupo produto
 INSERT INTO grupo_produto(id, descricao) VALUES(1, 'Eletronicos');

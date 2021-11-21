@@ -24,6 +24,7 @@ import { EmailComponent } from '@shared/components/email/email.component';
 import { GrupoCotacaoProdutoCotacao } from '@models/grupo-cotacao/grupo-cotacao-produto-cotacao.model';
 import { GrupoCotacaoProduto } from '@models/grupo-cotacao/grupo-cotacao-produto.model';
 import { OrdemCompraService } from '@services/ordem-compra.service';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-grupo-cotacao',
@@ -54,6 +55,7 @@ export class GrupoCotacaoComponent implements OnInit {
     private grupoCotacaoService: GrupoCotacaoService,
     private fornecedorService: FornecedorService,
     private ordemCompraService: OrdemCompraService,
+    private usuarioService: UsuarioService,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private modalService: NgbModal,
@@ -63,11 +65,23 @@ export class GrupoCotacaoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Editar cotação")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     if (!this.grupoCotacaoService.grupoCotacaoSelecionado.grupoProduto) {
       this.router.navigate(['/grupo-cotacao']);
     } else {
       this.grupoCotacao = new GrupoCotacao(this.grupoCotacaoService.grupoCotacaoSelecionado);
-      
+
       for (let cot of this.grupoCotacao?.cotacoes) {
         if (cot.fornecedor.nomeFantasia != undefined || cot.fornecedor.nomeFantasia != null) {
           this.isNew = false;
@@ -86,12 +100,12 @@ export class GrupoCotacaoComponent implements OnInit {
       });
 
       this.fornecedorService.listar(`grupoProduto=${this.grupoCotacaoService.grupoCotacaoSelecionado.grupoProduto?.descricao}`).subscribe((fornecedores: Fornecedor[]) => {
-        this.listaFornecedores  = [...fornecedores.map(f => new Fornecedor(f))];
+        this.listaFornecedores = [...fornecedores.map(f => new Fornecedor(f))];
       });
 
       if (this.grupoCotacao?.cotacoes.length) {
         let lista = [];
-        this.grupoCotacao.cotacoes?.forEach(c => { 
+        this.grupoCotacao.cotacoes?.forEach(c => {
           c.produtos.forEach(p => {
             p = new GrupoCotacaoProdutoCotacao(p);
             p.inputing = false;
@@ -111,7 +125,7 @@ export class GrupoCotacaoComponent implements OnInit {
 
       } else {
         this.grupoCotacao.grupoCotacaoProdutos = [...this.grupoCotacao.grupoCotacaoProdutos?.map(gcp => new GrupoCotacaoProduto(gcp))];
-        
+
         this.grupoCotacao.cotacoes = [
           new Cotacao({
             desconto: 0,
@@ -124,7 +138,7 @@ export class GrupoCotacaoComponent implements OnInit {
             selecionada: false,
             fornecedor: new Fornecedor(),
 
-            produtos: [...this.grupoCotacao.grupoCotacaoProdutos.map(gcp => 
+            produtos: [...this.grupoCotacao.grupoCotacaoProdutos.map(gcp =>
               new GrupoCotacaoProdutoCotacao({
                 aliquotaIpi: 0,
                 precoUnitario: 0,
@@ -145,7 +159,7 @@ export class GrupoCotacaoComponent implements OnInit {
             selecionada: false,
             fornecedor: new Fornecedor(),
 
-            produtos: [...this.grupoCotacao.grupoCotacaoProdutos.map(gcp => 
+            produtos: [...this.grupoCotacao.grupoCotacaoProdutos.map(gcp =>
               new GrupoCotacaoProdutoCotacao({
                 aliquotaIpi: 0,
                 precoUnitario: 'R$ 0,00',

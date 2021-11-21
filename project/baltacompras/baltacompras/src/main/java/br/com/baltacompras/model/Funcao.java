@@ -17,42 +17,42 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "funcao")
 public class Funcao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String descricao;
-    private Status status;
+
     @ManyToMany
     @JoinTable(
-        name="funcao_permissao",
-        joinColumns = @JoinColumn(name = "id_funcao"),
-        inverseJoinColumns = @JoinColumn(name = "id_permissao")
+            name = "funcao_permissao",
+            joinColumns = @JoinColumn(name = "id_funcao"),
+            inverseJoinColumns = @JoinColumn(name = "id_permissao")
     )
     private Set<Permissao> permissoes = new HashSet<>();
+
     public Set<Permissao> getPermissoes() {
         return permissoes;
     }
+
     public void setPermissoes(Set<Permissao> permissoes) {
         this.permissoes = permissoes;
     }
+
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getDescricao() {
         return descricao;
     }
+
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }

@@ -11,7 +11,6 @@
 CREATE TABLE setor (
      id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
-    ,status INT NOT NULL DEFAULT 6
     ,CONSTRAINT pk__setor PRIMARY KEY AUTO_INCREMENT (id)
 );
 
@@ -20,7 +19,6 @@ CREATE TABLE centro_custo (
     ,descricao VARCHAR(255)
     ,valor_gasto REAL(10,2) NOT NULL
     ,valor_limite REAL(10,2) NOT NULL
-    ,status INT NOT NULL DEFAULT 6
     ,id_setor INT NOT NULL
     ,CONSTRAINT pk__centro_custo PRIMARY KEY AUTO_INCREMENT (id)
 );
@@ -34,7 +32,6 @@ CREATE TABLE permissao (
 CREATE TABLE funcao (
      id INT AUTO_INCREMENT
     ,descricao VARCHAR(255)
-    ,status INT NOT NULL DEFAULT 6
     ,CONSTRAINT pk__funcao PRIMARY KEY AUTO_INCREMENT (id)
 );
 

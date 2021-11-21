@@ -6,7 +6,7 @@
             </app-button>
         </div>
         <div class="col col-sm-auto ms-1">
-            <app-button [btnClass]="'btn-primary py-2'" (click)="onRegistrarFornecedor()">
+            <app-button [btnClass]="'btn-primary py-2'" (click)="onRegistrarFornecedor()" [isDisabled]="!verificarPermissaoEditar()">
                 Novo fornecedor
             </app-button>
         </div>
@@ -182,10 +182,19 @@
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" (click)="onEditarFornecedor(row)">
-                                    <i class="bi bi-pencil-square me-2"></i>Editar</a></li>
-                            <li><a class="dropdown-item" (click)="onExcluirFornecedor(row)">
-                                    <i class="bi bi-trash me-2"></i>Excluir</a></li>
+                            <li>
+                                <app-button [btnClass]="'dropdown-item'" (action)="onEditarFornecedor(row)"
+                                    [isDisabled]="!verificarPermissaoEditar()">
+                                    <i class="bi bi-pencil-square me-2"></i>Editar
+                                </app-button>
+                            </li>
+                            <li>
+                                <app-button [btnClass]="'dropdown-item'" (action)="onExcluirFornecedor(row)"
+                                    [isDisabled]="!verificarPermissaoEditar()">
+                                    <i class="bi bi-x-lg me-2 text-danger"></i>
+                                    <span class="text-danger">Excluir</span>
+                                </app-button>
+                            </li>
                         </ul>
                     </div>
                 </div>

@@ -218,10 +218,13 @@
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><app-button [btnClass]="'dropdown-item'" (action)="onCancelar(row)" [isDisabled]="row.status != 'ABERTO'">
+                            <li>
+                                <app-button [btnClass]="'dropdown-item'" (action)="onCancelar(row)"
+                                    [isDisabled]="row.status != 'ABERTO' || !verificarPermissaoEditarCancelar(row.usuario)">
                                     <i class="bi bi-x-lg me-2 text-danger"></i>
                                     <span class="text-danger">Cancelar</span>
-                                </app-button></li>
+                                </app-button>
+                            </li>
                         </ul>
                     </div>
                 </div>

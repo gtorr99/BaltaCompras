@@ -8,10 +8,6 @@ import { UsuarioComponent } from './usuario.component';
 
 const routes: Routes = [
   {
-    path: 'registrar',
-    component: UsuarioComponent
-  },
-  {
     path: 'editar-perfil',
     component: EditarPerfilComponent
   },

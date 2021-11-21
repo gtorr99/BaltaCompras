@@ -1,16 +1,7 @@
 package br.com.baltacompras.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import br.com.baltacompras.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "centro_custo")
@@ -28,11 +19,7 @@ public class CentroCusto {
     @Column(nullable = false, name = "valor_limite")
     private Float valorLimite;
 
-    @Column(nullable = false)
-    private Status status;
-
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name="id_setor", referencedColumnName = "id")
     private Setor setor;
 
@@ -74,13 +61,5 @@ public class CentroCusto {
 
     public void setSetor(Setor setor) {
         this.setor = setor;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }

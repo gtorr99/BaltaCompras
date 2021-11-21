@@ -6,6 +6,7 @@ import { LoginComponent } from './login.component';
 import { LoginRoutingModule } from './login-routing.module';
 import { RecuperarSenhaComponent } from './recuperar-senha/recuperar-senha.component';
 import { NovaSenhaComponent } from './nova-senha/nova-senha.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { NovaSenhaComponent } from './nova-senha/nova-senha.component';
   imports: [
     CommonModule,
     LoginRoutingModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class LoginModule { }

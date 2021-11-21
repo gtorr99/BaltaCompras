@@ -18,6 +18,7 @@ import {
 } from '@models/index';
 import { DatePipe } from '@angular/common';
 import { Atributo, TipoFiltro } from '@shared/components';
+import { UsuarioService } from '@services/usuario.service';
 
 /**
  * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.
@@ -74,6 +75,7 @@ export class RequisicaoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private requisicaoService: RequisicaoService,
     private centroCustoService: CentroCustoService,
+    private usuarioService: UsuarioService,
     private produtoService: ProdutoService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
@@ -82,6 +84,18 @@ export class RequisicaoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Editar requisição")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.requisicao = this.requisicaoService.requisicaoSelecionada;
     this.titulo = this.requisicao.id ? 'Editar requisição' : 'Nova requisição';
     this.atributosPesquisa = [
@@ -101,7 +115,7 @@ export class RequisicaoComponent implements OnInit {
         tipo: TipoFiltro.STRING
       }
     ];
-    
+
     if (this.requisicao.prazo) {
       let prazo = this.requisicao?.prazo;
       this.requisicao.prazo = new Date(prazo);

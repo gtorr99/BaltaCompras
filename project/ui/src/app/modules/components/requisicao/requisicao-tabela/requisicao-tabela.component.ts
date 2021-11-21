@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ColumnMode } from '@models/enum/column-mode.enum';
 import { Router } from '@angular/router';
-import { Requisicao, Produto } from '@models/index';
+import { Requisicao, Produto, Usuario } from '@models/index';
 import { RequisicaoService } from '@services/requisicao.service';
 import { Page } from '@models/page.model';
 import { ToastrService } from 'ngx-toastr';
@@ -9,6 +9,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-requisicao-tabela',
@@ -47,10 +48,23 @@ export class RequisicaoTabelaComponent implements OnInit {
     private requisicaoService: RequisicaoService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
+    private usuarioService: UsuarioService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Ler requisição")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Nº Requisição",
@@ -114,24 +128,34 @@ export class RequisicaoTabelaComponent implements OnInit {
   }
 
   onEditarRequisicao(requisicao: Requisicao = null) {
-    this.requisicaoService.requisicaoSelecionada = requisicao ?? new Requisicao();
-    this.router.navigate(['/requisicao/nova']);
+    if (this.usuarioService.verificarPermissao("Editar requisição")) {
+      this.requisicaoService.requisicaoSelecionada = requisicao ?? new Requisicao();
+      this.router.navigate(['/requisicao/nova']);
+    } else {
+      this.toastrService.error("Usuário não possui permissão para editar requisição");
+    }
   }
 
   onNovaRequisicao() {
-    this.requisicaoService.requisicaoSelecionada = new Requisicao();
-    this.router.navigate(['/requisicao/nova']);
+    if (this.usuarioService.verificarPermissao("Editar requisição")) {
+      this.requisicaoService.requisicaoSelecionada = new Requisicao();
+      this.router.navigate(['/requisicao/nova']);
+    } else {
+      this.toastrService.error("Usuário não possui permissão para nova requisição");
+    }
   }
 
   onCancelarRequisicao(requisicao: Requisicao) {
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Cancelar requisição";
-    this.modalRef.componentInstance.message = "Ao prosseguir, a requisição será cancelada. Você tem certeza que deseja prosseguir?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.onCancelar(requisicao.id);
-      }
-    });
+    if (this.verificarPermissaoEditarCancelar(requisicao.usuario)) {
+      this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+      this.modalRef.componentInstance.title = "Cancelar requisição";
+      this.modalRef.componentInstance.message = "Ao prosseguir, a requisição será cancelada. Você tem certeza que deseja prosseguir?";
+      this.modalRef.closed.subscribe(response => {
+        if (response) {
+          this.onCancelar(requisicao.id);
+        }
+      });
+    }
   }
 
   onCancelar(id: number) {
@@ -139,6 +163,14 @@ export class RequisicaoTabelaComponent implements OnInit {
       this.toastrService.success("Requisição cancelada!");
       this.requisicaoService.listarPaginado().subscribe(resp => this.atualizarTabela(resp));
     });
+  }
+
+  verificarPermissaoEditarCancelar(usuario: Usuario): boolean {
+    return this.usuarioService.getUsuarioLogado().id == usuario.id;
+  }
+
+  verificarPermissaoEditar(): boolean {
+    return this.usuarioService.verificarPermissao("Editar requisição");
   }
 
   toggleExpandRow(row) {

@@ -8,5 +8,5 @@ import br.com.baltacompras.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>, JpaSpecificationExecutor<Usuario> {
-    
+    Usuario findFirstByEmail(String email);
 }

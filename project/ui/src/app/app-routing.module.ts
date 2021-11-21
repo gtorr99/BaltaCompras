@@ -5,7 +5,7 @@ import { PageNotFoundComponent } from '@shared/components/page-not-found/page-no
 const routes: Routes = [
     { 
         path: '',
-        redirectTo: 'requisicao',
+        redirectTo: '/login',
         pathMatch: 'full'
     },
     {

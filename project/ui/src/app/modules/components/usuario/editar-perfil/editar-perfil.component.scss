@@ -203,7 +203,7 @@ h4.header-info {
 }
 
 .row {
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 .box {
@@ -212,4 +212,52 @@ h4.header-info {
     padding-top: 8px;
     border-radius: var(--radius);
     box-shadow: var(--box-shadow);
+}
+
+input.senha {
+    border-right: none;
+}
+
+input {
+    height: 40px !important;
+    border: var(--border);
+}
+
+i.bi {
+    height: 40px;
+    background-color: white;
+    border: var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    border-left: none;
+    display: flex;
+    align-items: center;
+    padding-right: 8px;
+    width: 30px;
+    z-index: 20;
+}
+
+i.bi.icone-invalido {
+    border: 2px solid red;
+    border-left: none !important;
+    color: red;
+}
+
+i.bi.icone-valido {
+    border: 2px solid green;
+    border-left: none !important;
+    color: green;
+}
+
+input.ng-invalid.ng-touched {
+    border: 2px solid red !important;
+}
+
+input.ng-valid.ng-touched {
+    border: 2px solid green !important;
+}
+
+input.senha.ng-valid.ng-touched,
+input.senha.ng-invalid.ng-touched {
+    border-right: none !important;
 }

@@ -11,6 +11,7 @@ import { StatusEnum, UnMedidaEnum } from '@models/enum';
 import { Atributo, TipoFiltro } from '@shared/components';
 import { ProdutoService } from '@services/produto.service';
 import { ProdutoComponent } from '../produto.component';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-produto-tabela',
@@ -47,12 +48,25 @@ export class ProdutoTabelaComponent implements OnInit {
 
   constructor(
     private produtoService: ProdutoService,
+    private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Administrador")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Código",
@@ -113,32 +127,38 @@ export class ProdutoTabelaComponent implements OnInit {
   }
 
   onNovoProduto() {
-    this.modalRef = this.modalService.open(ProdutoComponent, {size: 'md'});
-    this.modalRef.closed.subscribe(produto => {
-      this.produtoService.salvar(produto).subscribe(() => this.toastrService.success("Novo produto salvo com sucesso!"));
-    })
+    if (this.usuarioService.verificarPermissao("Administrador")) {
+      this.modalRef = this.modalService.open(ProdutoComponent, {size: 'md'});
+      this.modalRef.closed.subscribe(produto => {
+        this.produtoService.salvar(produto).subscribe(() => this.toastrService.success("Novo produto salvo com sucesso!"));
+      })
+    }
   }
 
   onEditar(produto: Produto = null) {
-    this.modalRef = this.modalService.open(ProdutoComponent, { size: 'md' });
-    this.modalRef.componentInstance.produto = produto;
-    this.modalRef.closed.subscribe(produto => {
-      this.produtoService.salvar(produto).subscribe(() => this.toastrService.success("Produto alterado com sucesso!"));
-    })
+    if (this.usuarioService.verificarPermissao("Administrador")) {
+      this.modalRef = this.modalService.open(ProdutoComponent, { size: 'md' });
+      this.modalRef.componentInstance.produto = produto;
+      this.modalRef.closed.subscribe(produto => {
+        this.produtoService.salvar(produto).subscribe(() => this.toastrService.success("Produto alterado com sucesso!"));
+      })
+    }
   }
 
   onExcluir(produto: Produto) {
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Excluir produto";
-    this.modalRef.componentInstance.message = "Ao prosseguir, o produto será excluído. Você tem certeza que deseja prosseguir?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.produtoService.excluir(produto.id).subscribe(() => {
-          this.toastrService.success("Produto excluído!");
-          this.carregarTabela();
-        });
-      }
-    });
+    if (this.usuarioService.verificarPermissao("Administrador")) {
+      this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+      this.modalRef.componentInstance.title = "Excluir produto";
+      this.modalRef.componentInstance.message = "Ao prosseguir, o produto será excluído. Você tem certeza que deseja prosseguir?";
+      this.modalRef.closed.subscribe(response => {
+        if (response) {
+          this.produtoService.excluir(produto.id).subscribe(() => {
+            this.toastrService.success("Produto excluído!");
+            this.carregarTabela();
+          });
+        }
+      });
+    }
   }
 
   toggleExpandRow(row) {

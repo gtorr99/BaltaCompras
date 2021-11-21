@@ -55,6 +55,18 @@ export class UsuarioTabelaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.usuarioService.getUsuarioLogado()) {
+      if (this.usuarioService.verificarPermissao("Administrador")) {
+        this.carregarPagina();
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  carregarPagina() {
     this.atributosPesquisa = [
       {
         nome: "Nome",
@@ -83,7 +95,7 @@ export class UsuarioTabelaComponent implements OnInit {
         tipo: TipoFiltro.STRING
       }
     ];
-    
+
     this.page.page = 0;
     // this.carregarTabela(0);
     this.fakeData();
@@ -120,28 +132,34 @@ export class UsuarioTabelaComponent implements OnInit {
   }
 
   onAlterar(usuario: Usuario) {
-    this.modalRef = this.modalService.open(UsuarioComponent, {size: 'md'});
-    this.modalRef.componentInstance.usuario = usuario;
+    if (this.usuarioService.verificarPermissao("Administrador")) {
+      this.modalRef = this.modalService.open(UsuarioComponent, {size: 'md'});
+      this.modalRef.componentInstance.usuario = usuario;
+    }
   }
 
   onNovo() {
-    this.modalRef = this.modalService.open(UsuarioComponent, { size: 'md' });
+    if (this.usuarioService.verificarPermissao("Administrador")) {
+      this.modalRef = this.modalService.open(UsuarioComponent, { size: 'md' });
+    }
   }
 
   onSalvar() {}
 
   onExcluir(usuario: Usuario) {
-    this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
-    this.modalRef.componentInstance.title = "Excluir usuário";
-    this.modalRef.componentInstance.message = "Ao prosseguir, o fornecedor será excluído. Você tem certeza que deseja prosseguir?";
-    this.modalRef.closed.subscribe(response => {
-      if (response) {
-        this.usuarioService.excluir(usuario.id).subscribe(() => {
-          this.toastrService.success("Usuário excluído!");
-          this.carregarTabela();
-        });
-      }
-    });
+    if (this.usuarioService.verificarPermissao("Administrador")) {
+      this.modalRef = this.modalService.open(ConfirmModalComponent, { size: 'md' });
+      this.modalRef.componentInstance.title = "Excluir usuário";
+      this.modalRef.componentInstance.message = "Ao prosseguir, o fornecedor será excluído. Você tem certeza que deseja prosseguir?";
+      this.modalRef.closed.subscribe(response => {
+        if (response) {
+          this.usuarioService.excluir(usuario.id).subscribe(() => {
+            this.toastrService.success("Usuário excluído!");
+            this.carregarTabela();
+          });
+        }
+      });
+    }
   }
 
   toggleExpandRow(row) {
