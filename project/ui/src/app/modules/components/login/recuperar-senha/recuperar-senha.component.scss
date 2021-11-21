@@ -5,7 +5,7 @@
     margin: 32px auto;
     padding: 32px;
     max-width: 400px;
-    height: 250px;
+    height: 270px;
 }
 
 h1#logo {
@@ -46,4 +46,17 @@ div a#linkRecuperarSenha:hover {
 
 h2 {
     font: var(--font-bold-32);
+}
+
+input {
+    height: 40px;
+    border: var(--border);
+}
+
+input.ng-invalid.ng-touched {
+    border: 2px solid red !important;
+}
+
+input.ng-valid.ng-touched {
+    border: 2px solid green !important;
 }

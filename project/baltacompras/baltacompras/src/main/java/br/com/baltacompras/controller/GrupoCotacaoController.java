@@ -122,7 +122,7 @@ public class GrupoCotacaoController {
         }
     }
 
-    @PostMapping("/email-para-fornecedor")
+    @PostMapping("/email")
     public void enviarEmailParaFornecedor(@RequestParam(value = "link") String link,
                                           @RequestParam(value = "destinatarios") String[] destinatarios,
                                           @RequestParam(value = "mensagem") String mensagem,

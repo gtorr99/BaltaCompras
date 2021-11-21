@@ -46,3 +46,48 @@ div a#linkRecuperarSenha:hover {
 h2 {
     font: var(--font-bold-32);
 }
+
+input {
+    border: var(--border);
+    border-right: none;
+    height: 40px;
+}
+
+i.bi {
+    height: 40px;
+    background-color: white;
+    border: var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    border-left: none;
+    display: flex;
+    align-items: center;
+    padding-right: 8px;
+    width: 30px;
+    z-index: 20;
+}
+
+i.bi.icone-invalido {
+    border: 2px solid red;
+    border-left: none !important;
+    color: red;
+}
+
+i.bi.icone-valido {
+    border: 2px solid green;
+    border-left: none !important;
+    color: green;
+}
+
+input.ng-invalid.ng-touched {
+    border: 2px solid red !important;
+}
+
+input.ng-valid.ng-touched {
+    border: 2px solid green !important;
+}
+
+input.senha.ng-valid.ng-touched,
+input.senha.ng-invalid.ng-touched {
+    border-right: none !important;
+}

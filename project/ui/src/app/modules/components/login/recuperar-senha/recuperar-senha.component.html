@@ -4,19 +4,27 @@
             <h2>Recuperar senha</h2>
         </div>
     </div>
-    <div class="row">
-        <div id="loginForm" class="col">
-            <div class="row mx-2">
-                <div class="col">
-                    <label for="loginEmail" class="form-label">Informe o email de recuperação</label>
-                    <input id="loginEmail" class="form-control" type="email">
+    <form [formGroup]="loginForm" (ngSubmit)="onEnviarEmail()" class="needs-validation" novalidate>
+        <div class="row" style="">
+            <div id="loginForm" class="col">
+                <div class="row mx-2" style="height: 90px;">
+                    <div class="col">
+                        <label for="loginEmail" class="form-label">Informe o email de recuperação</label>
+                        <input id="loginEmail" class="form-control" type="email" formControlName="email">
+                        <small *ngIf="loginForm.get('email').touched && !loginForm.get('email').valid" class="text-danger">
+                            E-mail inválido
+                        </small>
+                        <small *ngIf="showMsgEmailEnviado" class="text-success">
+                            Verifique o link enviado para seu email
+                        </small>
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-auto mt-3">
-                    <app-button [btnClass]="'btn-dark'" (click)="onLogin()">Enviar email</app-button>
+                <div class="row justify-content-center">
+                    <div class="col-auto mt-3">
+                        <app-button [btnClass]="'btn-dark'" (click)="onEnviarEmail()">Enviar email</app-button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>

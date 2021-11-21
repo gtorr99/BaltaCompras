@@ -5,6 +5,11 @@ import java.util.Objects;
 
 import br.com.baltacompras.model.UsuarioDto;
 import br.com.baltacompras.model.enums.Status;
+import br.com.baltacompras.serviceimplement.Email;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +21,22 @@ import br.com.baltacompras.repository.UsuarioRepository;
 @RestController
 @RequestMapping("/administracao/usuario")
 public class UsuarioController {
+        @Or({
+                @Spec(path = "id", spec = Equal.class),
+                @Spec(path = "email", spec = Equal.class),
+        })
+    interface ModelSpec<Usuario> extends NotDeletedEntity<Usuario> {
+    }
+
     @Autowired
     private UsuarioRepository repositorio;
 
+    @Autowired
+    private Email email;
+
     @GetMapping("/listar")
-    public List<Usuario> listar(){
-        return repositorio.findAll();
+    public List<Usuario> listar(ModelSpec<Usuario> spec){
+        return repositorio.findAll(spec);
     }
     
     @PostMapping("/salvar")
@@ -53,5 +68,17 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Senha incorreta!");
         }
         return ResponseEntity.status(HttpStatus.OK).body(usuario);
+    }
+
+    @PostMapping("/email")
+    public void enviarEmailParaRecuperarSenha(@RequestParam(value = "link") String link,
+                                          @RequestParam(value = "destinatarios") String[] destinatarios,
+                                          @RequestParam(value = "mensagem") String mensagem,
+                                          @RequestParam(value = "assunto") String assunto) throws Exception {
+        if (link != null) {
+            mensagem += "<br><br><a href=" + link + ">Clique aqui para recuperar a senha</a>";
+        }
+        String arquivo = null;
+        email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
     }
 }

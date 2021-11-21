@@ -13,7 +13,7 @@ const routes: Routes = [
         component: RecuperarSenhaComponent
     },
     {
-        path: 'cadastrar-nova-senha',
+        path: 'cadastrar-nova-senha/:id',
         component: NovaSenhaComponent
     },
     {

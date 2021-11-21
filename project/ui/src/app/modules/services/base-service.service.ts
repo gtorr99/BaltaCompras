@@ -36,6 +36,6 @@ export abstract class BaseService<T extends BaseEntity> {
     }
 
     enviarEmail(link: string, destinatarios: string, mensagem: string, assunto: string): Observable<any> {
-        return this.httpClient.post<any>(`${baseUrl}/${this.resourceUrl}/email-para-fornecedor?link=${link}&destinatarios=${destinatarios}&mensagem=${mensagem}&assunto=${assunto}`, null);
+        return this.httpClient.post<any>(`${baseUrl}/${this.resourceUrl}/email?link=${link}&destinatarios=${destinatarios}&mensagem=${mensagem}&assunto=${assunto}`, null);
     }
 }

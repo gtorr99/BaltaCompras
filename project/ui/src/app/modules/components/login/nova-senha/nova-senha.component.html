@@ -4,15 +4,37 @@
             <h2>Alterar senha</h2>
         </div>
     </div>
-    <div class="row">
+    <form [formGroup]="loginForm" (ngSubmit)="onSalvar()" class="needs-validation" novalidate>
         <div id="loginForm">
-            <div class="mb-3">
-                <label for="loginEmail" class="form-label">Nova senha</label>
-                <input id="loginEmail" class="form-control" type="email">
+            <div class="row mb-4">
+                <div class="col">
+                    <label for="senha" class="form-label">
+                        Nova senha<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <input [type]="showPassword ? 'text' : 'password'" id="senha" class="form-control senha"
+                            formControlName="senha" required (change)="validarSenha()">
+                        <i [class]="passwordIconClass"
+                            [ngClass]="loginForm.get('senha').touched ? (loginForm.get('senha').valid ? 'icone-valido' : 'icone-invalido') : ''"
+                            (click)="displayPassword()"></i>
+                    </div>
+                    <small *ngIf="!senhasIguais" class="text-danger">As senhas não são iguais</small>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="loginSenha" class="form-label">Confirmar senha</label>
-                <input id="loginSenha" class="form-control" type="password">
+            <div class="row">
+                <div class="col">
+                    <label for="confirmarSenha" class="form-label">
+                        Confirmar senha<span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <input [type]="showPassword ? 'text' : 'password'" id="confirmarSenha" class="form-control senha"
+                            formControlName="confirmarSenha" required (change)="validarSenha()">
+                        <i [class]="passwordIconClass"
+                            [ngClass]="loginForm.get('senha').touched ? (loginForm.get('senha').valid ? 'icone-valido' : 'icone-invalido') : ''"
+                            (click)="displayPassword()"></i>
+                    </div>
+                    <small *ngIf="!senhasIguais" class="text-danger">As senhas não são iguais</small>
+                </div>
             </div>
             <div class="mt-4">
                 <div class="d-flex justify-content-center">
@@ -20,5 +42,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
