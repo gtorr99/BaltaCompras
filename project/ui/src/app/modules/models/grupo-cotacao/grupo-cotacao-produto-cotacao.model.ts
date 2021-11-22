@@ -2,8 +2,8 @@ import { GrupoCotacaoProduto } from "./grupo-cotacao-produto.model";
 
 export class GrupoCotacaoProdutoCotacao {
     id: { idCotacao: number, idGrupoCotacaoProduto: number };
-    aliquotaIpi: number | string;
-    precoUnitario: number | string;
+    aliquotaIpi: number;
+    precoUnitario: number;
     disponivel: boolean;
     grupoCotacaoProduto: GrupoCotacaoProduto;
     inputing?: boolean;

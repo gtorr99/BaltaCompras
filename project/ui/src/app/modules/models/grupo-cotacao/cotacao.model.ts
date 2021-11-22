@@ -6,8 +6,8 @@ import { GrupoCotacao } from "..";
 
 export class Cotacao extends BaseEntity {
     fornecedor: Fornecedor;
-    frete: number | string;
-    desconto: number | string;
+    frete: number;
+    desconto: number;
     prazo: Date;
     selecionada: boolean;
     transportadora: string;

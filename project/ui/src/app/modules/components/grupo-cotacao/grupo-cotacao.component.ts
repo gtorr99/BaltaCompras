@@ -109,8 +109,6 @@ export class GrupoCotacaoComponent implements OnInit {
           c.produtos.forEach(p => {
             p = new GrupoCotacaoProdutoCotacao(p);
             p.inputing = false;
-            p.precoUnitario = this.converterValorParaStringFloat(p);
-            this.converterValorParaStringMoeda(p);
 
             p.grupoCotacaoProduto = new GrupoCotacaoProduto(p.grupoCotacaoProduto);
             p.grupoCotacaoProduto.requisicaoProduto.forEach(rp => rp = new RequisicaoProduto(rp));
@@ -162,7 +160,7 @@ export class GrupoCotacaoComponent implements OnInit {
             produtos: [...this.grupoCotacao.grupoCotacaoProdutos.map(gcp =>
               new GrupoCotacaoProdutoCotacao({
                 aliquotaIpi: 0,
-                precoUnitario: 'R$ 0,00',
+                precoUnitario: 0,
                 disponivel: true,
                 grupoCotacaoProduto: gcp,
                 inputing: false
@@ -201,7 +199,7 @@ export class GrupoCotacaoComponent implements OnInit {
       produtos: [...this.grupoCotacao.grupoCotacaoProdutos.map(gcp =>
         new GrupoCotacaoProdutoCotacao({
           aliquotaIpi: 0,
-          precoUnitario: 'R$ 0,00',
+          precoUnitario: 0,
           disponivel: true,
           grupoCotacaoProduto: gcp,
           inputing: false
@@ -210,40 +208,12 @@ export class GrupoCotacaoComponent implements OnInit {
     }));
   }
 
-  converterValorParaStringFloat(gcpc: GrupoCotacaoProdutoCotacao): string {
-    gcpc.inputing = true;
-    if (gcpc.precoUnitario) {
-      let v = gcpc.precoUnitario.toString();
-      v = v.replace('R$', '');
-      v = v.replace(' ', '');
-      v = v.replace('.', '');
-      gcpc.precoUnitario = v;
-      return gcpc.precoUnitario.toString();
-    }
-    return '';
-  }
-
-  converterValorParaStringMoeda(gcpc: GrupoCotacaoProdutoCotacao) {
-    gcpc.inputing = false;
-    let v = gcpc.precoUnitario.toString();
-    v = v.replace(',', '.');
-    v = v.replace(' ', '');
-    gcpc.precoUnitario = parseFloat(v);
-    gcpc.precoUnitario = this.currencyPipe.transform(gcpc.precoUnitario, 'BRL', 'R$', '1.2-2', 'pt');
-  }
-
-  transformarValor(valor: number | string): string {
-    return this.currencyPipe.transform(valor, 'BRL', 'R$', '1.2-2', 'pt');
-  }
-
   onSalvar(event?: any) {
     this.grupoCotacao.cotacoes.forEach(c => {
       c.produtos.forEach(p => {
         if (this.isNew) {
           p.id = { idCotacao: 1, idGrupoCotacaoProduto: this.grupoCotacao.id };
         }
-        p.precoUnitario = this.converterValorParaStringFloat(p);
-        p.precoUnitario = parseFloat(p.precoUnitario.toString());
       });
       if (this.isNew) {
         c.grupoCotacao = new GrupoCotacao({
@@ -282,8 +252,6 @@ export class GrupoCotacaoComponent implements OnInit {
         if (this.isNew) {
           p.id = { idCotacao: c.id ?? 1, idGrupoCotacaoProduto: this.grupoCotacao.id };
         }
-        p.precoUnitario = this.converterValorParaStringFloat(p);
-        p.precoUnitario = parseFloat(p.precoUnitario.toString());
       });
       if (this.isNew) {
         c.grupoCotacao = new GrupoCotacao({
@@ -391,7 +359,8 @@ export class GrupoCotacaoComponent implements OnInit {
   construirEmail() {
     this.email = new Email({
       subject: "BaltaCompras - Solicitação de cotação",
-      mailTo: [...this.grupoCotacao.cotacoes.map(c => c.fornecedor.email), 'comprador@email.com'],
+      // ...this.grupoCotacao.cotacoes.map(c => c.fornecedor.email)
+      mailTo: ['gabriel.guimaraes6@fatec.sp.gov.br'],
       text: "Prezado fornecedor,\n\nSolicito a cotação dos produtos listados para o referido prazo, contidos no link abaixo.\n\nAtte.,\nComprador."
     });
   }
@@ -406,19 +375,18 @@ export class GrupoCotacaoComponent implements OnInit {
     this.listaFornecedoresEmCotacao = [...list];
   }
 
-  calcularTotalCotacao(cot: Cotacao): string {
+  calcularTotalCotacao(cot: Cotacao): number {
     let total = 0;
     cot.produtos?.forEach(p => {
-      total += parseFloat(this.converterValorParaStringFloat(p)) * p.grupoCotacaoProduto.quantidadeTotal;
+      total += p.precoUnitario * p.grupoCotacaoProduto.quantidadeTotal;
     });
-    total += parseFloat(cot.frete.toString());
-    total -= parseFloat(cot.desconto.toString());
-    return this.transformarValor(total);
+    total += cot.frete;
+    total -= cot.desconto;
+    return total;
   }
 
-  getProdutoSubTotal(produtoCotado: GrupoCotacaoProdutoCotacao): string {
-    this.converterValorParaStringFloat(produtoCotado);
-    return this.transformarValor(parseFloat(this.converterValorParaStringFloat(produtoCotado)) * produtoCotado.grupoCotacaoProduto.quantidadeTotal);
+  getProdutoSubTotal(produtoCotado: GrupoCotacaoProdutoCotacao): number {
+    return produtoCotado.precoUnitario * produtoCotado.grupoCotacaoProduto.quantidadeTotal;
   }
 
   getUnMedida(unMedida: UnMedidaEnum | string) {

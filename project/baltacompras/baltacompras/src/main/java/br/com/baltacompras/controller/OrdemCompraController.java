@@ -118,7 +118,7 @@ public class OrdemCompraController {
     @PutMapping("/aprovar/{id}")
     public void aprovar(@PathVariable Integer id) throws Exception {
         OrdemCompra ordemCompra = repositorio.getById(id);
-        ordemCompra.setStatus(Status.APROVADO);
+        ordemCompra.setStatus(Status.CONCLUIDO);
         ordemCompra.getCotacao().getGrupoCotacao().setStatus(Status.CONCLUIDO);
         repositorio.save(ordemCompra);
         String[] destinatarios = { "gabriel.guimaraes6@fatec.sp.gov.br" };
