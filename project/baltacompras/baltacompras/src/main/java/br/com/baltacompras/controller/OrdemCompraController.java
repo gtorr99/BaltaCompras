@@ -1,14 +1,17 @@
 package br.com.baltacompras.controller;
 
-import java.sql.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import br.com.baltacompras.model.enums.Status;
 import br.com.baltacompras.serviceimplement.Email;
+import net.kaczmarzyk.spring.data.jpa.domain.*;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,39 @@ import br.com.baltacompras.repository.OrdemCompraRepository;
 @RestController
 @RequestMapping("/ordem-compra")
 public class OrdemCompraController {
+
+    @Join(path = "usuario", alias = "u")
+    @Join(path = "cotacao", alias = "c")
+    @Or({
+            @Spec(path = "id", params = "filtro", spec = Equal.class),
+            @Spec(path = "prazoSolicitado", params = "filtro", spec = Equal.class, config = "dd/MM/yyyy"),
+            @Spec(path = "u.nome", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "status", params = "filtro", paramSeparator=',', spec = In.class),
+            @Spec(path = "c.grupoCotacao.grupoProduto.descricao", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "c.fornecedor.nomeFantasia", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "tipoCompra", params = "filtro", spec = Equal.class)
+    })
+    @And({
+            @Spec(path = "id", params = "idEqual", spec = Equal.class),
+            @Spec(path = "id", params = "idNotEqual", spec = NotEqual.class),
+            @Spec(path = "prazoSolicitado", params = "prazoEqual", spec = Equal.class, config = "dd/MM/yyyy"),
+            @Spec(path = "prazoSolicitado", params = {"prazoFim", "prazoInicio"}, spec = Between.class, config = "dd/MM/yyyy"),
+            @Spec(path = "u.nome", params = "compradorLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "u.nome", params = "compradorEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "u.nome", params = "compradorNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "status", params = "statusEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "status", params = "statusNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "c.grupoCotacao.grupoProduto.descricao", params = "grupoProdutoLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "c.grupoCotacao.grupoProduto.descricao", params = "grupoProdutoEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "c.grupoCotacao.grupoProduto.descricao", params = "grupoProdutoNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "c.fornecedor.nomeFantasia", params = "fornecedorLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "c.fornecedor.nomeFantasia", params = "fornecedorEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "c.fornecedor.nomeFantasia", params = "fornecedorNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "tipoCompra", params = "tipoCompra", spec = Equal.class)
+    })
+    interface ModelSpec<OrdemCompra> extends NotDeletedEntity<OrdemCompra> {
+    }
+
     @Autowired
     private OrdemCompraRepository repositorio;
 
@@ -36,8 +72,8 @@ public class OrdemCompraController {
     }
 
      @GetMapping("/listar-paginado")
-    public Page<OrdemCompra> listarPaginado(Pageable page) {
-        return repositorio.findAll(page);
+    public Page<OrdemCompra> listarPaginado(ModelSpec<OrdemCompra> spec, Pageable page) {
+        return repositorio.findAll(spec, page);
     }
 
     @PostMapping("/salvar")

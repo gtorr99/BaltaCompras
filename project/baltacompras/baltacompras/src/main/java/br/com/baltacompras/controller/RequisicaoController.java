@@ -3,6 +3,8 @@ package br.com.baltacompras.controller;
 import br.com.baltacompras.model.enums.Status;
 
 import br.com.baltacompras.repository.RequisicaoProdutoRepository;
+import net.kaczmarzyk.spring.data.jpa.domain.*;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +17,7 @@ import br.com.baltacompras.repository.RequisicaoRepository;
 import br.com.baltacompras.serviceimplement.Email;
 
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
-import net.kaczmarzyk.spring.data.jpa.domain.In;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
-import net.kaczmarzyk.spring.data.jpa.domain.Between;
-import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,14 +28,31 @@ public class RequisicaoController {
 
     @Join(path = "usuario", alias = "u")
     @Join(path = "centroCusto", alias = "cc")
-    @And({
-            @Spec(path = "id", spec = Equal.class),
-            @Spec(path="prazo", params={"dataFim","dataInicio"}, spec= Between.class),
-            @Spec(path="u.nome", params="requisitante", spec=Like.class),
-            @Spec(path = "cc.descricao", params="centroCusto", spec = Like.class),
-            @Spec(path = "status", spec = In.class),
+    @Or({
+            @Spec(path = "id", params = "filtro", spec = Equal.class),
+            @Spec(path = "u.nome", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "status", params = "filtro", paramSeparator=',', spec = In.class),
+            @Spec(path = "cc.descricao", params = "filtro", spec = LikeIgnoreCase.class)
     })
-    interface RequisicaoSpec<Requisicao> extends NotDeletedEntity<Requisicao> {
+    @And({
+            @Spec(path = "id", params = "idEqual", spec = Equal.class),
+            @Spec(path = "id", params = "idNotEqual", spec = NotEqual.class),
+
+            @Spec(path = "prazo", params = "prazoEqual", spec = Equal.class, config = "dd/MM/yyyy"),
+            @Spec(path = "prazo", params = {"prazoFim", "prazoInicio"}, spec = DateBetween.class, config = "dd/MM/yyyy"),
+
+            @Spec(path = "u.nome", params = "requisitanteLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "u.nome", params = "requisitanteEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "u.nome", params = "requisitanteNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+
+            @Spec(path = "status", params = "statusEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "status", params = "statusNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+
+            @Spec(path = "cc.descricao", params = "centroCustoEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "cc.descricao", params = "centroCustoNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "cc.descricao", params = "centroCustoLikeIgnoreCase", spec = LikeIgnoreCase.class)
+    })
+    interface ModelSpec<Requisicao> extends NotDeletedEntity<Requisicao> {
     }
 
     @Autowired
@@ -54,7 +69,7 @@ public class RequisicaoController {
 //    private RequisicaoCustomRepository customRepo;
 
     @GetMapping("/listar-paginado")
-    public Page<Requisicao> listarPaginado(RequisicaoSpec<Requisicao> spec, Pageable page) {
+    public Page<Requisicao> listarPaginado(ModelSpec<Requisicao> spec, Pageable page) {
         return repositorio.findAll(spec, page);
     }
 

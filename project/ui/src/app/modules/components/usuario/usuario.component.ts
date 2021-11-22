@@ -13,6 +13,7 @@ import { CentroCustoService } from '@services/centro-custo.service';
 import { SetorService } from '@services/setor.service';
 import { FuncaoService } from '@services/funcao.service';
 import { PermissaoService } from '@services/permissao.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-usuario',
@@ -49,6 +50,7 @@ export class UsuarioComponent implements OnInit {
     private setorService: SetorService,
     private funcaoService: FuncaoService,
     private permissaoService: PermissaoService,
+    private toastrService: ToastrService,
     private router: Router
   ) { }
 
@@ -61,19 +63,14 @@ export class UsuarioComponent implements OnInit {
         confirmarSenha: ['', [...this.textValidator]]
       }),
       grupoSetor: this.formBuilder.group({
-        setor: [this.usuario?.setor ?? '', [...this.commonValidators]],
+        setor: [this.usuario?.setor.id ?? '', [...this.commonValidators]],
         centroCusto: [this.usuario?.setor?.centrosCusto ?? '', [...this.commonValidators]],
       }),
       grupoFuncao: this.formBuilder.group({
-        funcao: [this.usuario?.funcao ?? '', [...this.commonValidators]],
+        funcao: [this.usuario?.funcao.id ?? '', [...this.commonValidators]],
         permissao: [this.usuario?.funcao?.permissoes ?? '', [...this.commonValidators]],
       }),
     });
-
-    // this.grupoProdutoService.listar().subscribe(gpl => {
-    //   this.grupoProdutoList = [...gpl];
-    //   this.fornecedorForm.get('gruposProduto').patchValue(this.fornecedor.gruposProduto?.map(gp => gp.descricao));
-    // });
 
     this.setorService.listar().subscribe(s => this.listaSetor = [...s]);
     this.centroCustoService.listar().subscribe(cc => this.listaCentroCusto = [...cc]);
@@ -82,40 +79,24 @@ export class UsuarioComponent implements OnInit {
   }
 
   onSalvar(event: any) {
-    if (event.key == "Enter" || event.type == "submit") {
-      // this.fornecedorForm.markAllAsTouched();
-      // var form = document.getElementsByClassName('needs-validation')[0] as HTMLFormElement;
-      // form.classList.add('was-validated');
+    this.usuarioForm.markAllAsTouched();
 
-      // if (form.checkValidity() === false || !this.fornecedorForm.valid) {
-      //   event.preventDefault();
-      //   event.stopPropagation();
-      // } else {
-      //   this.fornecedor.id = this.fornecedor.id ?? 0;
-      //   this.fornecedor.nomeFantasia = this.fornecedorForm.get('info.nomeFantasia').value,
-      //   this.fornecedor.razaoSocial = this.fornecedorForm.get('info.razaoSocial').value,
-      //   this.fornecedor.inscricaoEstadual = this.fornecedorForm.get('info.inscricaoEstadual').value,
-      //   this.fornecedor.cnpj = this.fornecedorForm.get('info.cnpj').value,
-      //   this.fornecedor.email = this.fornecedorForm.get('contato.email').value,
-      //   this.fornecedor.telefone = this.fornecedorForm.get('contato.telefone').value,
-      //   this.fornecedor.cep = this.fornecedorForm.get('endereco.cep').value,
-      //   this.fornecedor.rua = this.fornecedorForm.get('endereco.rua').value,
-      //   this.fornecedor.numero = this.fornecedorForm.get('endereco.numero').value,
-      //   this.fornecedor.complemento = this.fornecedorForm.get('endereco.complemento').value,
-      //   this.fornecedor.bairro = this.fornecedorForm.get('endereco.bairro').value,
-      //   this.fornecedor.cidade = this.fornecedorForm.get('endereco.cidade').value,
-      //   this.fornecedor.estado = this.fornecedorForm.get('endereco.estado').value
-      //   this.fornecedor.gruposProduto = this.fornecedorForm.get('gruposProduto').value.map(gp => {
-      //     return new GrupoProduto({ id: gp, descricao: this.grupoProdutoList.find(gpl => gpl.id == gp).descricao });
-      //   })
+    if(this.usuarioForm.valid) {
+      this.usuario.nome = this.usuarioForm.get('nome').value;
+      this.usuario.email = this.usuarioForm.get('email').value;
+      this.usuario.hashSenha = this.usuarioService.hashString(this.usuarioForm.get('senha').value);
+      this.usuario.setor = new Setor(this.usuarioForm.get('setor').value);
+      this.usuario.funcao = new Funcao(this.usuarioForm.get('funcao').value);
 
-      //   if (this.fornecedor.id) {
-      //     this.fornecedorService.alterar(this.fornecedor).subscribe();
-      //   } else {
-      //     this.fornecedorService.salvar(this.fornecedor).subscribe();
-      //   }
-      //   this.router.navigate(['/fornecedor']);
-      // }
+      if (this.usuario.id) {
+        this.usuarioService.alterar(this.usuario).subscribe(() => {
+          this.toastrService.success("Usuário atualizado com sucesso!");
+        });
+      } else {
+        this.usuarioService.alterar(this.usuario).subscribe(() => {
+          this.toastrService.success("Usuário cadastrado com sucesso!");
+        });
+      }
     }
   }
 

@@ -326,8 +326,8 @@ export class GrupoCotacaoComponent implements OnInit {
       let novaOrdemCompra = new OrdemCompra({
         data: new Date(),
         tipoCompra: 0,
-        observacoes: 'Teste nova ordem',
-        usuario: new Usuario({ id: 1 }),
+        observacoes: '',
+        usuario: this.usuarioService.getUsuarioLogado(),
         cotacao: new Cotacao(cot[0])
       });
       this.ordemCompraService.salvar(novaOrdemCompra).subscribe(() => {
@@ -411,8 +411,8 @@ export class GrupoCotacaoComponent implements OnInit {
     cot.produtos?.forEach(p => {
       total += parseFloat(this.converterValorParaStringFloat(p)) * p.grupoCotacaoProduto.quantidadeTotal;
     });
-    total += cot.frete;
-    total -= cot.desconto;
+    total += parseFloat(cot.frete.toString());
+    total -= parseFloat(cot.desconto.toString());
     return this.transformarValor(total);
   }
 

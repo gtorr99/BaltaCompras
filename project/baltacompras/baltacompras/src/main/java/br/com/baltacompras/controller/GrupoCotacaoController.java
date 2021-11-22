@@ -2,6 +2,7 @@ package br.com.baltacompras.controller;
 
 import java.util.List;
 
+import br.com.baltacompras.model.Usuario;
 import br.com.baltacompras.model.enums.Status;
 import net.kaczmarzyk.spring.data.jpa.domain.*;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -23,37 +24,29 @@ import br.com.baltacompras.serviceimplement.GrupoCotacaoServiceImplement;
 public class GrupoCotacaoController {
 
     @Join(path = "usuario", alias = "u")
+    @Join(path = "grupoProduto", alias = "gp")
     @Or({
-            @Spec(path = "id", spec = LikeIgnoreCase.class),
-            @Spec(path = "prazo", params = "prazo", spec = Equal.class),
-            @Spec(path = "data", params = "data", spec = Equal.class),
-            @Spec(path = "u.nome", params = "comprador", spec = LikeIgnoreCase.class),
-            @Spec(path = "status", spec = In.class)
+            @Spec(path = "id", params = "filtro", spec = Equal.class),
+            @Spec(path = "prazoSolicitado", params = "filtro", spec = Equal.class, config = "dd/MM/yyyy"),
+            @Spec(path = "u.nome", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "gp.descricao", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "status", params = "filtro", paramSeparator=',', spec = In.class),
     })
-//    @And({
-//            @Or({
-//                    @Spec(path = "id", params = "idLikeIgnoreCase", spec = LikeIgnoreCase.class),
-//                    @Spec(path = "id", params = "idEqualIgnoreCase", spec = EqualIgnoreCase.class),
-//                    @Spec(path = "id", params = "idNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
-//            }),
-//            @Or({
-//                    @Spec(path = "data", params = "dataEqualIgnoreCase", spec = EqualIgnoreCase.class),
-//                    @Spec(path = "data", params = {"dataFim", "dataInicio"}, spec = Between.class),
-//            }),
-//            @Or({
-//                    @Spec(path = "prazo", params = "prazoEqualIgnoreCase", spec = EqualIgnoreCase.class),
-//                    @Spec(path = "prazo", params = {"prazoFim", "prazoInicio"}, spec = Between.class),
-//            }),
-//
-//
-//            @Spec(path = "status", params = "statusEqualIgnoreCase", spec = EqualIgnoreCase.class),
-//            @Spec(path = "status", params = "statusNotEqual", spec = NotEqualIgnoreCase.class),
-//            @Spec(path = "u.nome", params = "usuarioLikeIgnoreCase", spec = LikeIgnoreCase.class),
-//            @Spec(path = "u.nome", params = "usuarioEqualIgnoreCase", spec = EqualIgnoreCase.class),
-//            @Spec(path = "u.nome", params = "usuarioNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class)
-//
-//    })
-    interface GrupoCotacaoSpec<GrupoCotacao> extends NotDeletedEntity<GrupoCotacao> {
+    @And({
+            @Spec(path = "id", params = "idEqual", spec = Equal.class),
+            @Spec(path = "id", params = "idNotEqual", spec = NotEqual.class),
+            @Spec(path = "prazoSolicitado", params = "prazoEqual", spec = Equal.class, config = "dd-MM-yyyy"),
+            @Spec(path = "prazoSolicitado", params = {"prazoFim", "prazoInicio"}, spec = Between.class),
+            @Spec(path = "status", params = "statusEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "status", params = "statusNotEqual", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "u.nome", params = "usuarioLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "u.nome", params = "usuarioEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "u.nome", params = "usuarioNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class),
+            @Spec(path = "gp.descricao", params = "grupoProdutoLikeIgnoreCase", spec = LikeIgnoreCase.class),
+            @Spec(path = "gp.descricao", params = "grupoProdutoEqualIgnoreCase", spec = EqualIgnoreCase.class),
+            @Spec(path = "gp.descricao", params = "grupoProdutoNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class)
+    })
+    interface ModelSpec<GrupoCotacao> extends NotDeletedEntity<GrupoCotacao> {
     }
 
     @Autowired
@@ -70,19 +63,14 @@ public class GrupoCotacaoController {
         return repositorio.findAll();
     }
 
-//    @GetMapping("/listar-paginado")
-//    public Page<GrupoCotacao> listarPaginado(GrupoCotacaoSpec<GrupoCotacao> spec, Pageable page) {
-//        return repositorio.findAll(spec, page);
-//    }
-
     @GetMapping("/listar-paginado")
-    public Page<GrupoCotacao> listarPaginado(Pageable page) {
-        return repositorio.findAll(page);
+    public Page<GrupoCotacao> listarPaginado(ModelSpec<GrupoCotacao> spec, Pageable page) {
+        return repositorio.findAll(spec, page);
     }
 
-    @GetMapping("/gerar-cotacoes")
-    public void gerarCotacoes() {
-         grupoCotacaoServiceImplement.gerarCotacoes();
+    @PostMapping("/gerar-cotacoes")
+    public void gerarCotacoes(@RequestBody Usuario usuario) {
+        grupoCotacaoServiceImplement.gerarCotacoes(usuario);
     }
 
     @PostMapping("/salvar")

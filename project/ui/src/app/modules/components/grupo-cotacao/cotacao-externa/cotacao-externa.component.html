@@ -14,7 +14,7 @@
                                 <h4>Comprador:</h4>
                             </div>
                             <div class="col-auto">
-                                <h4 class="header-info">Jhonatan Ferri</h4>
+                                <h4 class="header-info">{{ cotacao.grupoCotacao.usuario.nome }}</h4>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -22,7 +22,7 @@
                                 <h4>Email de contato:</h4>
                             </div>
                             <div class="col-auto">
-                                <h4 class="header-info">comprador@email.com</h4>
+                                <h4 class="header-info">{{ cotacao.grupoCotacao.usuario.email }}</h4>
                             </div>
                         </div>
                         <div class="row my-2">
@@ -30,7 +30,7 @@
                                 <h4>Prazo solicitado: </h4>
                             </div>
                             <div class="col">
-                                <h4 class="header-info">{{ prazo | date: 'dd/MM/yyyy' }}</h4>
+                                <h4 class="header-info">{{ cotacao.grupoCotacao.prazoSolicitado | date: 'dd/MM/yyyy' }}</h4>
                             </div>
                         </div>
                     </div>
@@ -171,13 +171,15 @@
                         <label class="form-label">
                             Frete
                         </label>
-                        <input type="text" class="form-control" [(ngModel)]="cotacao.frete" [ngModelOptions]="{standalone: true}">
+                        <input type="text" class="form-control" [(ngModel)]="cotacao.frete" [ngModelOptions]="{standalone: true}" (click)="converterValorParaStringFloatFrete()"
+                            (focusout)="converterValorParaStringMoedaFrete()" [mask]="freteInputing ? '0*,00': ''">
                     </div>
                     <div class="col me-1">
                         <label class="form-label">
                             Desconto
                         </label>
-                        <input type="text" class="form-control"  [(ngModel)]="cotacao.desconto" [ngModelOptions]="{standalone: true}">
+                        <input type="text" class="form-control"  [(ngModel)]="cotacao.desconto" [ngModelOptions]="{standalone: true}" (click)="converterValorParaStringFloatDesconto()"
+                            (focusout)="converterValorParaStringMoedaDesconto()" [mask]="descontoInputing ? '0*,00': ''"> 
                     </div>
                     <div class="col">
                         <label class="form-label">

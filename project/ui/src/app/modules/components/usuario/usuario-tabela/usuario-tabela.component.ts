@@ -64,6 +64,7 @@ export class UsuarioTabelaComponent implements OnInit {
     } else {
       this.router.navigate(['/login']);
     }
+
   }
 
   carregarPagina() {
@@ -97,8 +98,7 @@ export class UsuarioTabelaComponent implements OnInit {
     ];
 
     this.page.page = 0;
-    // this.carregarTabela(0);
-    this.fakeData();
+    this.carregarTabela();
   }
 
   carregarTabela(pageEvent: any = null) {
@@ -143,8 +143,6 @@ export class UsuarioTabelaComponent implements OnInit {
       this.modalRef = this.modalService.open(UsuarioComponent, { size: 'md' });
     }
   }
-
-  onSalvar() {}
 
   onExcluir(usuario: Usuario) {
     if (this.usuarioService.verificarPermissao("Administrador")) {
@@ -211,131 +209,5 @@ export class UsuarioTabelaComponent implements OnInit {
     params.push(this.filterQuery);
     params.push(this.sortQuery);
     this.query = params.join('&');
-  }
-
-  fakeData() {
-    this.page = {
-      page: 0,
-      size: 10,
-      totalElements: 3,
-      totalPages: 1,
-      content: [
-        new Usuario({
-          id: 1,
-          nome: 'Jhonatan Leite',
-          email: 'jhonatan.leite@baltacompras.com.br',
-          status: StatusEnum[StatusEnum.ATIVO],
-          setor: new Setor({
-            id: 1,
-            descricao: 'Compras',
-            centrosCusto: [
-              new CentroCusto({
-              id: 1,
-              descricao: "Controle de Compras"
-            })
-            ]
-          }),
-          funcao: new Funcao({
-            id: 1,
-            descricao: 'Comprador',
-            permissoes: [
-                new Permissao({
-                id: 1,
-                descricao: 'Visualizar cotação'
-              }),
-                new Permissao({
-                id: 2,
-                descricao: 'Editar cotação'
-              }),
-                new Permissao({
-                id: 3,
-                descricao: 'Visualizar requisição'
-              }),
-                new Permissao({
-                id: 4,
-                descricao: 'Editar requisição'
-              }),
-            ]
-          })
-        }),
-        new Usuario({
-          id: 2,
-          nome: 'Cauê Sampaio',
-          email: 'caue.sampaio@baltacompras.com.br',
-          status: StatusEnum[StatusEnum.ATIVO],
-          setor: new Setor({
-            id: 1,
-            descricao: 'Compras',
-            centrosCusto: [
-              new CentroCusto({
-              id: 1,
-              descricao: "Controle de Compras"
-            })
-            ]
-          }),
-          funcao: new Funcao({
-            id: 1,
-            descricao: 'Comprador',
-            permissoes: [
-                new Permissao({
-                id: 1,
-                descricao: 'Visualizar cotação'
-              }),
-                new Permissao({
-                id: 2,
-                descricao: 'Editar cotação'
-              }),
-                new Permissao({
-                id: 3,
-                descricao: 'Visualizar requisição'
-              }),
-                new Permissao({
-                id: 4,
-                descricao: 'Editar requisição'
-              }),
-            ]
-          })
-        }),
-        new Usuario({
-          id: 3,
-          nome: 'Gabriel Torres',
-          email: 'gabriel.torres@baltacompras.com.br',
-          status: StatusEnum[StatusEnum.ATIVO],
-          setor: new Setor({
-            id: 1,
-            descricao: 'Compras',
-            centrosCusto: [
-              new CentroCusto({
-              id: 1,
-              descricao: "Controle de Compras"
-            })
-            ]
-          }),
-          funcao: new Funcao({
-            id: 1,
-            descricao: 'Comprador',
-            permissoes: [
-                new Permissao({
-                id: 1,
-                descricao: 'Visualizar cotação'
-              }),
-                new Permissao({
-                id: 2,
-                descricao: 'Editar cotação'
-              }),
-                new Permissao({
-                id: 3,
-                descricao: 'Visualizar requisição'
-              }),
-                new Permissao({
-                id: 4,
-                descricao: 'Editar requisição'
-              }),
-            ]
-          })
-        })
-      ]
-    };
-    this.rows = [...this.page.content];
   }
 }

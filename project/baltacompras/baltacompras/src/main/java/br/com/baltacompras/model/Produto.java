@@ -14,7 +14,7 @@ public class Produto {
     private Integer id;
     private String descricao;
     private Integer unMedida;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_grupo_produto", referencedColumnName = "id")
     private GrupoProduto grupoProduto;
 

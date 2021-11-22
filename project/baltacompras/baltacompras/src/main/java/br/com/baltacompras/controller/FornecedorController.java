@@ -28,12 +28,12 @@ public class FornecedorController {
 
     @Join(path = "gruposProduto", alias = "gp")
     @Or({
-            @Spec(path = "cnpj", spec = LikeIgnoreCase.class),
-            @Spec(path = "nomeFantasia", spec = LikeIgnoreCase.class),
-            @Spec(path = "status", spec = In.class),
-            @Spec(path = "email", spec = LikeIgnoreCase.class),
+            @Spec(path = "cnpj", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "nomeFantasia", params = "filtro", spec = LikeIgnoreCase.class),
+            @Spec(path = "status", params = "filtro", spec = In.class),
+            @Spec(path = "email", params = "filtro", spec = LikeIgnoreCase.class),
             @Spec(path = "telefone", spec = LikeIgnoreCase.class),
-            @Spec(path = "gp.descricao", params="grupoProduto", spec = LikeIgnoreCase.class)
+            @Spec(path = "gp.descricao", params = "filtro", spec = LikeIgnoreCase.class)
     })
     @And({
             @Spec(path = "cnpj", params = "cnpjLikeIgnoreCase", spec = LikeIgnoreCase.class),
@@ -54,7 +54,7 @@ public class FornecedorController {
             @Spec(path = "gp.descricao", params="grupoProdutoEqualIgnoreCase", spec = EqualIgnoreCase.class),
             @Spec(path = "gp.descricao", params="grupoProdutoNotEqualIgnoreCase", spec = NotEqualIgnoreCase.class)
     })
-    interface FornecedorSpec<Fornecedor> extends NotDeletedEntity<Fornecedor> {
+    interface ModelSpec<Fornecedor> extends NotDeletedEntity<Fornecedor> {
     }
 
     @Autowired
@@ -66,12 +66,12 @@ public class FornecedorController {
     private final FornecedorServiceImplement fornecedorServiceImpl = new FornecedorServiceImplement();
 
     @GetMapping("/listar-paginado")
-    public Page<Fornecedor> listarPaginado(FornecedorSpec<Fornecedor> spec, Pageable page) {
+    public Page<Fornecedor> listarPaginado(ModelSpec<Fornecedor> spec, Pageable page) {
         return repositorio.findAll(spec, page);
     }
 
     @GetMapping("/listar")
-    public List<Fornecedor> listar(FornecedorSpec<Fornecedor> spec) {
+    public List<Fornecedor> listar(ModelSpec<Fornecedor> spec) {
         return repositorio.findAll(spec);
     }
 

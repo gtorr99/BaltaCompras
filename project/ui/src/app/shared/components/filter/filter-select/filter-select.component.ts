@@ -38,8 +38,7 @@ export class FilterSelectComponent implements OnInit {
       {
         tipo: TipoFiltro.NUMBER,
         parametros: [
-          { nome: "Contém", parametro: "Like" },
-          { nome: "Igual a", parametro: "EqualIgnoreCase" },
+          { nome: "Igual a", parametro: "Equal" },
           { nome: "Diferente de", parametro: "NotEqual" },
           { nome: "Maior que", parametro: "GreaterThan" },
           { nome: "Maior ou igual a", parametro: "GreaterThanOrEqual" },
@@ -52,7 +51,7 @@ export class FilterSelectComponent implements OnInit {
         parametros: [
           { nome: "Começa em", parametro: "Inicio" },
           { nome: "Termina em", parametro: "Fim" },
-          { nome: "Igual a", parametro: "EqualIgnoreCase" }
+          { nome: "Igual a", parametro: "Equal" }
         ]
       },
       {
@@ -79,7 +78,7 @@ export class FilterSelectComponent implements OnInit {
   }
 
   onDateSelect(date: any, filtro: Filtro) {
-    filtro.valor = this.converterNgbDateStructParaDate(date).toLocaleDateString('en-US');
+    // filtro.valor = this.converterNgbDateStructParaDate(date).toLocaleDateString('en-US');
   }
 
   onAdicionarFiltro() {
@@ -94,6 +93,8 @@ export class FilterSelectComponent implements OnInit {
 
   onFiltrar() {
     let params = [];
+    console.log(this.filtrosAdicionados);
+    
     this.filtrosAdicionados.forEach(f => {
       params.push(`${f.atributo.atributo}${f.parametro}=${f.valor ?? ''}`);
     });

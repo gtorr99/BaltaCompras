@@ -21,8 +21,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         .pipe(
             catchError((error: HttpErrorResponse) => {
                 let defaultErrorMsg: string = 'Falha na comunicação com o servidor';
-                let errorMsg: string = (error && error.error && typeof (error.error === 'string')) ? error.error : defaultErrorMsg
-                console.log(error.error.error);
+                let errorMsg: string = (error && error.error && typeof (error.error === 'string')) ? error.error.error : defaultErrorMsg
                 
                 switch(error.status) {
                     case 200:

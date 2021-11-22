@@ -23,7 +23,7 @@ export class RequisicaoTabelaComponent implements OnInit {
   atributosPesquisa: Atributo[] = [];
   query: string = '';
   filterQuery: string = '';
-  sortQuery: string = '';
+  sortQuery: string = 'sort=id,desc';
   defaultStatus: string = '';
 
   // Tabela

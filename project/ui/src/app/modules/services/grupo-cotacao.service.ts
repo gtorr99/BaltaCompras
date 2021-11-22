@@ -4,6 +4,7 @@ import { Cotacao } from '@models/grupo-cotacao/cotacao.model';
 import { BaseService } from './base-service.service';
 import { Observable } from 'rxjs';
 import { GrupoCotacao } from '@models/grupo-cotacao/grupo-cotacao.model';
+import { Usuario } from '@models/usuario.model';
 
 @Injectable({ providedIn: 'root' })
 export class GrupoCotacaoService extends BaseService<GrupoCotacao> {
@@ -17,8 +18,8 @@ export class GrupoCotacaoService extends BaseService<GrupoCotacao> {
         return this.httpClient.put<boolean>(`http://localhost:8080/grupo-cotacao/cancelar/${id}`, null);
     }
 
-    gerarCotacoes(): Observable<any> {
-        return this.httpClient.get<any>(`http://localhost:8080/grupo-cotacao/gerar-cotacoes`);
+    gerarCotacoes(usuario: Usuario): Observable<any> {
+        return this.httpClient.post<any>(`http://localhost:8080/grupo-cotacao/gerar-cotacoes`, usuario);
     }
 
     alterarCotacao(cotacao: Cotacao): Observable<any> {

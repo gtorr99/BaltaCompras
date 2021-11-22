@@ -27,7 +27,7 @@ export class GrupoCotacaoTabelaComponent implements OnInit {
   atributosPesquisa: Atributo[] = [];  
   query: string = '';
   filterQuery: string = '';
-  sortQuery: string = '';
+  sortQuery: string = 'sort=id,desc';
   defaultStatus: string = '';
 
   // Tabela
@@ -140,7 +140,7 @@ export class GrupoCotacaoTabelaComponent implements OnInit {
   }
 
   onGerarCotacoes() {
-    this.grupoCotacaoService.gerarCotacoes().subscribe(() => {
+    this.grupoCotacaoService.gerarCotacoes(this.usuarioService.getUsuarioLogado()).subscribe(() => {
       this.carregarTabela();
       this.toastrService.success("Cotações geradas com sucesso!");
     });
@@ -236,8 +236,8 @@ export class GrupoCotacaoTabelaComponent implements OnInit {
     cotacaoSelecionada?.produtos.forEach(p => {
       total += parseFloat(p.precoUnitario.toString()) * p.grupoCotacaoProduto.quantidadeTotal;
     });
-    total += cotacaoSelecionada?.frete;
-    total -= cotacaoSelecionada?.desconto;
+    total += parseFloat(cotacaoSelecionada?.frete.toString());
+    total -= parseFloat(cotacaoSelecionada?.desconto.toString());
     return this.onTransformarValor(total);
   }
 }

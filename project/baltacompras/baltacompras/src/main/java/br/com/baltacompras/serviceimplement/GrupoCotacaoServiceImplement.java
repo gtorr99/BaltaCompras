@@ -32,8 +32,8 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
 
     @Override
     @Transactional
-     public List<GrupoCotacao> gerarCotacoes() {
-        Usuario usuario = usuarioRepository.getById(1);
+     public List<GrupoCotacao> gerarCotacoes(Usuario usuario) {
+        Usuario usuarioSalvo = usuarioRepository.getById(usuario.getId());
          List<ProdutoAgrupado> produtosAgrupados = repository.getRequisicoesAgrupadas();
 
          Map<GrupoProduto, Date> grupoProdutoEPrazoMap = new HashMap<>();
@@ -43,7 +43,7 @@ public class GrupoCotacaoServiceImplement implements GrupoCotacaoService {
 
          Map<Integer, GrupoCotacao> grupoCotacaoMap = new HashMap<>();
          grupoProdutoEPrazoMap.forEach((gp, prazo) ->
-                 grupoCotacaoMap.put(gp.getId(), repository.save(new GrupoCotacao(prazo, gp, usuario)
+                 grupoCotacaoMap.put(gp.getId(), repository.save(new GrupoCotacao(prazo, gp, usuarioSalvo)
          )));
 
          List<RequisicaoProduto> requisicaoProdutos = requisicaoProdutoRepository.findAllByRequisicaoStatus(Status.APROVADO);

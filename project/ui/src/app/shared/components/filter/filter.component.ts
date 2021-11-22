@@ -16,6 +16,7 @@ export class FilterComponent implements OnInit {
 
   filtrosAdicionados: Filtro[] = [];
   textoPesquisa: string = '';
+  filtrosAvancadosQuery: string = '';
   private modalRef: NgbModalRef;
 
   constructor(
@@ -26,12 +27,12 @@ export class FilterComponent implements OnInit {
     
   }
 
-  onFiltrar(filtro?: string) {
+  onFiltrar() {
     let params = [];
-    this.atributos.forEach(a => params.push(`${a.atributo}=${this.textoPesquisa}`));
-    if (filtro) {
-      params.push(filtro);
-    }
+    params.push(`filtro=${this.textoPesquisa}`);
+    params.push(this.filtrosAvancadosQuery);
+    console.log(params.join('&'));
+    
     this.search.emit(params.join('&'));
   }
 
@@ -40,8 +41,9 @@ export class FilterComponent implements OnInit {
     this.modalRef.componentInstance.filtrosAdicionados = this.filtrosAdicionados;
     this.modalRef.componentInstance.atributos = this.atributos;
     this.modalRef.closed.subscribe(filtro => {
+      this.filtrosAvancadosQuery = filtro;
       this.filtrosAdicionados = this.modalRef.componentInstance.filtrosAdicionados;
-      this.onFiltrar(filtro);
+      this.onFiltrar();
     });
   }
 }

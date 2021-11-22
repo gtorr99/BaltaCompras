@@ -252,7 +252,7 @@ export class RequisicaoComponent implements OnInit {
           this.requisicao.data = new Date();
           this.requisicao.prazo = this.converterNgbDateStructParaDate(this.requisicaoForm.get('prazo').value),
           this.requisicao.observacoes = this.requisicaoForm.get('observacoes').value ?? '';
-          this.requisicao.usuario = this.requisicao.usuario ?? new Usuario({ id: 1 });
+          this.requisicao.usuario = this.usuarioService.getUsuarioLogado();
           this.requisicao.produtos = [...this.listaProdutosAdicionados.map(p => new RequisicaoProduto(p.requisicaoProduto))];
           this.requisicao.produtos.forEach(p => p.id = { idRequisicao: this.requisicao.id ?? 1, idProduto: p.produto.id});
           

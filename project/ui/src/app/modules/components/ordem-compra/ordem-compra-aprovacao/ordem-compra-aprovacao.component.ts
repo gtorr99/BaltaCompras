@@ -75,11 +75,6 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
         tipo: TipoFiltro.STRING
       },
       {
-        nome: "Data abertura",
-        atributo: "data",
-        tipo: TipoFiltro.DATE
-      },
-      {
         nome: "Prazo",
         atributo: "prazo",
         tipo: TipoFiltro.DATE
@@ -108,11 +103,6 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
         nome: "Fornecedor",
         atributo: "fornecedor",
         tipo: TipoFiltro.STRING
-      },
-      {
-        nome: "Total",
-        atributo: "total",
-        tipo: TipoFiltro.NUMBER
       }
     ];
 
@@ -210,8 +200,8 @@ export class OrdemCompraAprovacaoComponent implements OnInit {
     cot.produtos?.forEach(p => {
       total += parseFloat(p.precoUnitario.toString()) * p.grupoCotacaoProduto.quantidadeTotal;
     });
-    total += cot.frete;
-    total -= cot.desconto;
+    total += parseFloat(cot.frete.toString());
+    total -= parseFloat(cot.desconto.toString());
     return total;
   }
 

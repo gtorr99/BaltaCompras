@@ -38,6 +38,8 @@ export class CotacaoExternaComponent implements OnInit {
   cotacao: Cotacao = new Cotacao();
   grupoCotacao: GrupoCotacao = new GrupoCotacao();
   hoje: NgbDateStruct = this.converterDateParaNgbDateStruct(new Date());
+  freteInputing: boolean = false;
+  descontoInputing: boolean = false;
 
   mapProdutos: Map<number, { produto: Produto, quantidadeTotal: number }> = new Map();
 
@@ -127,6 +129,58 @@ export class CotacaoExternaComponent implements OnInit {
     return this.currencyPipe.transform(valor, 'BRL', 'R$', '1.2-2', 'pt');
   }
 
+  converterValorParaStringFloatFrete(): string {
+    this.freteInputing = true;
+    if (this.cotacao.frete) {
+      let v = this.cotacao.frete.toString();
+      v = v.replace('R$', '');
+      v = v.replace(' ', '');
+      v = v.replace('.', '');
+      this.cotacao.frete = v;
+      return this.cotacao.frete.toString();
+    }
+    return '';
+  }
+
+  converterValorParaStringMoedaFrete() {
+    this.freteInputing = false;
+    let v = this.cotacao.frete.toString();
+    v = v.replace(',', '.');
+    v = v.replace(' ', '');
+    this.cotacao.frete = parseFloat(v);
+    this.cotacao.frete = this.currencyPipe.transform(this.cotacao.frete, 'BRL', 'R$', '1.2-2', 'pt');
+  }
+
+  transformarValorFrete(): string {
+    return this.currencyPipe.transform(this.cotacao.frete, 'BRL', 'R$', '1.2-2', 'pt');
+  }
+
+  converterValorParaStringFloatDesconto(): string {
+    this.descontoInputing = true;
+    if (this.cotacao.desconto) {
+      let v = this.cotacao.desconto.toString();
+      v = v.replace('R$', '');
+      v = v.replace(' ', '');
+      v = v.replace('.', '');
+      this.cotacao.desconto = v;
+      return this.cotacao.desconto.toString();
+    }
+    return '';
+  }
+
+  converterValorParaStringMoedaDesconto() {
+    this.descontoInputing = false;
+    let v = this.cotacao.desconto.toString();
+    v = v.replace(',', '.');
+    v = v.replace(' ', '');
+    this.cotacao.desconto = parseFloat(v);
+    this.cotacao.desconto = this.currencyPipe.transform(this.cotacao.desconto, 'BRL', 'R$', '1.2-2', 'pt');
+  }
+
+  transformarValorDesconto(): string {
+    return this.currencyPipe.transform(this.cotacao.desconto, 'BRL', 'R$', '1.2-2', 'pt');
+  }
+
   onSalvar(event: any) {
     this.cotacao.produtos.forEach(p => {
       p.precoUnitario = this.converterValorParaStringFloat(p);
@@ -160,8 +214,8 @@ export class CotacaoExternaComponent implements OnInit {
     cot.produtos?.forEach(p => {
       total += parseFloat(this.converterValorParaStringFloat(p)) * p.grupoCotacaoProduto.quantidadeTotal;
     });
-    total += cot.frete;
-    total -= cot.desconto;
+    total += parseFloat(cot.frete.toString());
+    total -= parseFloat(cot.desconto.toString());
     return this.transformarValor(total);
   }
 
