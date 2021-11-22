@@ -1,10 +1,14 @@
 package br.com.baltacompras.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import br.com.baltacompras.model.Requisicao;
 import br.com.baltacompras.repository.RequisicaoCustomRepository;
@@ -30,7 +37,7 @@ public class RequisicaoController {
     @Autowired
     private RequisicaoRepository repositorio;
 
-    @Autowired 
+    @Autowired
     private RequisicaoCustomRepository customRepo;
 
     @Autowired
@@ -47,7 +54,8 @@ public class RequisicaoController {
     }
 
     @GetMapping("/filterbydate")
-    public List<Requisicao> buscarPorData(@RequestParam("datestart") String dataInicio, @RequestParam("dateend") String dataFim) throws ParseException{
+    public List<Requisicao> buscarPorData(@RequestParam("datestart") String dataInicio,
+            @RequestParam("dateend") String dataFim) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Date dateIni = format.parse(dataInicio);
         Date dateFim = format.parse(dataFim);
@@ -55,24 +63,23 @@ public class RequisicaoController {
     }
 
     @GetMapping("/filtrar")
-    public List<Requisicao> filtrar(
-    @RequestParam(value = "id", required  = false) Integer id,
-    @RequestParam(value = "dataInicio", required = false) String dataInicio, 
-    @RequestParam(value = "dataFim", required = false) String dataFim,
-    @RequestParam(value = "status", required = false) Integer status, 
-    @RequestParam(value = "observacao", required = false) String observacao) throws ParseException{
+    public List<Requisicao> filtrar(@RequestParam(value = "id", required = false) Integer id,
+            @RequestParam(value = "dataInicio", required = false) String dataInicio,
+            @RequestParam(value = "dataFim", required = false) String dataFim,
+            @RequestParam(value = "status", required = false) Integer status,
+            @RequestParam(value = "observacao", required = false) String observacao) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Date dateIni = null;
         Date dateFim = null;
-        
-        if(dataInicio != null){
+
+        if (dataInicio != null) {
             dateIni = format.parse(dataInicio);
         }
-        if(dataFim != null){
+        if (dataFim != null) {
             dateFim = format.parse(dataFim);
         }
-        
-        return customRepo.filtrar(id, dateIni, dateFim, status, observacao);        
+
+        return customRepo.filtrar(id, dateIni, dateFim, status, observacao);
     }
 
     @PostMapping
@@ -91,13 +98,41 @@ public class RequisicaoController {
     public void excluir(@RequestBody Requisicao requisicao) {
         repositorio.delete(requisicao);
     }
-    
-    
+
     @PostMapping("/email")
-    public void gerarRelatorio(@RequestParam(value = "link") String link, @RequestParam(value = "destinatarios") String[] destinatarios) throws Exception{
-        String mensagem = "<h4>Uma nova requisição está aguardando sua análise!</h4><br><a href=" + link + ">Clique aqui para acessar!</a>";
+    public void gerarRelatorio(@RequestParam(value = "link") String link,
+            @RequestParam(value = "destinatarios") String[] destinatarios) throws Exception {
+        String mensagem = "<h4>Uma nova requisição está aguardando sua análise!</h4><br><a href=" + link
+                + ">Clique aqui para acessar!</a>";
         String assunto = "Nova Requisição para análise";
         String arquivo = null;
         email.sendEmailWithAttachment(destinatarios, assunto, mensagem, arquivo);
+    }
+
+    @GetMapping("/relatorio")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+         
+        List<Requisicao> requisicoes = repositorio.findAll();
+
+ 
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), new CsvPreference.Builder('"', ';', "\r\n").build());
+        String[] csvHeader = {"Requisicao ID", "Data", "Prazo", "Status", "Observações"};
+        String[] nameMapping = {"id","data", "prazo", "status", "observacoes"};
+         
+        csvWriter.writeHeader(csvHeader);
+         
+        for (Requisicao requisicao : requisicoes) {
+            csvWriter.write(requisicao, nameMapping);
+        }
+         
+        csvWriter.close();
+         
     }
 }
